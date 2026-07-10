@@ -1,26 +1,97 @@
 @import "tailwindcss";
 
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #111111;
+  --foreground: #ffffff;
+  --gold: #f5b800;
 }
+
 
 @theme inline {
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+
+
+* {
+  box-sizing: border-box;
 }
+
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+  background: #111111;
+
+  color: #ffffff;
+
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+
+}
+
+
+
+/* Botones principales */
+
+.btn-gold {
+
+  background: #f5b800;
+
+  color: #111111;
+
+  font-weight: 700;
+
+  padding: 12px 24px;
+
+  border-radius: 10px;
+
+  transition: .3s;
+
+}
+
+
+
+.btn-gold:hover {
+
+  background: #ffd700;
+
+  transform: translateY(-2px);
+
+}
+
+
+
+/* Tarjetas de productos */
+
+.card-dark {
+
+  background: #181818;
+
+  border: 1px solid #2b2b2b;
+
+  border-radius: 16px;
+
+}
+
+
+
+/* Texto secundario */
+
+.text-muted {
+
+  color: #a3a3a3;
+
 }
