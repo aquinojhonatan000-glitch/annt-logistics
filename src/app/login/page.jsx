@@ -8,20 +8,52 @@ import { supabase } from "@/lib/supabase";
 export default function Login(){
 
 const { actualizarUsuario } = useUser();
-
 const router = useRouter();
-
 
 const [modo,setModo] = useState("login");
 
-
 const [datos,setDatos] = useState({
-
-nombre:"",
-correo:"",
-contraseña:""
-
+  nombre:"",
+  correo:"",
+  contraseña:""
 });
+
+
+const crearPerfil = async(usuario, nombre)=>{
+
+const perfil = {
+
+id: usuario.id,
+nombre: nombre || usuario.email.split("@")[0],
+correo: usuario.email,
+rol:"cliente",
+telefono:"",
+direccion:""
+
+};
+
+
+const {error}=await supabase
+.from("perfiles")
+.upsert(perfil);
+
+
+if(error){
+
+console.log("ERROR PERFIL:",error);
+
+alert(
+"Error perfil: " + error.message
+);
+
+return false;
+
+}
+
+
+return perfil;
+
+};
 
 
 
@@ -34,11 +66,9 @@ e.preventDefault();
 if(modo==="registro"){
 
 
-
 const {data,error}=await supabase.auth.signUp({
 
 email:datos.correo,
-
 password:datos.contraseña
 
 });
@@ -47,56 +77,44 @@ password:datos.contraseña
 if(error){
 
 alert(error.message);
-
 return;
 
 }
 
 
 
-const usuarioNuevo={
+if(!data.user){
 
-id:data.user.id,
-
-nombre:datos.nombre,
-
-correo:datos.correo,
-
-rol:"cliente",
-
-telefono:"",
-
-direccion:""
-
-};
-
-
-
-const {error:perfilError}=await supabase
-
-.from("perfiles")
-
-.upsert(usuarioNuevo);
-
-
-
-if(perfilError){
-
-console.log(perfilError);
-
-alert("Error creando perfil");
-
+alert("Usuario creado. Inicia sesión para continuar.");
 return;
 
 }
 
 
 
-actualizarUsuario(usuarioNuevo);
+const perfil=await crearPerfil(
+
+data.user,
+datos.nombre
+
+);
 
 
-alert("✅ Cuenta creada correctamente");
 
+if(!perfil)return;
+
+
+
+actualizarUsuario(perfil);
+
+
+localStorage.setItem(
+"usuario",
+JSON.stringify(perfil)
+);
+
+
+alert("✅ Cuenta creada");
 
 router.push("/perfil");
 
@@ -105,11 +123,9 @@ router.push("/perfil");
 }else{
 
 
-
 const {data,error}=await supabase.auth.signInWithPassword({
 
 email:datos.correo,
-
 password:datos.contraseña
 
 });
@@ -117,16 +133,10 @@ password:datos.contraseña
 
 if(error){
 
-alert("❌ Correo o contraseña incorrectos");
-
+alert(error.message);
 return;
 
 }
-
-
-
-console.log("UID AUTH:",data.user.id);
-
 
 
 
@@ -142,60 +152,23 @@ let {data:perfil,error:perfilError}=await supabase
 
 
 
-
-
-// Si no existe perfil lo crea automáticamente
-
 if(perfilError){
 
 
-const nuevoPerfil={
-
-id:data.user.id,
-
-nombre:data.user.email.split("@")[0],
-
-correo:data.user.email,
-
-rol:"cliente",
-
-telefono:"",
-
-direccion:""
-
-};
+perfil=await crearPerfil(
+data.user,
+data.user.email.split("@")[0]
+);
 
 
-
-const {error:crearError}=await supabase
-
-.from("perfiles")
-
-.insert(nuevoPerfil);
-
-
-
-if(crearError){
-
-console.log(crearError);
-
-alert("No se pudo crear perfil");
-
-return;
-
-}
-
-
-
-perfil=nuevoPerfil;
+if(!perfil)return;
 
 
 }
 
 
 
-
-const usuarioCompleto={
+const usuario={
 
 id:data.user.id,
 
@@ -213,27 +186,17 @@ rol:perfil.rol || "cliente"
 
 
 
-actualizarUsuario(usuarioCompleto);
-
+actualizarUsuario(usuario);
 
 
 localStorage.setItem(
-
 "usuario",
-
-JSON.stringify(usuarioCompleto)
-
+JSON.stringify(usuario)
 );
 
 
 
-
-alert("✅ Bienvenido a ANNT LOGISTICS");
-
-
-
-
-if(usuarioCompleto.rol==="admin"){
+if(usuario.rol==="admin"){
 
 router.push("/admin");
 
@@ -242,7 +205,6 @@ router.push("/admin");
 router.push("/perfil");
 
 }
-
 
 
 }
@@ -257,41 +219,25 @@ return(
 
 <main className="min-h-screen bg-[#111] text-white flex items-center justify-center p-8">
 
-
 <div className="bg-[#181818] border border-[#333] rounded-2xl p-8 w-full max-w-md">
-
 
 
 <h1 className="text-4xl font-bold text-center mb-8">
 
-ANNT
-
-<span className="text-[#f5b800]">
-
-{" "}LOGISTICS
-
-</span>
+ANNT <span className="text-[#f5b800]">LOGISTICS</span>
 
 </h1>
 
 
-
-
 <h2 className="text-2xl font-bold text-center mb-6">
 
-{modo==="login"
-?
-"Iniciar sesión"
-:
-"Crear cuenta"}
+{modo==="login" ? "Iniciar sesión" : "Crear cuenta"}
 
 </h2>
 
 
 
-
 <form onSubmit={enviar}>
-
 
 
 {modo==="registro" && (
@@ -307,7 +253,6 @@ value={datos.nombre}
 onChange={(e)=>setDatos({
 
 ...datos,
-
 nombre:e.target.value
 
 })}
@@ -318,12 +263,11 @@ nombre:e.target.value
 
 
 
-
 <input
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
 
-placeholder="Correo electrónico"
+placeholder="Correo"
 
 type="email"
 
@@ -332,14 +276,11 @@ value={datos.correo}
 onChange={(e)=>setDatos({
 
 ...datos,
-
 correo:e.target.value
 
 })}
 
 />
-
-
 
 
 
@@ -356,13 +297,11 @@ value={datos.contraseña}
 onChange={(e)=>setDatos({
 
 ...datos,
-
 contraseña:e.target.value
 
 })}
 
 />
-
 
 
 
@@ -372,18 +311,12 @@ className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-xl"
 
 >
 
-{modo==="login"
-?
-"Entrar"
-:
-"Registrarme"}
+{modo==="login" ? "Entrar" : "Registrarme"}
 
 </button>
 
 
-
 </form>
-
 
 
 
@@ -391,11 +324,7 @@ className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-xl"
 
 onClick={()=>setModo(
 
-modo==="login"
-?
-"registro"
-:
-"login"
+modo==="login" ? "registro" : "login"
 
 )}
 
@@ -403,18 +332,12 @@ className="mt-6 w-full text-[#f5b800]"
 
 >
 
-{modo==="login"
-?
-"Crear una cuenta nueva"
-:
-"Ya tengo una cuenta"}
+{modo==="login" ? "Crear una cuenta" : "Ya tengo cuenta"}
 
 </button>
 
 
-
 </div>
-
 
 </main>
 
