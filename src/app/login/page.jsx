@@ -19,7 +19,7 @@ const [datos,setDatos] = useState({
 });
 
 
-const crearPerfil = async(usuario, nombre)=>{
+const crearPerfil = async(usuario,nombre)=>{
 
 const perfil = {
 
@@ -34,8 +34,11 @@ direccion:""
 
 
 const {error}=await supabase
+
 .from("perfiles")
+
 .upsert(perfil);
+
 
 
 if(error){
@@ -43,10 +46,10 @@ if(error){
 console.log("ERROR PERFIL:",error);
 
 alert(
-"Error perfil: " + error.message
+"Error creando perfil: " + error.message
 );
 
-return false;
+return null;
 
 }
 
@@ -69,6 +72,7 @@ if(modo==="registro"){
 const {data,error}=await supabase.auth.signUp({
 
 email:datos.correo,
+
 password:datos.contraseña
 
 });
@@ -77,6 +81,7 @@ password:datos.contraseña
 if(error){
 
 alert(error.message);
+
 return;
 
 }
@@ -85,23 +90,29 @@ return;
 
 if(!data.user){
 
-alert("Usuario creado. Inicia sesión para continuar.");
+alert("Usuario creado. Inicia sesión.");
+
 return;
 
 }
 
 
 
-const perfil=await crearPerfil(
+const perfil = await crearPerfil(
 
 data.user,
+
 datos.nombre
 
 );
 
 
 
-if(!perfil)return;
+if(!perfil){
+
+return;
+
+}
 
 
 
@@ -109,12 +120,16 @@ actualizarUsuario(perfil);
 
 
 localStorage.setItem(
+
 "usuario",
+
 JSON.stringify(perfil)
+
 );
 
 
-alert("✅ Cuenta creada");
+
+alert("✅ Cuenta creada correctamente");
 
 router.push("/perfil");
 
@@ -126,6 +141,7 @@ router.push("/perfil");
 const {data,error}=await supabase.auth.signInWithPassword({
 
 email:datos.correo,
+
 password:datos.contraseña
 
 });
@@ -134,13 +150,18 @@ password:datos.contraseña
 if(error){
 
 alert(error.message);
+
 return;
 
 }
 
 
 
-let {data:perfil,error:perfilError}=await supabase
+let perfil;
+
+
+
+const {data:perfilDB,error:perfilError}=await supabase
 
 .from("perfiles")
 
@@ -155,13 +176,28 @@ let {data:perfil,error:perfilError}=await supabase
 if(perfilError){
 
 
-perfil=await crearPerfil(
+perfil = await crearPerfil(
+
 data.user,
+
 data.user.email.split("@")[0]
+
 );
 
 
-if(!perfil)return;
+
+if(!perfil){
+
+return;
+
+}
+
+
+
+}else{
+
+
+perfil = perfilDB;
 
 
 }
@@ -190,9 +226,16 @@ actualizarUsuario(usuario);
 
 
 localStorage.setItem(
+
 "usuario",
+
 JSON.stringify(usuario)
+
 );
+
+
+
+alert("✅ Bienvenido a ANNT LOGISTICS");
 
 
 
@@ -253,6 +296,7 @@ value={datos.nombre}
 onChange={(e)=>setDatos({
 
 ...datos,
+
 nombre:e.target.value
 
 })}
@@ -267,7 +311,7 @@ nombre:e.target.value
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
 
-placeholder="Correo"
+placeholder="Correo electrónico"
 
 type="email"
 
@@ -276,6 +320,7 @@ value={datos.correo}
 onChange={(e)=>setDatos({
 
 ...datos,
+
 correo:e.target.value
 
 })}
@@ -297,6 +342,7 @@ value={datos.contraseña}
 onChange={(e)=>setDatos({
 
 ...datos,
+
 contraseña:e.target.value
 
 })}
