@@ -5,9 +5,7 @@ import { useProducts } from "@/context/ProductContext";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 
-
 export default function Admin() {
-
 
 const {
 productos,
@@ -40,9 +38,7 @@ const [subiendo,setSubiendo]=useState(false);
 
 const subirImagen=async(e)=>{
 
-
 const archivo=e.target.files[0];
-
 
 if(!archivo)return;
 
@@ -99,7 +95,6 @@ imagen:url
 
 setSubiendo(false);
 
-
 };
 
 
@@ -107,7 +102,6 @@ setSubiendo(false);
 
 
 const guardarProducto=async(e)=>{
-
 
 e.preventDefault();
 
@@ -204,8 +198,8 @@ className="inline-block bg-[#f5b800] text-black font-bold px-6 py-3 rounded-xl m
 
 
 
-
 <form onSubmit={guardarProducto}>
+
 
 
 
@@ -217,9 +211,21 @@ placeholder="Nombre producto"
 
 value={producto.nombre}
 
-onChange={(e)=>setProducto({...producto,nombre:e.target.value})}
+onChange={(e)=>
+
+setProducto({
+
+...producto,
+
+nombre:e.target.value
+
+})
+
+}
 
 />
+
+
 
 
 
@@ -231,9 +237,21 @@ placeholder="Descripción"
 
 value={producto.descripcion}
 
-onChange={(e)=>setProducto({...producto,descripcion:e.target.value})}
+onChange={(e)=>
+
+setProducto({
+
+...producto,
+
+descripcion:e.target.value
+
+})
+
+}
 
 />
+
+
 
 
 
@@ -245,9 +263,21 @@ placeholder="Categoría"
 
 value={producto.categoria}
 
-onChange={(e)=>setProducto({...producto,categoria:e.target.value})}
+onChange={(e)=>
+
+setProducto({
+
+...producto,
+
+categoria:e.target.value
+
+})
+
+}
 
 />
+
+
 
 
 
@@ -261,9 +291,21 @@ placeholder="Precio"
 
 value={producto.precio}
 
-onChange={(e)=>setProducto({...producto,precio:e.target.value})}
+onChange={(e)=>
+
+setProducto({
+
+...producto,
+
+precio:e.target.value
+
+})
+
+}
 
 />
+
+
 
 
 
@@ -277,9 +319,21 @@ placeholder="Precio anterior"
 
 value={producto.precio_original}
 
-onChange={(e)=>setProducto({...producto,precio_original:e.target.value})}
+onChange={(e)=>
+
+setProducto({
+
+...producto,
+
+precio_original:e.target.value
+
+})
+
+}
 
 />
+
+
 
 
 
@@ -293,9 +347,21 @@ placeholder="Descuento %"
 
 value={producto.descuento}
 
-onChange={(e)=>setProducto({...producto,descuento:e.target.value})}
+onChange={(e)=>
+
+setProducto({
+
+...producto,
+
+descuento:e.target.value
+
+})
+
+}
 
 />
+
+
 
 
 
@@ -309,9 +375,21 @@ placeholder="Stock"
 
 value={producto.stock}
 
-onChange={(e)=>setProducto({...producto,stock:e.target.value})}
+onChange={(e)=>
+
+setProducto({
+
+...producto,
+
+stock:e.target.value
+
+})
+
+}
 
 />
+
+
 
 
 
@@ -323,9 +401,21 @@ placeholder="Tallas S,M,L o 39,40"
 
 value={producto.tallas}
 
-onChange={(e)=>setProducto({...producto,tallas:e.target.value})}
+onChange={(e)=>
+
+setProducto({
+
+...producto,
+
+tallas:e.target.value
+
+})
+
+}
 
 />
+
+
 
 
 
@@ -337,9 +427,21 @@ placeholder="Colores Negro,Blanco"
 
 value={producto.colores}
 
-onChange={(e)=>setProducto({...producto,colores:e.target.value})}
+onChange={(e)=>
+
+setProducto({
+
+...producto,
+
+colores:e.target.value
+
+})
+
+}
 
 />
+
+
 
 
 
@@ -357,7 +459,19 @@ className="mb-4"
 
 
 
-{subiendo && <p>⏳ Subiendo imagen...</p>}
+
+
+{subiendo && (
+
+<p>
+
+⏳ Subiendo imagen...
+
+</p>
+
+)}
+
+
 
 
 
@@ -367,11 +481,13 @@ className="mb-4"
 
 src={producto.imagen}
 
-className="w-40 rounded-lg mb-4"
+className="w-48 h-48 object-contain bg-white rounded-lg mb-4"
 
 />
 
 )}
+
+
 
 
 
@@ -398,7 +514,7 @@ className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-lg"
 
 <h2 className="text-3xl font-bold mb-5">
 
-📦 Productos
+📦 Productos publicados
 
 </h2>
 
@@ -406,16 +522,18 @@ className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-lg"
 
 
 
-{
+<div className="grid md:grid-cols-3 gap-6">
 
-productos.map((p)=>(
+
+
+{productos?.map((p)=>(
 
 
 <div
 
 key={p.id}
 
-className="bg-[#181818] border border-[#333] p-5 rounded-xl mb-5"
+className="bg-[#181818] border border-[#333] rounded-xl p-5"
 
 >
 
@@ -424,13 +542,14 @@ className="bg-[#181818] border border-[#333] p-5 rounded-xl mb-5"
 
 src={p.imagen}
 
-className="w-32 h-32 object-cover rounded-lg"
+className="w-full h-64 object-contain bg-white rounded-lg"
 
 />
 
 
 
-<h3 className="text-xl font-bold mt-3">
+
+<h3 className="text-xl font-bold mt-4">
 
 {p.nombre}
 
@@ -440,15 +559,7 @@ className="w-32 h-32 object-cover rounded-lg"
 
 <p>
 
-S/ {p.precio}
-
-</p>
-
-
-
-<p>
-
-📦 Stock: {p.stock}
+💲 S/ {p.precio}
 
 </p>
 
@@ -471,10 +582,11 @@ className="mt-4 bg-red-600 px-5 py-2 rounded-lg"
 </div>
 
 
-))
+))}
 
 
-}
+
+</div>
 
 
 
