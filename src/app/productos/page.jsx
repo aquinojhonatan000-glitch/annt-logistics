@@ -100,10 +100,21 @@ return (
 <main className="min-h-screen px-6 py-10">
 
 
+<div className="
+bg-white/10
+backdrop-blur-xl
+border
+border-white/20
+rounded-3xl
+p-8
+shadow-2xl
+mb-8
+">
+
 <h1 className="
 text-4xl
 font-bold
-mb-6
+mb-4
 ">
 
 🛍️ Catálogo 
@@ -114,6 +125,50 @@ ANNT LOGISTICS
 </h1>
 
 
+<p className="text-gray-300">
+
+Todos nuestros productos están sujetos a disponibilidad,
+proveedores y costos de importación.
+
+</p>
+
+
+<p className="mt-4">
+
+🚚 Entrega estimada: 6 a 15 días hábiles
+
+</p>
+
+
+<a
+
+href="https://wa.me/51907025944"
+
+target="_blank"
+
+className="
+inline-block
+mt-5
+bg-green-500/90
+backdrop-blur-lg
+border
+border-white/20
+text-white
+font-bold
+px-6
+py-3
+rounded-xl
+hover:bg-green-600
+transition
+"
+
+>
+
+💬 WhatsApp: 907025944
+
+</a>
+
+</div>
 
 <p className="mb-4 text-gray-300">
 
