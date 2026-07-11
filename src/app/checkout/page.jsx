@@ -21,7 +21,10 @@ const router = useRouter();
 
 
 
+
+
 const [datos,setDatos]=useState({
+
 
 nombre: usuario?.nombre || "",
 
@@ -29,9 +32,14 @@ telefono: usuario?.telefono || "",
 
 direccion: usuario?.direccion || "",
 
+ciudad: "",
+
 pago:"Yape"
 
+
 });
+
+
 
 
 
@@ -45,13 +53,19 @@ const [enviando,setEnviando]=useState(false);
 
 
 
+
+
 const total = carrito.reduce(
 
-(sum,p)=>sum + Number(p.precio)*p.cantidad,
+(sum,p)=>
+
+sum + Number(p.precio)*p.cantidad,
 
 0
 
 );
+
+
 
 
 
@@ -72,7 +86,8 @@ setSubiendo(true);
 
 
 
-const nombreArchivo=
+
+const nombreArchivo =
 
 "comprobantes/"+Date.now()+"-"+archivo.name;
 
@@ -112,7 +127,6 @@ return;
 
 
 
-
 const url=supabase.storage
 
 .from("imagenes")
@@ -127,13 +141,12 @@ const url=supabase.storage
 
 setComprobante(url);
 
-
-
 setSubiendo(false);
 
 
-
 };
+
+
 
 
 
@@ -158,6 +171,16 @@ return;
 
 
 
+if(!datos.nombre || !datos.telefono || !datos.direccion || !datos.ciudad){
+
+alert("Completa todos tus datos de entrega");
+
+return;
+
+}
+
+
+
 setEnviando(true);
 
 
@@ -167,39 +190,56 @@ setEnviando(true);
 const pedido={
 
 
+
 id:crypto.randomUUID(),
 
 
+
+
 cliente:{
+
 
 nombre:datos.nombre,
 
 telefono:datos.telefono,
 
-direccion:datos.direccion
+direccion:datos.direccion,
+
+ciudad:datos.ciudad
+
 
 },
+
+
+
 
 
 productos:carrito,
 
 
+
 total,
+
 
 
 estado:"Esperando pago",
 
 
+
 pago:datos.pago,
+
 
 
 comprobante,
 
 
+
 fecha:new Date().toISOString(),
 
 
+
 tiempo_entrega:"Pendiente"
+
 
 
 };
@@ -218,11 +258,16 @@ limpiarCarrito();
 
 
 
+
+
 alert("✅ Pedido enviado correctamente");
 
 
 
+
+
 router.push("/");
+
 
 
 };
@@ -234,7 +279,10 @@ router.push("/");
 
 
 
+
+
 return(
+
 
 
 <main className="min-h-screen bg-[#111] text-white p-8">
@@ -259,7 +307,9 @@ return(
 
 
 
+
 <div className="bg-[#181818] border border-[#333] rounded-xl p-6">
+
 
 
 <h2 className="text-2xl font-bold mb-5">
@@ -271,11 +321,13 @@ Datos de entrega
 
 
 
+
+
 <input
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
 
-placeholder="Nombre"
+placeholder="Nombre completo"
 
 value={datos.nombre}
 
@@ -288,6 +340,8 @@ nombre:e.target.value
 })}
 
 />
+
+
 
 
 
@@ -316,11 +370,12 @@ telefono:e.target.value
 
 
 
+
 <textarea
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
 
-placeholder="Dirección"
+placeholder="Dirección completa"
 
 value={datos.direccion}
 
@@ -339,11 +394,38 @@ direccion:e.target.value
 
 
 
+
+<input
+
+className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+
+placeholder="Ciudad"
+
+value={datos.ciudad}
+
+onChange={(e)=>setDatos({
+
+...datos,
+
+ciudad:e.target.value
+
+})}
+
+/>
+
+
+
+
+
+
+
 <h2 className="text-xl font-bold">
 
 Método de pago
 
 </h2>
+
+
 
 
 
@@ -365,11 +447,13 @@ pago:e.target.value
 
 >
 
+
 <option>Yape</option>
 
 <option>Plin</option>
 
 <option>Transferencia</option>
+
 
 </select>
 
@@ -378,6 +462,7 @@ pago:e.target.value
 
 
 </div>
+
 
 
 
@@ -401,10 +486,13 @@ Resumen del pedido
 
 
 
+
+
 {carrito.map((p)=>(
 
 
-<div key={p.id} className="mb-4">
+
+<div key={p.id} className="mb-4 border-b border-[#333] pb-3">
 
 
 <p className="font-bold">
@@ -414,6 +502,7 @@ Resumen del pedido
 </p>
 
 
+
 <p>
 
 Cantidad: {p.cantidad}
@@ -421,16 +510,29 @@ Cantidad: {p.cantidad}
 </p>
 
 
-{p.talla && <p>👕 {p.talla}</p>}
+
+{p.talla && (
+
+<p>👕 Talla: {p.talla}</p>
+
+)}
 
 
-{p.color && <p>🎨 {p.color}</p>}
+
+{p.color && (
+
+<p>🎨 Color: {p.color}</p>
+
+)}
+
 
 
 </div>
 
 
+
 ))}
+
 
 
 
@@ -454,6 +556,7 @@ Total:
 
 
 
+
 <img
 
 src="/qr.png"
@@ -466,11 +569,16 @@ className="w-48 mt-5 rounded-lg"
 
 
 
+
+
 <p className="mt-5">
 
 📷 Subir comprobante
 
 </p>
+
+
+
 
 
 
@@ -490,7 +598,18 @@ className="mt-3"
 
 
 
-{subiendo && <p>⏳ Subiendo...</p>}
+
+
+{subiendo && (
+
+<p>
+
+⏳ Subiendo comprobante...
+
+</p>
+
+)}
+
 
 
 
@@ -512,20 +631,23 @@ className="mt-6 w-full bg-[#f5b800] text-black font-bold py-4 rounded-xl"
 {enviando ? "Enviando..." : "✅ Confirmar compra"}
 
 
+
 </button>
 
 
 
 
-</div>
-
-
-
-
-
 
 
 </div>
+
+
+
+
+
+
+</div>
+
 
 
 
@@ -534,7 +656,9 @@ className="mt-6 w-full bg-[#f5b800] text-black font-bold py-4 rounded-xl"
 </main>
 
 
+
 );
+
 
 
 }
