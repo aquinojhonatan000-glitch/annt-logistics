@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 const OrderContext = createContext();
 
 
+
 export function OrderProvider({ children }) {
 
 
@@ -13,7 +14,8 @@ const [pedidos, setPedidos] = useState([]);
 
 
 
-// cargar pedidos desde Supabase
+
+// Cargar pedidos
 
 const cargarPedidos = async()=>{
 
@@ -24,7 +26,7 @@ const {data,error}=await supabase
 
 .select("*")
 
-.order("created_at",{ascending:false});
+.order("fecha",{ascending:false});
 
 
 
@@ -38,10 +40,16 @@ return;
 
 
 
+console.log("PEDIDOS CARGADOS:",data);
+
+
 setPedidos(data || []);
 
 
+
 };
+
+
 
 
 
@@ -58,16 +66,15 @@ cargarPedidos();
 
 
 
-// crear pedido
+
+
+
+// Crear pedido
 
 const agregarPedido = async(pedido)=>{
 
 
-const {data,error}=await supabase
-
-.from("pedidos")
-
-.insert([{
+const pedidoGuardar={
 
 
 numero_pedido:pedido.id,
@@ -75,35 +82,66 @@ numero_pedido:pedido.id,
 
 cliente:{
 
-...pedido.cliente,
 
-correo:pedido.cliente.correo
+nombre:pedido.cliente.nombre,
+
+telefono:pedido.cliente.telefono,
+
+direccion:pedido.cliente.direccion,
+
+ciudad:pedido.cliente.ciudad,
+
+correo:pedido.cliente.correo || ""
+
 
 },
 
 
-productos:pedido.productos,
+
+productos:JSON.parse(
+
+JSON.stringify(pedido.productos)
+
+),
 
 
-total:pedido.total,
+
+total:Number(pedido.total),
+
 
 
 estado:"Esperando pago",
 
 
+
 pago:pedido.pago,
+
 
 
 comprobante:pedido.comprobante || "",
 
 
-fecha:pedido.fecha,
+
+fecha:pedido.fecha || new Date().toISOString(),
+
 
 
 tiempo_entrega:"6-15 días hábiles"
 
 
-}])
+
+};
+
+
+
+
+
+
+const {data,error}=await supabase
+
+.from("pedidos")
+
+.insert([pedidoGuardar])
 
 .select();
 
@@ -113,17 +151,14 @@ tiempo_entrega:"6-15 días hábiles"
 
 if(error){
 
-
 console.log("ERROR GUARDANDO PEDIDO:",error);
-
 
 alert("Error guardando pedido");
 
-
 return;
 
-
 }
+
 
 
 
@@ -147,7 +182,8 @@ data[0],
 
 
 
-// cambiar estado
+
+// Cambiar estado pedido
 
 const cambiarEstado=async(id,estado)=>{
 
@@ -166,13 +202,16 @@ estado
 
 
 
+
 if(error){
 
-console.log(error);
+console.log("ERROR ESTADO:",error);
 
 return;
 
 }
+
+
 
 
 
@@ -201,6 +240,7 @@ pedido
 );
 
 
+
 };
 
 
@@ -211,7 +251,7 @@ pedido
 
 
 
-// cambiar tiempo
+// Cambiar tiempo entrega
 
 const cambiarTiempoEntrega=async(id,tiempo)=>{
 
@@ -230,13 +270,16 @@ tiempo_entrega:tiempo
 
 
 
+
 if(error){
 
-console.log(error);
+console.log("ERROR TIEMPO:",error);
 
 return;
 
 }
+
+
 
 
 
@@ -265,6 +308,7 @@ pedido
 );
 
 
+
 };
 
 
@@ -274,7 +318,9 @@ pedido
 
 return(
 
+
 <OrderContext.Provider
+
 
 value={{
 
@@ -290,11 +336,15 @@ cargarPedidos
 
 }}
 
+
 >
+
 
 {children}
 
+
 </OrderContext.Provider>
+
 
 );
 
@@ -304,8 +354,13 @@ cargarPedidos
 
 
 
+
+
+
 export function useOrders(){
 
+
 return useContext(OrderContext);
+
 
 }
