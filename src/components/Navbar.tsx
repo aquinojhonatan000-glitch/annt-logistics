@@ -41,8 +41,8 @@ export default function Navbar() {
       flex
       items-center
       justify-between
-      px-12
-      py-2
+      px-10
+      py-3
       mx-4
       mt-4
       rounded-3xl
@@ -54,23 +54,17 @@ export default function Navbar() {
     ">
 
 
-      {/* LOGO LIBRE */}
+      {/* LOGO */}
 
-      <Link 
-        href="/"
-        className="
-          flex
-          items-center
-        "
-      >
+      <Link href="/">
         <Image
           src="/logo.png"
           alt="ANNT LOGISTICS"
-          width={340}
-          height={150}
+          width={320}
+          height={140}
           className="
-            w-80
-            md:w-[22rem]
+            w-72
+            md:w-80
             h-auto
             object-contain
             drop-shadow-[0_0_35px_rgba(245,184,0,0.5)]
@@ -84,7 +78,7 @@ export default function Navbar() {
 
 
 
-      {/* MENU LIQUID GLASS */}
+      {/* MENU */}
 
       <div className="
         flex
@@ -113,12 +107,10 @@ export default function Navbar() {
         </Link>
 
 
-
         {
           usuario ? (
 
             <>
-
 
               <Link
                 href="/perfil"
@@ -126,7 +118,6 @@ export default function Navbar() {
               >
                 👤 {usuario.nombre}
               </Link>
-
 
 
               {
@@ -144,8 +135,6 @@ export default function Navbar() {
                       border-[#f5b800]
                       text-[#f5b800]
                       font-bold
-                      hover:shadow-[0_0_25px_rgba(245,184,0,0.7)]
-                      transition
                     "
                   >
                     ⚙️ Admin
@@ -153,7 +142,6 @@ export default function Navbar() {
 
                 )
               }
-
 
 
               <button
@@ -173,7 +161,6 @@ export default function Navbar() {
               >
                 Cerrar sesión
               </button>
-
 
             </>
 
@@ -195,7 +182,6 @@ export default function Navbar() {
                 font-bold
                 hover:bg-[#f5b800]
                 hover:text-black
-                hover:shadow-[0_0_30px_rgba(245,184,0,0.8)]
                 transition
               "
             >
