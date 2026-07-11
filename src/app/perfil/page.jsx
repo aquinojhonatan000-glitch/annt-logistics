@@ -34,16 +34,20 @@ direccion: usuario?.direccion || ""
 
 
 
+
+
 if(!usuario){
 
 return(
 
-<main className="min-h-screen bg-[#111] text-white p-8 flex items-center justify-center">
+<main className="min-h-screen bg-[#111] text-white flex items-center justify-center p-8">
 
 <div className="bg-[#181818] p-8 rounded-xl text-center">
 
 <h1 className="text-3xl font-bold mb-5">
+
 👤 No has iniciado sesión
+
 </h1>
 
 
@@ -72,7 +76,9 @@ Iniciar sesión
 
 
 
+
 const guardar=()=>{
+
 
 actualizarUsuario({
 
@@ -85,19 +91,44 @@ actualizarUsuario({
 
 setEditar(false);
 
+
 };
 
 
 
 
 
-const misPedidos = pedidos.filter(
 
-(pedido)=>
 
-pedido.cliente?.correo?.toLowerCase() === usuario.correo?.toLowerCase()
+// Buscar pedidos del cliente
+
+const misPedidos = pedidos.filter((pedido)=>{
+
+
+const correoPedido = pedido.cliente?.correo?.toLowerCase();
+
+const correoUsuario = usuario.correo?.toLowerCase();
+
+
+const telefonoPedido = pedido.cliente?.telefono;
+
+const telefonoUsuario = usuario.telefono;
+
+
+
+return (
+
+correoPedido === correoUsuario
+
+||
+
+telefonoPedido === telefonoUsuario
 
 );
+
+
+});
+
 
 
 
@@ -121,14 +152,15 @@ return(
 
 
 
-<section className="bg-[#181818] border border-[#333] rounded-xl p-6">
 
+
+<section className="bg-[#181818] border border-[#333] rounded-xl p-6">
 
 
 <div className="flex items-center gap-5 mb-6">
 
 
-<div className="w-28 h-28 rounded-full bg-[#f5b800] text-black flex items-center justify-center text-5xl font-bold">
+<div className="w-24 h-24 rounded-full bg-[#f5b800] text-black flex items-center justify-center text-5xl font-bold">
 
 {usuario.nombre?.charAt(0) || "U"}
 
@@ -143,7 +175,11 @@ return(
 </h2>
 
 
+
 </div>
+
+
+
 
 
 
@@ -152,9 +188,7 @@ return(
 {
 editar ?
 
-
 (
-
 
 <>
 
@@ -181,7 +215,6 @@ nombre:e.target.value
 
 
 
-
 <input
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
@@ -201,7 +234,6 @@ telefono:e.target.value
 }
 
 />
-
 
 
 
@@ -227,7 +259,6 @@ direccion:e.target.value
 
 
 
-
 <button
 
 onClick={guardar}
@@ -247,12 +278,9 @@ className="bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 
 )
 
-
 :
 
-
 (
-
 
 <>
 
@@ -296,7 +324,6 @@ className="mt-5 bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 
 </>
 
-
 )
 
 }
@@ -304,6 +331,8 @@ className="mt-5 bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 
 
 </section>
+
+
 
 
 
@@ -323,13 +352,13 @@ className="mt-5 bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 
 
 
+
 {
 
 misPedidos.length===0 ?
 
 
 (
-
 
 <p className="text-gray-400">
 
@@ -369,7 +398,6 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 
 
 
-
 <p className="mt-3">
 
 📅 Fecha:
@@ -379,7 +407,6 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 {new Date(pedido.fecha).toLocaleDateString()}
 
 </p>
-
 
 
 
@@ -397,8 +424,7 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 
 
 
-
-<p className="text-[#f5b800] font-bold mt-2">
+<p className="text-[#f5b800] font-bold">
 
 ⏳ Entrega:
 
@@ -414,7 +440,7 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 
 
 
-<h3 className="text-xl font-bold mt-5">
+<h3 className="font-bold text-xl mt-5">
 
 🛒 Productos
 
@@ -429,7 +455,6 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 pedido.productos?.map((producto,index)=>(
 
 
-
 <div
 
 key={index}
@@ -437,7 +462,6 @@ key={index}
 className="flex gap-4 bg-[#111] border border-[#333] rounded-xl p-4 mt-4"
 
 >
-
 
 
 
@@ -450,8 +474,6 @@ alt={producto.nombre}
 className="w-24 h-24 object-cover rounded-lg"
 
 />
-
-
 
 
 
@@ -471,7 +493,6 @@ className="w-24 h-24 object-cover rounded-lg"
 Cantidad: {producto.cantidad}
 
 </p>
-
 
 
 
@@ -506,12 +527,12 @@ producto.color &&
 </div>
 
 
+
 </div>
 
 
 
 ))
-
 
 }
 
@@ -525,7 +546,12 @@ producto.color &&
 
 {" "}
 
+<span className="text-[#f5b800]">
+
 S/ {Number(pedido.total).toFixed(2)}
+
+</span>
+
 
 </p>
 
@@ -533,15 +559,15 @@ S/ {Number(pedido.total).toFixed(2)}
 
 
 
-
-<div className="mt-5 bg-[#111] p-4 rounded-xl">
-
-
 {
 
 pedido.estado==="Esperando pago" &&
 
-"💳 Estamos verificando tu pago"
+<p className="mt-4">
+
+💳 Estamos verificando tu pago
+
+</p>
 
 }
 
@@ -551,7 +577,11 @@ pedido.estado==="Esperando pago" &&
 
 pedido.estado==="Preparando pedido" &&
 
-"📦 Tu pedido está siendo preparado"
+<p className="mt-4">
+
+📦 Tu pedido está siendo preparado
+
+</p>
 
 }
 
@@ -561,7 +591,11 @@ pedido.estado==="Preparando pedido" &&
 
 pedido.estado==="En camino" &&
 
-"🚚 Tu pedido está en camino"
+<p className="mt-4">
+
+🚚 Tu pedido está en camino
+
+</p>
 
 }
 
@@ -571,14 +605,13 @@ pedido.estado==="En camino" &&
 
 pedido.estado==="Entregado" &&
 
-"✅ Pedido entregado correctamente"
+<p className="mt-4">
+
+✅ Pedido entregado correctamente
+
+</p>
 
 }
-
-
-
-</div>
-
 
 
 
@@ -591,6 +624,7 @@ pedido.estado==="Entregado" &&
 
 )
 
+
 }
 
 
@@ -600,10 +634,10 @@ pedido.estado==="Entregado" &&
 
 
 
-
 </main>
 
 
 );
+
 
 }
