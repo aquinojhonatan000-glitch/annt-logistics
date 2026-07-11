@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
+
 const OrderContext = createContext();
 
 
@@ -32,7 +33,10 @@ const {data,error}=await supabase
 
 if(error){
 
-console.log("ERROR CARGANDO PEDIDOS:",error);
+console.log(
+"ERROR CARGANDO PEDIDOS:",
+error
+);
 
 return;
 
@@ -40,7 +44,11 @@ return;
 
 
 
-console.log("PEDIDOS CARGADOS:",data);
+console.log(
+"PEDIDOS CARGADOS:",
+data
+);
+
 
 
 setPedidos(data || []);
@@ -53,15 +61,11 @@ setPedidos(data || []);
 
 
 
-
 useEffect(()=>{
-
 
 cargarPedidos();
 
-
 },[]);
-
 
 
 
@@ -74,63 +78,99 @@ cargarPedidos();
 const agregarPedido = async(pedido)=>{
 
 
+
 const pedidoGuardar={
+
 
 
 numero_pedido:pedido.id,
 
 
+
 cliente:{
 
 
-nombre:pedido.cliente.nombre,
+nombre:pedido.cliente?.nombre || "",
 
-telefono:pedido.cliente.telefono,
 
-direccion:pedido.cliente.direccion,
+dni:pedido.cliente?.dni || "",
 
-ciudad:pedido.cliente.ciudad,
 
-correo:pedido.cliente.correo || ""
+telefono:pedido.cliente?.telefono || "",
+
+
+direccion:pedido.cliente?.direccion || "",
+
+
+ciudad:pedido.cliente?.ciudad || "",
+
+
+correo:pedido.cliente?.correo || ""
 
 
 },
 
 
 
+
+
+
 productos:JSON.parse(
 
-JSON.stringify(pedido.productos)
+JSON.stringify(
+pedido.productos || []
+)
 
 ),
 
 
 
-total:Number(pedido.total),
+
+
+total:Number(pedido.total || 0),
 
 
 
-estado:"Esperando pago",
+
+
+estado:
+pedido.estado || "Esperando pago",
 
 
 
-pago:pedido.pago,
 
 
 
-comprobante:pedido.comprobante || "",
+pago:
+pedido.pago || "Yape",
 
 
 
-fecha:pedido.fecha || new Date().toISOString(),
+
+
+comprobante:
+pedido.comprobante || "",
 
 
 
-tiempo_entrega:"6-15 días hábiles"
+
+
+fecha:
+pedido.fecha || new Date().toISOString(),
+
+
+
+
+
+tiempo_entrega:
+pedido.tiempo_entrega || "6-15 días hábiles"
+
+
 
 
 
 };
+
 
 
 
@@ -151,11 +191,20 @@ const {data,error}=await supabase
 
 if(error){
 
-console.log("ERROR GUARDANDO PEDIDO:",error);
 
-alert("Error guardando pedido");
+console.log(
+"ERROR GUARDANDO PEDIDO:",
+error
+);
+
+
+alert(
+"Error guardando pedido"
+);
+
 
 return;
+
 
 }
 
@@ -173,6 +222,8 @@ data[0],
 
 
 
+
+
 };
 
 
@@ -185,7 +236,9 @@ data[0],
 
 // Cambiar estado pedido
 
+
 const cambiarEstado=async(id,estado)=>{
+
 
 
 const {error}=await supabase
@@ -203,13 +256,22 @@ estado
 
 
 
+
+
 if(error){
 
-console.log("ERROR ESTADO:",error);
+
+console.log(
+"ERROR CAMBIANDO ESTADO:",
+error
+);
+
 
 return;
 
+
 }
+
 
 
 
@@ -238,6 +300,8 @@ pedido
 )
 
 );
+
+
 
 
 
@@ -253,7 +317,9 @@ pedido
 
 // Cambiar tiempo entrega
 
+
 const cambiarTiempoEntrega=async(id,tiempo)=>{
+
 
 
 const {error}=await supabase
@@ -271,13 +337,23 @@ tiempo_entrega:tiempo
 
 
 
+
+
 if(error){
 
-console.log("ERROR TIEMPO:",error);
+
+console.log(
+"ERROR TIEMPO ENTREGA:",
+error
+);
+
 
 return;
 
+
 }
+
+
 
 
 
@@ -309,7 +385,12 @@ pedido
 
 
 
+
+
+
 };
+
+
 
 
 
@@ -324,15 +405,21 @@ return(
 
 value={{
 
+
 pedidos,
+
 
 agregarPedido,
 
+
 cambiarEstado,
+
 
 cambiarTiempoEntrega,
 
+
 cargarPedidos
+
 
 }}
 
@@ -343,10 +430,13 @@ cargarPedidos
 {children}
 
 
+
 </OrderContext.Provider>
 
 
+
 );
+
 
 
 }
