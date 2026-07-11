@@ -71,6 +71,7 @@ body {
 
 /* SCROLLBAR PREMIUM */
 
+
 ::-webkit-scrollbar {
 
   width:10px;
@@ -96,6 +97,7 @@ body {
 
 
 /* BOTONES DORADOS */
+
 
 .btn-gold {
 
@@ -133,6 +135,7 @@ body {
 
 /* TARJETAS PREMIUM */
 
+
 .card-dark {
 
   background:
@@ -149,7 +152,6 @@ body {
   transition:.35s;
 
   box-shadow:
-
   0 10px 30px rgba(0,0,0,.35);
 
 }
@@ -163,7 +165,6 @@ body {
   border-color:var(--gold);
 
   box-shadow:
-
   0 20px 45px rgba(245,184,0,.18);
 
 }
@@ -171,6 +172,7 @@ body {
 
 
 /* PRODUCTOS */
+
 
 .product-image {
 
@@ -193,6 +195,7 @@ body {
 
 
 /* BADGES */
+
 
 .badge-offer {
 
@@ -232,6 +235,7 @@ body {
 
 /* TITULOS */
 
+
 .title-gold {
 
   color:var(--gold);
@@ -244,6 +248,7 @@ body {
 
 /* TEXTO SECUNDARIO */
 
+
 .text-muted {
 
   color:#a3a3a3;
@@ -252,10 +257,12 @@ body {
 
 
 
-/* INPUTS */
+/* INPUTS GENERALES */
+
 
 input,
-textarea {
+textarea,
+select {
 
   outline:none;
 
@@ -266,7 +273,8 @@ textarea {
 
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
 
   border-color:#f5b800 !important;
 
@@ -277,7 +285,46 @@ textarea:focus {
 
 
 
-/* EFECTO PREMIUM HERO */
+/* INPUT ADMIN PREMIUM */
+
+
+.admin-input {
+
+  width:100%;
+
+  background:#111;
+
+  border:1px solid #333;
+
+  padding:14px;
+
+  border-radius:14px;
+
+  margin-bottom:16px;
+
+  color:white;
+
+  outline:none;
+
+  transition:.3s;
+
+}
+
+
+
+.admin-input:focus {
+
+  border-color:#f5b800;
+
+  box-shadow:
+  0 0 15px rgba(245,184,0,.25);
+
+}
+
+
+
+/* HERO */
+
 
 .hero-glow {
 
@@ -295,6 +342,7 @@ textarea:focus {
 
 /* ANIMACIONES */
 
+
 .fade-up {
 
   animation:fadeUp .6s ease;
@@ -305,21 +353,24 @@ textarea:focus {
 
 @keyframes fadeUp {
 
-  from {
 
-    opacity:0;
+from {
 
-    transform:translateY(20px);
+  opacity:0;
 
-  }
+  transform:translateY(20px);
+
+}
 
 
-  to {
 
-    opacity:1;
+to {
 
-    transform:translateY(0);
+  opacity:1;
 
-  }
+  transform:translateY(0);
+
+}
+
 
 }
