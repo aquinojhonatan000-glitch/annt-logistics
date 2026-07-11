@@ -47,7 +47,6 @@ const estadosPedido = [
 
 
 
-
 // Cargar pedidos
 
 const cargarPedidos = async()=>{
@@ -109,13 +108,22 @@ const fechaActual = new Date().toISOString();
 
 const primerEstado = {
 
+
 estado:"Pendiente de pago",
+
 
 fecha:new Date().toLocaleDateString("es-PE"),
 
-hora:new Date().toLocaleTimeString("es-PE")
+
+hora:new Date().toLocaleTimeString("es-PE"),
+
+
+descripcion:
+"Pedido creado, esperando confirmación de pago"
+
 
 };
+
 
 
 
@@ -165,7 +173,9 @@ pedido.total || 0
 
 
 
+
 estado:"Pendiente de pago",
+
 
 
 
@@ -177,9 +187,11 @@ primerEstado
 
 
 
+
 pago:
 
 pedido.pago || "Yape",
+
 
 
 
@@ -189,9 +201,11 @@ pedido.comprobante || "",
 
 
 
+
 fecha:
 
 fechaActual,
+
 
 
 
@@ -227,9 +241,11 @@ console.log(
 error
 );
 
+
 alert(
 "❌ Error guardando pedido"
 );
+
 
 return false;
 
@@ -261,6 +277,7 @@ return true;
 
 
 
+
 // Cambiar estado con historial
 
 const cambiarEstado = async(id, estado)=>{
@@ -280,20 +297,31 @@ if(!pedidoActual)return;
 
 
 
+
 const nuevoEstado={
+
 
 
 estado:estado,
 
 
+
 fecha:new Date().toLocaleDateString("es-PE"),
 
 
-hora:new Date().toLocaleTimeString("es-PE")
+
+hora:new Date().toLocaleTimeString("es-PE"),
+
+
+
+descripcion:
+
+`Pedido actualizado a: ${estado}`
 
 
 
 };
+
 
 
 
@@ -306,6 +334,7 @@ const historialNuevo=[
 nuevoEstado
 
 ];
+
 
 
 
@@ -340,9 +369,11 @@ error
 
 );
 
+
 return;
 
 }
+
 
 
 
@@ -384,7 +415,6 @@ pedido
 
 
 
-
 return(
 
 <OrderContext.Provider
@@ -410,6 +440,7 @@ estadosPedido
 </OrderContext.Provider>
 
 );
+
 
 
 }
