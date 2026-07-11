@@ -3,12 +3,9 @@
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { useProducts } from "@/context/ProductContext";
-import Link from "next/link";
 import CountdownProduct from "@/components/CountdownProduct";
 
-
 export default function Productos() {
-
 
 const { carrito, agregarCarrito } = useCart();
 
@@ -48,7 +45,7 @@ const ofertaActiva=(fecha)=>{
 
 if(!fecha) return false;
 
-return new Date(fecha) > new Date();
+return new Date(fecha)>new Date();
 
 };
 
@@ -71,6 +68,7 @@ setSelecciones((prev)=>({
 }));
 
 };
+
 
 
 
@@ -98,37 +96,87 @@ return nombre && cat;
 
 return (
 
-<main className="min-h-screen px-6 py-10">
+<main className="min-h-screen">
 
 
-<h1 className="
-text-4xl
-font-bold
-mb-3
-text-center
-">
-
+<h1 className="text-4xl font-bold mb-6">
 🛍️ Catálogo ANNT LOGISTICS
-
 </h1>
 
 
 
-<p className="
-text-center
-text-gray-400
+<div className="
+bg-[#181818]
+border
+border-[#333]
+rounded-2xl
+p-5
 mb-8
 ">
 
-Precios sujetos a disponibilidad del producto,
-proveedor y costos de importación.
+<h2 className="
+text-xl
+font-bold
+text-[#f5b800]
+">
 
-<br/>
+🚚 Compra segura y atención personalizada
 
-🚚 Entrega estimada: 6 a 15 días hábiles.
+</h2>
+
+
+<p className="text-gray-300 mt-3">
+
+Todos nuestros productos están sujetos a disponibilidad,
+proveedores y costos de importación.
 
 </p>
 
+
+<p className="text-gray-300 mt-2">
+
+📦 Entrega estimada: <b>6 a 15 días hábiles</b>
+
+</p>
+
+
+<p className="text-gray-300 mt-2">
+
+💬 ¿Tienes dudas antes de comprar?
+
+Nuestro equipo está disponible por WhatsApp.
+
+</p>
+
+
+
+<a
+
+href="https://wa.me/51907025944"
+
+target="_blank"
+
+className="
+inline-block
+mt-4
+bg-green-500
+text-white
+font-bold
+px-6
+py-3
+rounded-xl
+hover:bg-green-600
+transition
+"
+
+>
+
+💬 WhatsApp: 907025944
+
+</a>
+
+
+</div>
 
 
 
@@ -143,7 +191,6 @@ border-[#333]
 p-4
 rounded-2xl
 mb-8
-focus:border-[#f5b800]
 outline-none
 "
 
@@ -158,12 +205,11 @@ onChange={(e)=>setBusqueda(e.target.value)}
 
 
 
-
 <div className="
 flex
-gap-3
 flex-wrap
-mb-10
+gap-3
+mb-8
 ">
 
 
@@ -179,13 +225,11 @@ key={cat}
 onClick={()=>setCategoria(cat)}
 
 className={`
-
 px-5
 py-2
 rounded-full
 border
 transition
-
 
 ${
 categoria===cat
@@ -204,7 +248,9 @@ categoria===cat
 
 >
 
+
 {cat}
+
 
 </button>
 
@@ -223,7 +269,7 @@ categoria===cat
 <div className="
 grid
 md:grid-cols-3
-gap-8
+gap-6
 ">
 
 
@@ -254,15 +300,7 @@ duration-300
 ofertaActiva(producto.descuento_hasta) && (
 
 <span className="
-absolute
-top-4
-left-4
-bg-red-600
-px-3
-py-1
-rounded-full
-font-bold
-text-sm
+badge-offer
 ">
 
 🔥 OFERTA
@@ -272,7 +310,6 @@ text-sm
 )
 
 }
-
 
 
 
@@ -295,10 +332,7 @@ mb-5
 
 
 
-<p className="
-text-[#f5b800]
-font-bold
-">
+<p className="text-gray-400">
 
 {producto.categoria}
 
@@ -318,25 +352,15 @@ mt-2
 
 
 
-{
-
-producto.descripcion && (
 
 <p className="
-text-gray-400
-mt-3
+text-gray-300
+mt-2
 ">
 
 {producto.descripcion}
 
 </p>
-
-)
-
-}
-
-
-
 
 
 
@@ -344,24 +368,17 @@ mt-3
 {
 
 ofertaActiva(producto.descuento_hasta)
-
 &&
-
 Number(producto.descuento)>0
-
 &&
 
 (
 
-<div className="
-mt-4
-">
-
+<div className="mt-3">
 
 <span className="
-text-gray-400
 line-through
-mr-3
+text-gray-400
 ">
 
 S/ {Number(producto.precio_original).toFixed(2)}
@@ -369,13 +386,13 @@ S/ {Number(producto.precio_original).toFixed(2)}
 </span>
 
 
-
 <span className="
+ml-3
 bg-red-600
 px-3
 py-1
 rounded-full
-text-sm
+text-white
 font-bold
 ">
 
@@ -393,7 +410,6 @@ font-bold
 
 
 
-
 <p className="
 text-3xl
 font-bold
@@ -401,9 +417,7 @@ text-[#f5b800]
 mt-3
 ">
 
-S/
-
-{
+S/ {
 
 ofertaActiva(producto.descuento_hasta)
 
@@ -422,19 +436,12 @@ Number(producto.precio_original || producto.precio).toFixed(2)
 
 
 
-
 {
 
-ofertaActiva(producto.descuento_hasta)
+ofertaActiva(producto.descuento_hasta) && (
 
-&&
-
-(
-
-<CountdownProduct 
-
+<CountdownProduct
 fecha={producto.descuento_hasta}
-
 />
 
 )
@@ -445,14 +452,11 @@ fecha={producto.descuento_hasta}
 
 
 
-
-
-
 {
 
 producto.tallas && (
 
-<div className="mt-5">
+<div className="mt-4">
 
 <p>👕 Talla</p>
 
@@ -465,43 +469,27 @@ producto.tallas && (
 producto.tallas.split(",").map((talla)=>{
 
 
-const tallaLimpia=talla.trim();
-
+const t=talla.trim();
 
 
 return (
 
 <button
 
-key={tallaLimpia}
+key={t}
 
-onClick={()=>seleccionar(producto.id,"talla",tallaLimpia)}
+onClick={()=>seleccionar(producto.id,"talla",t)}
 
-className={`
-
+className="
+border
 px-3
 py-1
 rounded-lg
-border
-
-${
-selecciones[producto.id]?.talla===tallaLimpia
-
-?
-
-"bg-[#f5b800] text-black"
-
-:
-
-"bg-[#111]"
-
-}
-
-`}
+"
 
 >
 
-{tallaLimpia}
+{t}
 
 </button>
 
@@ -518,11 +506,10 @@ selecciones[producto.id]?.talla===tallaLimpia
 
 </div>
 
+
 )
 
 }
-
-
 
 
 
@@ -532,7 +519,8 @@ selecciones[producto.id]?.talla===tallaLimpia
 
 producto.colores && (
 
-<div className="mt-5">
+<div className="mt-4">
+
 
 <p>🎨 Color</p>
 
@@ -545,49 +533,31 @@ producto.colores && (
 producto.colores.split(",").map((color)=>{
 
 
-const colorLimpio=color.trim();
-
+const c=color.trim();
 
 
 return (
 
 <button
 
-key={colorLimpio}
+key={c}
 
-onClick={()=>seleccionar(producto.id,"color",colorLimpio)}
+onClick={()=>seleccionar(producto.id,"color",c)}
 
-className={`
-
+className="
+border
 px-3
 py-1
 rounded-lg
-border
-
-${
-selecciones[producto.id]?.color===colorLimpio
-
-?
-
-"bg-[#f5b800] text-black"
-
-:
-
-"bg-[#111]"
-
-}
-
-`}
+"
 
 >
 
-{colorLimpio}
+{c}
 
 </button>
 
-
 )
-
 
 })
 
@@ -596,13 +566,13 @@ selecciones[producto.id]?.color===colorLimpio
 
 </div>
 
+
 </div>
+
 
 )
 
 }
-
-
 
 
 
@@ -614,8 +584,8 @@ selecciones[producto.id]?.color===colorLimpio
 onClick={()=>{
 
 
-const elegido=selecciones[producto.id] || {};
-
+const elegido =
+selecciones[producto.id] || {};
 
 
 if(producto.tallas && !elegido.talla){
@@ -638,14 +608,15 @@ return;
 
 
 
-
 agregarCarrito({
 
 ...producto,
 
 talla:elegido.talla || "",
 
-color:elegido.color || ""
+color:elegido.color || "",
+
+cantidad:1
 
 });
 
@@ -659,13 +630,13 @@ w-full
 btn-gold
 "
 
+
 >
 
 🛒 Agregar al carrito
 
 
 </button>
-
 
 
 
@@ -684,11 +655,9 @@ btn-gold
 
 
 
-
 {
 
-
-carrito.length > 0 && (
+carrito.length>0 && (
 
 
 <div className="
@@ -700,82 +669,45 @@ border
 border-[#f5b800]
 rounded-2xl
 p-5
-shadow-2xl
-w-80
+shadow-xl
 z-50
 ">
 
 
-<h3 className="
-font-bold
-text-xl
-mb-2
-">
+<p className="font-bold">
 
 🛒 Tu carrito
 
-</h3>
+</p>
 
 
-
-<p className="text-gray-300">
+<p>
 
 {carrito.length} producto(s)
 
 </p>
 
 
-
-<p className="
-text-[#f5b800]
-text-2xl
-font-bold
-my-3
-">
-
-S/
-
-{
-
-carrito.reduce(
-
-(total,item)=>
-
-total + Number(item.precio),
-
-0
-
-).toFixed(2)
-
-}
-
-</p>
-
-
-
-
-<Link
+<a
 
 href="/carrito"
 
 className="
 block
-text-center
+mt-3
 bg-[#f5b800]
 text-black
 font-bold
+px-5
 py-3
 rounded-xl
-hover:bg-[#ffd700]
-transition
 "
 
 >
 
-Ver carrito 🛒
+Ver carrito
 
-
-</Link>
+</a>
 
 
 </div>
@@ -787,8 +719,8 @@ Ver carrito 🛒
 
 
 
-
 </main>
+
 
 );
 
