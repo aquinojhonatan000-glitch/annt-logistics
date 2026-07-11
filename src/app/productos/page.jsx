@@ -6,7 +6,8 @@ import { useCart } from "@/context/CartContext";
 import { useProducts } from "@/context/ProductContext";
 import CountdownProduct from "@/components/CountdownProduct";
 
-export default function Productos() {
+
+export default function Productos(){
 
 const { carrito, agregarCarrito } = useCart();
 
@@ -15,11 +16,11 @@ const { productos } = useProducts();
 const pathname = usePathname();
 
 
-const [busqueda,setBusqueda] = useState("");
+const [busqueda,setBusqueda]=useState("");
 
-const [categoria,setCategoria] = useState("Todos");
+const [categoria,setCategoria]=useState("Todos");
 
-const [selecciones,setSelecciones] = useState({});
+const [selecciones,setSelecciones]=useState({});
 
 
 
@@ -40,7 +41,7 @@ const categorias=[
 "Juguetes",
 "Bebés",
 "Automóvil",
-"Otros",
+"Otros"
 
 ];
 
@@ -76,15 +77,16 @@ setSelecciones((prev)=>({
 
 
 
-const productosFiltrados = productos.filter((producto)=>{
 
-const nombre =
+const productosFiltrados=productos.filter((producto)=>{
+
+const nombre=
 producto.nombre
 ?.toLowerCase()
 .includes(busqueda.toLowerCase());
 
 
-const cat =
+const cat=
 categoria==="Todos" ||
 producto.categoria===categoria;
 
@@ -95,37 +97,43 @@ return nombre && cat;
 
 
 
-return (
+return(
 
-<main className="min-h-screen px-6 py-10">
+<main className="px-6 py-10">
 
 
-<div className="
+
+{/* ANUNCIO LIQUID GLASS */}
+
+<div
+className="
 bg-white/10
 backdrop-blur-xl
 border
 border-white/20
 rounded-3xl
 p-8
-shadow-2xl
-mb-8
-">
+mb-10
+shadow-xl
+"
+>
+
 
 <h1 className="
 text-4xl
 font-bold
-mb-4
 ">
 
-🛍️ Catálogo 
+🛍️ Catálogo
+
 <span className="text-[#f5b800]">
-ANNT LOGISTICS
+ ANNT LOGISTICS
 </span>
 
 </h1>
 
 
-<p className="text-gray-300">
+<p className="mt-4 text-gray-300">
 
 Todos nuestros productos están sujetos a disponibilidad,
 proveedores y costos de importación.
@@ -133,11 +141,12 @@ proveedores y costos de importación.
 </p>
 
 
-<p className="mt-4">
+<p className="mt-2">
 
 🚚 Entrega estimada: 6 a 15 días hábiles
 
 </p>
+
 
 
 <a
@@ -168,47 +177,11 @@ transition
 
 </a>
 
+
 </div>
 
-<p className="mb-4 text-gray-300">
-
-Todos nuestros productos están sujetos a disponibilidad,
-proveedores y costos de importación.
-
-</p>
 
 
-
-<p className="mb-6">
-
-🚚 Entrega estimada: 6 a 15 días hábiles
-
-</p>
-
-
-
-<a
-
-href="https://wa.me/51907025944"
-
-target="_blank"
-
-className="
-inline-block
-mb-6
-bg-green-500
-text-white
-font-bold
-px-6
-py-3
-rounded-xl
-"
-
->
-
-💬 WhatsApp: 907025944
-
-</a>
 
 
 
@@ -234,12 +207,17 @@ onChange={(e)=>setBusqueda(e.target.value)}
 
 
 
+
+
+
+
 <div className="flex flex-wrap gap-3 mb-8">
 
 
 {
 
 categorias.map((cat)=>(
+
 
 <button
 
@@ -248,7 +226,6 @@ key={cat}
 onClick={()=>setCategoria(cat)}
 
 className={`
-
 px-5
 py-2
 rounded-full
@@ -263,7 +240,7 @@ categoria===cat
 
 :
 
-"bg-[#181818]"
+"bg-[#181818] border-[#333]"
 
 }
 
@@ -271,9 +248,12 @@ categoria===cat
 
 >
 
+
 {cat}
 
+
 </button>
+
 
 ))
 
@@ -286,10 +266,12 @@ categoria===cat
 
 
 
+
+
 <div className="
 grid
-md:grid-cols-3
-lg:grid-cols-4
+md:grid-cols-2
+lg:grid-cols-3
 gap-6
 ">
 
@@ -311,17 +293,19 @@ hover:-translate-y-2
 transition
 "
 
+
 >
+
 
 
 {
 
 ofertaActiva(producto.descuento_hasta)&&(
 
-<div className="
+<span className="
 absolute
-top-3
-left-3
+top-4
+left-4
 bg-red-500
 px-3
 py-1
@@ -331,11 +315,13 @@ font-bold
 
 🔥 OFERTA
 
-</div>
+</span>
 
 )
 
 }
+
+
 
 
 
@@ -357,11 +343,9 @@ rounded-2xl
 
 
 
-<p className="
-text-sm
-text-gray-400
-mt-4
-">
+
+
+<p className="text-sm text-gray-400 mt-3">
 
 {producto.categoria}
 
@@ -369,10 +353,8 @@ mt-4
 
 
 
-<h2 className="
-font-bold
-text-xl
-">
+
+<h2 className="text-xl font-bold">
 
 {producto.nombre}
 
@@ -380,9 +362,8 @@ text-xl
 
 
 
-<p className="
-text-gray-300
-">
+
+<p className="text-gray-300">
 
 {producto.descripcion}
 
@@ -391,7 +372,7 @@ text-gray-300
 
 
 
-<div className="mt-3">
+
 
 
 {
@@ -402,7 +383,8 @@ ofertaActiva(producto.descuento_hasta)
 
 (
 
-<>
+<div className="mt-3">
+
 
 <p className="
 line-through
@@ -424,13 +406,13 @@ S/ {Number(producto.precio).toFixed(2)}
 
 </p>
 
-</>
+
+</div>
 
 )
 
 
 :
-
 
 (
 
@@ -438,18 +420,19 @@ S/ {Number(producto.precio).toFixed(2)}
 text-3xl
 font-bold
 text-[#f5b800]
+mt-3
 ">
 
-S/ {Number(producto.precio_original || producto.precio).toFixed(2)}
+S/ {Number(producto.precio).toFixed(2)}
 
 </p>
 
 )
 
+
 }
 
 
-</div>
 
 
 
@@ -473,166 +456,14 @@ fecha={producto.descuento_hasta}
 
 
 
-{
-
-producto.tallas && (
-
-<div className="flex gap-2 mt-4 flex-wrap">
-
-
-{
-
-producto.tallas.split(",").map((talla)=>{
-
-const t=talla.trim();
-
-
-return (
-
 <button
 
-key={t}
-
-onClick={()=>seleccionar(producto.id,"talla",t)}
-
-className={`
-
-border
-px-3
-py-1
-rounded-lg
-
-${
-selecciones[producto.id]?.talla===t
-
-?
-
-"bg-[#f5b800] text-black"
-
-:
-
-"bg-[#111]"
-
-}
-
-`}
-
->
-
-{t}
-
-</button>
-
-)
-
-})
-
-}
-
-
-</div>
-
-)
-
-}
-
-
-
-
-
-{
-
-producto.colores && (
-
-<div className="flex gap-2 mt-3 flex-wrap">
-
-
-{
-
-producto.colores.split(",").map((color)=>{
-
-const c=color.trim();
-
-
-return (
-
-<button
-
-key={c}
-
-onClick={()=>seleccionar(producto.id,"color",c)}
-
-className={`
-
-border
-px-3
-py-1
-rounded-lg
-
-${
-selecciones[producto.id]?.color===c
-
-?
-
-"bg-[#f5b800] text-black"
-
-:
-
-"bg-[#111]"
-
-}
-
-`}
-
->
-
-{c}
-
-</button>
-
-)
-
-})
-
-}
-
-
-</div>
-
-)
-
-}
-
-
-
-
-
-<button
 
 onClick={()=>{
 
 
-const elegido=selecciones[producto.id] || {};
-
-
-
-if(producto.tallas && !elegido.talla){
-
-alert("Selecciona una talla");
-
-return;
-
-}
-
-
-
-if(producto.colores && !elegido.color){
-
-alert("Selecciona un color");
-
-return;
-
-}
+const elegido =
+selecciones[producto.id] || {};
 
 
 
@@ -658,7 +489,9 @@ w-full
 btn-gold
 "
 
+
 >
+
 
 🛒 Agregar al carrito
 
@@ -672,6 +505,7 @@ btn-gold
 
 ))
 
+
 }
 
 
@@ -681,9 +515,14 @@ btn-gold
 
 
 
+
+
 {
 
-carrito.length>0 && pathname !== "/carrito" && (
+carrito.length>0 &&
+pathname!=="/carrito" &&
+
+(
 
 <div className="
 fixed
@@ -691,15 +530,15 @@ bottom-5
 right-5
 bg-[#f5b800]
 text-black
-p-5
-rounded-xl
 font-bold
+px-6
+py-4
+rounded-2xl
+shadow-xl
 ">
 
 
-🛒 Tu carrito:
-
-{carrito.length} producto(s)
+🛒 {carrito.length} producto(s)
 
 
 <a
@@ -708,8 +547,8 @@ href="/carrito"
 
 className="
 block
-mt-2
 underline
+mt-2
 "
 
 >
@@ -727,8 +566,11 @@ Ver carrito
 
 
 
+
 </main>
 
+
 );
+
 
 }
