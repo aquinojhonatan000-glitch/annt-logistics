@@ -24,6 +24,7 @@ const router = useRouter();
 const [datos,setDatos]=useState({
 
 nombre: usuario?.nombre || "",
+dni:"",
 telefono: usuario?.telefono || "",
 direccion: usuario?.direccion || "",
 ciudad:"",
@@ -40,7 +41,6 @@ const [nombreArchivo,setNombreArchivo]=useState("");
 const [subiendo,setSubiendo]=useState(false);
 
 const [enviando,setEnviando]=useState(false);
-
 
 
 
@@ -89,7 +89,6 @@ return;
 
 
 
-
 const url=supabase.storage
 .from("imagenes")
 .getPublicUrl(nombre)
@@ -102,6 +101,7 @@ setComprobante(url);
 setNombreArchivo(archivo.name);
 
 setSubiendo(false);
+
 
 
 };
@@ -129,14 +129,23 @@ return;
 
 
 
+
+
 if(
+
 !datos.nombre ||
+
+!datos.dni ||
+
 !datos.telefono ||
+
 !datos.direccion ||
+
 !datos.ciudad
+
 ){
 
-alert("Completa tus datos de entrega");
+alert("Completa todos tus datos incluyendo DNI");
 
 return;
 
@@ -144,7 +153,9 @@ return;
 
 
 
+
 setEnviando(true);
+
 
 
 
@@ -155,9 +166,13 @@ const pedido={
 id:crypto.randomUUID(),
 
 
+
 cliente:{
 
+
 nombre:datos.nombre,
+
+dni:datos.dni,
 
 telefono:datos.telefono,
 
@@ -165,25 +180,36 @@ direccion:datos.direccion,
 
 ciudad:datos.ciudad
 
+
 },
+
+
 
 
 productos:carrito,
 
+
 total,
+
 
 estado:"Esperando pago",
 
+
 pago:datos.pago,
+
 
 comprobante,
 
+
 fecha:new Date().toISOString(),
+
 
 tiempo_entrega:"Pendiente"
 
 
+
 };
+
 
 
 
@@ -199,7 +225,9 @@ limpiarCarrito();
 alert("✅ Pedido enviado correctamente");
 
 
+
 router.push("/");
+
 
 
 };
@@ -210,7 +238,10 @@ router.push("/");
 
 
 
+
+
 return(
+
 
 
 <main className="
@@ -220,7 +251,6 @@ py-10
 ">
 
 
-
 <h1 className="
 text-4xl
 md:text-5xl
@@ -228,6 +258,7 @@ font-bold
 text-center
 mb-10
 ">
+
 
 💳 Checkout
 
@@ -252,9 +283,6 @@ gap-8
 
 
 
-{/* DATOS */}
-
-
 <div className="
 card-dark
 p-6
@@ -276,77 +304,112 @@ mb-6
 
 <input
 
-className="
-input-style
-"
+className="input-style"
 
 placeholder="Nombre completo"
 
 value={datos.nombre}
 
 onChange={(e)=>setDatos({
+
 ...datos,
+
 nombre:e.target.value
+
 })}
 
 />
 
 
 
+
+
 <input
 
-className="
-input-style
-"
+className="input-style"
+
+placeholder="DNI"
+
+maxLength="8"
+
+value={datos.dni}
+
+onChange={(e)=>setDatos({
+
+...datos,
+
+dni:e.target.value.replace(/\D/g,"")
+
+})}
+
+/>
+
+
+
+
+
+<input
+
+className="input-style"
 
 placeholder="Teléfono"
 
 value={datos.telefono}
 
 onChange={(e)=>setDatos({
+
 ...datos,
+
 telefono:e.target.value
+
 })}
 
 />
 
 
 
+
+
 <textarea
 
-className="
-input-style
-"
+className="input-style"
 
 placeholder="Dirección completa"
 
 value={datos.direccion}
 
 onChange={(e)=>setDatos({
+
 ...datos,
+
 direccion:e.target.value
+
 })}
 
 />
 
 
 
+
+
 <input
 
-className="
-input-style
-"
+className="input-style"
 
 placeholder="Ciudad"
 
 value={datos.ciudad}
 
 onChange={(e)=>setDatos({
+
 ...datos,
+
 ciudad:e.target.value
+
 })}
 
 />
+
 
 
 
@@ -366,15 +429,16 @@ mt-5
 
 <select
 
-className="
-input-style
-"
+className="input-style"
 
 value={datos.pago}
 
 onChange={(e)=>setDatos({
+
 ...datos,
+
 pago:e.target.value
+
 })}
 
 >
@@ -405,9 +469,6 @@ pago:e.target.value
 
 
 
-{/* RESUMEN */}
-
-
 <div className="
 card-dark
 p-6
@@ -423,7 +484,6 @@ mb-6
 🛒 Resumen del pedido
 
 </h2>
-
 
 
 
@@ -444,14 +504,10 @@ pb-4
 mb-4
 "
 
-
 >
 
 
-<div className="
-flex
-gap-4
-">
+<div className="flex gap-4">
 
 
 <img
@@ -472,7 +528,6 @@ object-contain
 
 <div>
 
-
 <p className="font-bold">
 
 {p.nombre}
@@ -488,19 +543,11 @@ Cantidad: {p.cantidad}
 
 
 
-{
-
-p.talla && <p>👕 {p.talla}</p>
-
-}
+{p.talla && <p>👕 {p.talla}</p>}
 
 
+{p.color && <p>🎨 {p.color}</p>}
 
-{
-
-p.color && <p>🎨 {p.color}</p>
-
-}
 
 
 </div>
@@ -515,7 +562,10 @@ p.color && <p>🎨 {p.color}</p>
 
 ))
 
+
 }
+
+
 
 
 
@@ -537,8 +587,6 @@ Total:
 
 
 </p>
-
-
 
 
 
@@ -568,16 +616,13 @@ text-[#f5b800]
 
 
 
-
 <p className="mt-4">
 
 📱 Yape / Plin / Prexpe
 
 <br/>
 
-<b>
-907025944
-</b>
+<b>907025944</b>
 
 </p>
 
@@ -590,9 +635,7 @@ text-[#f5b800]
 
 <br/>
 
-<b>
-37507956352075
-</b>
+<b>37507956352075</b>
 
 </p>
 
@@ -605,9 +648,7 @@ text-[#f5b800]
 
 <br/>
 
-<b>
-0011-0814-0278664916
-</b>
+<b>0011-0814-0278664916</b>
 
 </p>
 
@@ -626,13 +667,11 @@ Jhonatan Antoni Aquiño López
 
 </span>
 
-
 </p>
 
 
 
 </div>
-
 
 
 
@@ -684,9 +723,7 @@ className="hidden"
 
 
 
-{
-
-subiendo && (
+{subiendo && (
 
 <p className="text-yellow-400 mt-3">
 
@@ -694,15 +731,12 @@ subiendo && (
 
 </p>
 
-)
-
-}
+)}
 
 
 
-{
 
-nombreArchivo && (
+{nombreArchivo && (
 
 <p className="text-green-400 mt-3 font-bold">
 
@@ -710,9 +744,7 @@ nombreArchivo && (
 
 </p>
 
-)
-
-}
+)}
 
 
 
@@ -738,7 +770,6 @@ btn-gold
 py-4
 "
 
-
 >
 
 
@@ -762,7 +793,9 @@ enviando
 
 
 
+
 </div>
+
 
 
 
