@@ -89,10 +89,9 @@ return (
 <div className="bg-yellow-500 text-black rounded-xl p-5 mb-6 font-bold">
 
 📢 Aviso importante ANNT LOGISTICS
-
 <p className="mt-2 font-normal">
 Algunos precios pueden variar según disponibilidad del producto,
-proveedor y costos de importación.
+proveedor, descuentos ya vencidos y costos de importación.
 </p>
 
 <p className="mt-2 font-normal">
