@@ -101,44 +101,6 @@ proveedor y costos de importación.
 
 </div>
 
-
-
-<div className="bg-[#181818] border border-[#333] rounded-xl p-5 mb-6">
-
-<h2 className="text-xl font-bold text-[#f5b800]">
-
-🚚 Tiempo de entrega ANNT LOGISTICS
-
-</h2>
-
-
-<p className="mt-2 text-gray-300">
-
-📦 Realizamos envíos a diferentes ciudades.
-
-</p>
-
-
-<p className="mt-2 text-lg font-bold">
-
-⏳ Entrega estimada: 6 a 15 días hábiles
-
-</p>
-
-
-<p className="text-gray-400 mt-2">
-
-El tiempo puede variar según la ciudad y disponibilidad del producto.
-
-</p>
-
-
-</div>
-
-
-
-
-
 <div className="mb-5 font-bold text-xl">
 
 🛒 Carrito: {carrito.length} productos
