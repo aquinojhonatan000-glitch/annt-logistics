@@ -3,167 +3,247 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-
 const ProductContext = createContext();
-
 
 
 export function ProductProvider({children}) {
 
 
-  const [productos, setProductos] = useState([]);
+const [productos,setProductos] = useState([]);
 
 
 
+const cargarProductos = async()=>{
 
-  // Cargar productos desde Supabase
 
-  const cargarProductos = async ()=>{
+const {data,error}=await supabase
 
+.from("productos")
 
-    const { data, error } = await supabase
+.select("*")
 
-      .from("productos")
+.order("created_at",{ascending:false});
 
-      .select("*")
 
-      .order("id", { ascending:false });
 
+if(error){
 
+console.log("ERROR CARGANDO PRODUCTOS:",error);
 
-    if(error){
+return;
 
-      console.log("ERROR CARGANDO PRODUCTOS:", error);
+}
 
-    } else {
 
 
-      console.log("PRODUCTOS DESDE SUPABASE:", data);
+setProductos(data || []);
 
 
-      setProductos(data || []);
+};
 
-    }
 
 
-  };
 
+useEffect(()=>{
 
+cargarProductos();
 
+},[]);
 
 
-  useEffect(()=>{
 
 
-    cargarProductos();
 
+// CREAR PRODUCTO
 
-  },[]);
+const agregarProducto = async(producto)=>{
 
 
+const {data,error}=await supabase
 
+.from("productos")
 
+.insert([producto])
 
+.select();
 
-  // Guardar producto
 
-  const agregarProducto = async(producto)=>{
 
+if(error){
 
-    console.log("ENVIANDO PRODUCTO:", producto);
+console.log("ERROR GUARDANDO PRODUCTO:",error);
 
+alert(error.message);
 
+return;
 
-    const { data, error } = await supabase
+}
 
-      .from("productos")
 
-      .insert([producto])
 
-      .select();
+setProductos([
 
+data[0],
 
+...productos
 
+]);
 
 
-    if(error){
 
+alert("✅ Producto guardado");
 
-      console.log("ERROR GUARDANDO PRODUCTO:", error);
 
+};
 
-      alert(
-        "Error guardando producto. Revisa consola."
-      );
 
 
-      return;
 
-    }
 
 
+// ELIMINAR PRODUCTO
 
+const eliminarProducto = async(id)=>{
 
 
-    console.log("PRODUCTO GUARDADO:", data);
+const confirmar = confirm(
+"¿Eliminar este producto?"
+);
 
 
+if(!confirmar)return;
 
-    setProductos([
 
-      data[0],
 
-      ...productos
+const {error}=await supabase
 
-    ]);
+.from("productos")
 
+.delete()
 
+.eq("id",id);
 
-    alert("✅ Producto guardado en Supabase");
 
 
-  };
+if(error){
 
+console.log(
+"ERROR ELIMINANDO PRODUCTO:",
+error
+);
 
+alert(error.message);
 
+return;
 
+}
 
 
 
-  return (
+setProductos(
 
-    <ProductContext.Provider
+productos.filter(
 
-      value={{
+(producto)=>producto.id !== id
 
-        productos,
+)
 
-        agregarProducto,
+);
 
-        cargarProductos
 
-      }}
 
-    >
+alert("🗑️ Producto eliminado");
 
-      {children}
 
+};
 
-    </ProductContext.Provider>
 
-  );
+
+
+
+
+// ACTUALIZAR PRODUCTO
+
+const actualizarProducto = async(id,cambios)=>{
+
+
+const {data,error}=await supabase
+
+.from("productos")
+
+.update(cambios)
+
+.eq("id",id)
+
+.select();
+
+
+
+if(error){
+
+console.log(error);
+
+alert(error.message);
+
+return;
+
+}
+
+
+
+setProductos(
+
+productos.map((p)=>
+
+p.id===id ? data[0] : p
+
+)
+
+);
+
+
+};
+
+
+
+
+
+
+return(
+
+<ProductContext.Provider
+
+value={{
+
+productos,
+
+agregarProducto,
+
+eliminarProducto,
+
+actualizarProducto,
+
+cargarProductos
+
+}}
+
+>
+
+
+{children}
+
+
+</ProductContext.Provider>
+
+);
 
 
 }
 
 
 
-
-
 export function useProducts(){
 
-
-  return useContext(ProductContext);
-
+return useContext(ProductContext);
 
 }

@@ -5,168 +5,162 @@ import { useProducts } from "@/context/ProductContext";
 import { useOrders } from "@/context/OrderContext";
 import { supabase } from "@/lib/supabase";
 
-export default function Admin() {
 
-  const { agregarProducto } = useProducts();
+export default function Admin(){
 
-  const { 
-    pedidos, 
-    cambiarEstado,
-    cambiarTiempoEntrega
-  } = useOrders();
 
+const {
+productos,
+agregarProducto,
+eliminarProducto
+}=useProducts();
 
 
-  const [producto,setProducto] = useState({
+const {
+pedidos,
+cambiarEstado,
+cambiarTiempoEntrega
+}=useOrders();
 
-    nombre:"",
-    categoria:"",
-    precio:"",
-    imagen:""
 
-  });
 
+const [producto,setProducto]=useState({
 
+nombre:"",
+categoria:"",
+precio:"",
+precio_original:"",
+descuento:"",
+imagen:""
 
-  const [subiendo,setSubiendo] = useState(false);
+});
 
 
+const [subiendo,setSubiendo]=useState(false);
 
 
 
-  const subirImagen = async(e)=>{
+const subirImagen=async(e)=>{
 
 
-    const archivo = e.target.files[0];
+const archivo=e.target.files[0];
 
+if(!archivo)return;
 
-    if(!archivo) return;
 
+setSubiendo(true);
 
 
-    setSubiendo(true);
+const nombreArchivo=
 
+Date.now()+"-"+archivo.name;
 
 
-    const nombreArchivo =
-    Date.now()+"-"+archivo.name;
 
+const {error}=await supabase.storage
 
+.from("imagenes")
 
-    const {error} = await supabase.storage
+.upload(
+nombreArchivo,
+archivo
+);
 
-    .from("imagenes")
 
-    .upload(
-      nombreArchivo,
-      archivo
-    );
 
+if(error){
 
+alert("Error subiendo imagen");
 
-    if(error){
+console.log(error);
 
-      console.log(error);
+setSubiendo(false);
 
-      alert("❌ Error subiendo imagen");
+return;
 
-      setSubiendo(false);
+}
 
-      return;
 
-    }
 
+const url=supabase.storage
 
+.from("imagenes")
 
+.getPublicUrl(nombreArchivo)
 
-    const url = supabase.storage
+.data.publicUrl;
 
-    .from("imagenes")
 
-    .getPublicUrl(nombreArchivo)
 
-    .data.publicUrl;
+setProducto({
 
+...producto,
 
+imagen:url
 
-    setProducto({
+});
 
-      ...producto,
 
-      imagen:url
+setSubiendo(false);
 
-    });
 
+};
 
 
-    setSubiendo(false);
 
+const guardarProducto=(e)=>{
 
 
-    alert("✅ Imagen subida correctamente");
+e.preventDefault();
 
 
-  };
 
+if(!producto.imagen){
 
+alert("Sube una imagen");
 
+return;
 
+}
 
 
 
-  const guardarProducto=(e)=>{
+agregarProducto({
 
+...producto,
 
-    e.preventDefault();
+precio:Number(producto.precio),
 
+precio_original:Number(producto.precio_original),
 
+descuento:Number(producto.descuento)
 
-    if(!producto.imagen){
+});
 
-      alert("Sube una imagen primero");
 
-      return;
 
-    }
+setProducto({
 
+nombre:"",
+categoria:"",
+precio:"",
+precio_original:"",
+descuento:"",
+imagen:""
 
+});
 
-    agregarProducto({
 
-      ...producto,
+};
 
-      precio:Number(producto.precio)
 
-    });
 
-
-
-
-    setProducto({
-
-      nombre:"",
-      categoria:"",
-      precio:"",
-      imagen:""
-
-    });
-
-
-
-  };
-
-
-
-
-
-
-
-return (
+return(
 
 <main className="min-h-screen bg-[#111] text-white p-8">
 
 
-<h1 className="text-4xl font-bold mb-8">
+<h1 className="text-3xl font-bold mb-8">
 
 ⚙️ ANNT LOGISTICS ADMIN
 
@@ -174,12 +168,10 @@ return (
 
 
 
+<div className="bg-[#181818] p-6 rounded-xl border border-[#333] mb-10">
 
 
-<section className="bg-[#181818] border border-[#333] rounded-2xl p-6 max-w-xl">
-
-
-<h2 className="text-2xl font-bold mb-5">
+<h2 className="text-xl font-bold mb-5">
 
 🛍️ Agregar producto
 
@@ -194,16 +186,17 @@ return (
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
 
-placeholder="Nombre del producto"
+placeholder="Nombre"
 
 value={producto.nombre}
 
-onChange={(e)=>
-setProducto({
+onChange={(e)=>setProducto({
+
 ...producto,
+
 nombre:e.target.value
-})
-}
+
+})}
 
 />
 
@@ -217,15 +210,15 @@ placeholder="Categoría"
 
 value={producto.categoria}
 
-onChange={(e)=>
-setProducto({
+onChange={(e)=>setProducto({
+
 ...producto,
+
 categoria:e.target.value
-})
-}
+
+})}
 
 />
-
 
 
 
@@ -235,28 +228,63 @@ type="number"
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
 
-placeholder="Precio"
+placeholder="Precio actual"
 
 value={producto.precio}
 
-onChange={(e)=>
-setProducto({
+onChange={(e)=>setProducto({
+
 ...producto,
+
 precio:e.target.value
-})
-}
+
+})}
 
 />
 
 
 
+<input
+
+type="number"
+
+className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+
+placeholder="Precio anterior"
+
+value={producto.precio_original}
+
+onChange={(e)=>setProducto({
+
+...producto,
+
+precio_original:e.target.value
+
+})}
+
+/>
 
 
-<label>
 
-Imagen del producto
+<input
 
-</label>
+type="number"
+
+className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+
+placeholder="Descuento %"
+
+value={producto.descuento}
+
+onChange={(e)=>setProducto({
+
+...producto,
+
+descuento:e.target.value
+
+})}
+
+/>
 
 
 
@@ -268,40 +296,27 @@ accept="image/*"
 
 onChange={subirImagen}
 
-className="w-full mt-3 mb-4"
+className="mb-4"
 
 />
 
 
 
-
-{subiendo && (
-
-<p>
-
-⏳ Subiendo imagen...
-
-</p>
-
-)}
+{subiendo && <p>⏳ Subiendo...</p>}
 
 
 
-
-{producto.imagen && (
+{producto.imagen &&
 
 <img
 
 src={producto.imagen}
 
-className="w-40 h-40 object-cover rounded-lg mb-5"
+className="w-40 rounded-lg mb-4"
 
 />
 
-)}
-
-
-
+}
 
 
 
@@ -316,24 +331,100 @@ className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-lg"
 </button>
 
 
-
 </form>
 
 
-</section>
+</div>
+
+
+
+<div className="bg-[#181818] p-6 rounded-xl mb-10">
+
+
+<h2 className="text-xl font-bold mb-5">
+
+📦 Productos
+
+</h2>
+
+
+
+{productos?.map((p)=>(
+
+
+<div
+
+key={p.id}
+
+className="border border-[#333] p-4 rounded-xl mb-4"
+
+>
+
+
+<img
+
+src={p.imagen}
+
+className="w-32 h-32 object-cover rounded-lg"
+
+/>
+
+
+<h3 className="font-bold mt-3">
+
+{p.nombre}
+
+</h3>
+
+
+
+<p>
+
+S/ {p.precio}
+
+</p>
+
+
+{p.descuento > 0 && (
+
+<p className="text-[#f5b800]">
+
+🔥 {p.descuento}% descuento
+
+</p>
+
+)}
+
+
+
+<button
+
+onClick={()=>eliminarProducto(p.id)}
+
+className="mt-3 bg-red-600 px-4 py-2 rounded-lg"
+
+>
+
+🗑️ Eliminar
+
+</button>
+
+
+
+</div>
+
+
+))}
+
+
+
+</div>
 
 
 
 
 
-
-
-
-
-<section className="mt-12">
-
-
-<h2 className="text-3xl font-bold mb-6">
+<h2 className="text-xl font-bold mb-5">
 
 📦 Pedidos de clientes
 
@@ -341,23 +432,7 @@ className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-lg"
 
 
 
-
-
-{pedidos.length===0 ? (
-
-<p>
-
-No hay pedidos todavía.
-
-</p>
-
-
-):(
-
-
-
-pedidos.map((pedido)=>(
-
+{pedidos.map((pedido)=>(
 
 <div
 
@@ -368,156 +443,17 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-5"
 >
 
 
+<p>📦 {pedido.numero_pedido}</p>
 
-<h3 className="text-2xl font-bold">
+<p>👤 {pedido.cliente?.nombre}</p>
 
-📦 {pedido.numero_pedido}
-
-</h3>
-
-
-
-<p>
-
-🕒 {pedido.fecha}
-
-</p>
-
-
-
-
-
-<h4 className="font-bold mt-4">
-
-👤 Cliente
-
-</h4>
-
-
-<p>
-
-Nombre: {pedido.cliente?.nombre}
-
-</p>
-
-
-<p>
-
-📞 {pedido.cliente?.telefono}
-
-</p>
-
-
-<p>
-
-📍 {pedido.cliente?.direccion}
-
-</p>
-
-
-<p>
-
-🏙️ {pedido.cliente?.ciudad}
-
-</p>
-
-
-
-
-
-
-<h4 className="font-bold mt-4">
-
-💳 Pago
-
-</h4>
-
-
-<p>
-
-Método: {pedido.pago}
-
-</p>
-
-
-
-
-{pedido.comprobante && (
-
-<div className="mt-3">
-
-<p>
-
-🧾 Comprobante
-
-</p>
-
-
-<img
-
-src={pedido.comprobante}
-
-className="w-64 rounded-lg mt-2"
-
-/>
-
-
-</div>
-
-)}
-
-
-
-
-
-
-<h4 className="font-bold mt-5">
-
-🛒 Productos
-
-</h4>
-
-
-
-
-{pedido.productos?.map((producto)=>(
-
-<p key={producto.id}>
-
-• {producto.nombre} x {producto.cantidad}
-
-</p>
-
-))}
-
-
-
-
-
-
-<p className="text-[#f5b800] text-2xl font-bold mt-4">
-
-Total: S/ {pedido.total.toFixed(2)}
-
-</p>
-
-
-
-
-
-
-
-<p className="font-bold mt-5">
-
-🚚 Estado:
-
-</p>
+<p>Total: S/ {pedido.total}</p>
 
 
 
 <select
 
-className="bg-[#111] border border-[#333] p-3 rounded-lg mt-2"
+className="bg-[#111] p-3 rounded-lg mt-3"
 
 value={pedido.estado}
 
@@ -535,138 +471,26 @@ e.target.value
 
 >
 
+<option>Esperando pago</option>
 
-<option>
+<option>Preparando pedido</option>
 
-Esperando pago
+<option>En camino</option>
 
-</option>
-
-
-<option>
-
-Preparando pedido
-
-</option>
-
-
-<option>
-
-En camino
-
-</option>
-
-
-<option>
-
-Entregado
-
-</option>
-
+<option>Entregado</option>
 
 </select>
-
-
-
-
-
-
-
-<p className="font-bold mt-5">
-
-⏳ Tiempo aproximado de entrega:
-
-</p>
-
-
-
-<select
-
-className="bg-[#111] border border-[#333] p-3 rounded-lg mt-2"
-
-value={pedido.tiempo_entrega || "Pendiente"}
-
-onChange={(e)=>
-
-cambiarTiempoEntrega(
-
-pedido.id,
-
-e.target.value
-
-)
-
-}
-
->
-
-
-<option>
-
-Pendiente
-
-</option>
-
-
-<option>
-
-1-2 días
-
-</option>
-
-
-<option>
-
-3-5 días
-
-</option>
-
-
-<option>
-
-5-7 días
-
-</option>
-
-
-<option>
-
-10-15 días
-
-</option>
-
-
-<option>
-
-Más de 15 días
-
-</option>
-
-
-
-</select>
-
-
 
 
 
 </div>
 
-
-))
-
-
-)}
-
-
-</section>
+))}
 
 
 
 </main>
 
-
 );
-
 
 }
