@@ -21,25 +21,15 @@ const router = useRouter();
 
 
 
-
-
 const [datos,setDatos]=useState({
 
-
 nombre: usuario?.nombre || "",
-
 telefono: usuario?.telefono || "",
-
 direccion: usuario?.direccion || "",
-
-ciudad: "",
-
+ciudad:"",
 pago:"Yape"
 
-
 });
-
-
 
 
 
@@ -51,15 +41,9 @@ const [enviando,setEnviando]=useState(false);
 
 
 
-
-
-
-
 const total = carrito.reduce(
 
-(sum,p)=>
-
-sum + Number(p.precio)*p.cantidad,
+(sum,p)=>sum + Number(p.precio)*p.cantidad,
 
 0
 
@@ -68,30 +52,20 @@ sum + Number(p.precio)*p.cantidad,
 
 
 
-
-
-
-
-const subirComprobante=async(e)=>{
+const subirComprobante = async(e)=>{
 
 
 const archivo=e.target.files[0];
 
-
 if(!archivo)return;
-
 
 
 setSubiendo(true);
 
 
 
-
 const nombreArchivo =
-
 "comprobantes/"+Date.now()+"-"+archivo.name;
-
-
 
 
 
@@ -99,15 +73,7 @@ const {error}=await supabase.storage
 
 .from("imagenes")
 
-.upload(
-
-nombreArchivo,
-
-archivo
-
-);
-
-
+.upload(nombreArchivo,archivo);
 
 
 
@@ -125,8 +91,6 @@ return;
 
 
 
-
-
 const url=supabase.storage
 
 .from("imagenes")
@@ -137,18 +101,14 @@ const url=supabase.storage
 
 
 
-
-
 setComprobante(url);
+
 
 setSubiendo(false);
 
 
+
 };
-
-
-
-
 
 
 
@@ -171,7 +131,17 @@ return;
 
 
 
-if(!datos.nombre || !datos.telefono || !datos.direccion || !datos.ciudad){
+if(
+
+!datos.nombre ||
+
+!datos.telefono ||
+
+!datos.direccion ||
+
+!datos.ciudad
+
+){
 
 alert("Completa todos tus datos de entrega");
 
@@ -185,15 +155,10 @@ setEnviando(true);
 
 
 
-
-
 const pedido={
 
 
-
 id:crypto.randomUUID(),
-
-
 
 
 cliente:{
@@ -212,22 +177,16 @@ ciudad:datos.ciudad
 
 
 
-
-
 productos:carrito,
-
 
 
 total,
 
 
-
 estado:"Esperando pago",
 
 
-
 pago:datos.pago,
-
 
 
 comprobante,
@@ -237,13 +196,10 @@ comprobante,
 fecha:new Date().toISOString(),
 
 
-
 tiempo_entrega:"Pendiente"
 
 
-
 };
-
 
 
 
@@ -252,18 +208,10 @@ await agregarPedido(pedido);
 
 
 
-
-
 limpiarCarrito();
 
 
-
-
-
 alert("✅ Pedido enviado correctamente");
-
-
-
 
 
 router.push("/");
@@ -276,17 +224,10 @@ router.push("/");
 
 
 
-
-
-
-
-
 return(
 
 
-
 <main className="min-h-screen bg-[#111] text-white p-8">
-
 
 
 <h1 className="text-4xl font-bold mb-8">
@@ -298,11 +239,7 @@ return(
 
 
 
-
-
 <div className="grid md:grid-cols-2 gap-8">
-
-
 
 
 
@@ -311,15 +248,11 @@ return(
 <div className="bg-[#181818] border border-[#333] rounded-xl p-6">
 
 
-
 <h2 className="text-2xl font-bold mb-5">
 
-Datos de entrega
+📦 Datos de entrega
 
 </h2>
-
-
-
 
 
 
@@ -331,18 +264,9 @@ placeholder="Nombre completo"
 
 value={datos.nombre}
 
-onChange={(e)=>setDatos({
-
-...datos,
-
-nombre:e.target.value
-
-})}
+onChange={(e)=>setDatos({...datos,nombre:e.target.value})}
 
 />
-
-
-
 
 
 
@@ -355,18 +279,9 @@ placeholder="Teléfono"
 
 value={datos.telefono}
 
-onChange={(e)=>setDatos({
-
-...datos,
-
-telefono:e.target.value
-
-})}
+onChange={(e)=>setDatos({...datos,telefono:e.target.value})}
 
 />
-
-
-
 
 
 
@@ -379,19 +294,9 @@ placeholder="Dirección completa"
 
 value={datos.direccion}
 
-onChange={(e)=>setDatos({
-
-...datos,
-
-direccion:e.target.value
-
-})}
+onChange={(e)=>setDatos({...datos,direccion:e.target.value})}
 
 />
-
-
-
-
 
 
 
@@ -403,18 +308,9 @@ placeholder="Ciudad"
 
 value={datos.ciudad}
 
-onChange={(e)=>setDatos({
-
-...datos,
-
-ciudad:e.target.value
-
-})}
+onChange={(e)=>setDatos({...datos,ciudad:e.target.value})}
 
 />
-
-
-
 
 
 
@@ -428,22 +324,13 @@ Método de pago
 
 
 
-
-
-
 <select
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mt-3"
 
 value={datos.pago}
 
-onChange={(e)=>setDatos({
-
-...datos,
-
-pago:e.target.value
-
-})}
+onChange={(e)=>setDatos({...datos,pago:e.target.value})}
 
 >
 
@@ -452,7 +339,11 @@ pago:e.target.value
 
 <option>Plin</option>
 
-<option>Transferencia</option>
+<option>Prexpe</option>
+
+<option>Transferencia BCP</option>
+
+<option>Transferencia BBVA</option>
 
 
 </select>
@@ -460,10 +351,7 @@ pago:e.target.value
 
 
 
-
 </div>
-
-
 
 
 
@@ -475,15 +363,11 @@ pago:e.target.value
 <div className="bg-[#181818] border border-[#333] rounded-xl p-6">
 
 
-
 <h2 className="text-2xl font-bold mb-5">
 
-Resumen del pedido
+🛒 Resumen del pedido
 
 </h2>
-
-
-
 
 
 
@@ -491,8 +375,13 @@ Resumen del pedido
 {carrito.map((p)=>(
 
 
+<div
 
-<div key={p.id} className="mb-4 border-b border-[#333] pb-3">
+key={p.id}
+
+className="border-b border-[#333] pb-3 mb-3"
+
+>
 
 
 <p className="font-bold">
@@ -502,7 +391,6 @@ Resumen del pedido
 </p>
 
 
-
 <p>
 
 Cantidad: {p.cantidad}
@@ -510,10 +398,11 @@ Cantidad: {p.cantidad}
 </p>
 
 
-
 {p.talla && (
 
-<p>👕 Talla: {p.talla}</p>
+<p>
+👕 Talla: {p.talla}
+</p>
 
 )}
 
@@ -521,7 +410,9 @@ Cantidad: {p.cantidad}
 
 {p.color && (
 
-<p>🎨 Color: {p.color}</p>
+<p>
+🎨 Color: {p.color}
+</p>
 
 )}
 
@@ -530,9 +421,7 @@ Cantidad: {p.cantidad}
 </div>
 
 
-
 ))}
-
 
 
 
@@ -557,28 +446,121 @@ Total:
 
 
 
-<img
-
-src="/qr.png"
-
-className="w-48 mt-5 rounded-lg"
-
-/>
+<div className="mt-6 bg-[#111] border border-[#333] rounded-xl p-5">
 
 
+<h3 className="text-xl font-bold text-[#f5b800]">
 
+💳 Datos de pago
+
+</h3>
 
 
 
+<div className="mt-4 space-y-4">
 
-<p className="mt-5">
 
-📷 Subir comprobante
+<div>
+
+📱 Yape / Plin / Prexpe
+
+<p className="font-bold">
+
+907025944
+
+</p>
+
+</div>
+
+
+
+<div>
+
+🏦 BCP Soles
+
+<p>
+
+Cuenta:
+<br/>
+
+37507956352075
+
+</p>
+
+<p>
+
+CCI:
+
+<br/>
+
+00237510795635207541
+
+</p>
+
+</div>
+
+
+
+
+<div>
+
+🏦 BBVA Soles
+
+<p>
+
+Cuenta:
+
+<br/>
+
+0011-0814-0278664916
 
 </p>
 
 
+<p>
 
+CCI:
+
+<br/>
+
+01181400027866491616
+
+</p>
+
+</div>
+
+
+
+
+<div>
+
+👤 Titular:
+
+<p className="text-[#f5b800] font-bold">
+
+Jhonatan Antoni Aquiño López
+
+</p>
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<p className="mt-6">
+
+📷 Subir comprobante de pago
+
+</p>
 
 
 
@@ -597,9 +579,6 @@ className="mt-3"
 
 
 
-
-
-
 {subiendo && (
 
 <p>
@@ -609,10 +588,6 @@ className="mt-3"
 </p>
 
 )}
-
-
-
-
 
 
 
@@ -631,34 +606,24 @@ className="mt-6 w-full bg-[#f5b800] text-black font-bold py-4 rounded-xl"
 {enviando ? "Enviando..." : "✅ Confirmar compra"}
 
 
-
 </button>
 
 
 
-
-
-
 </div>
 
 
 
 
 
-
 </div>
-
-
-
 
 
 
 </main>
 
 
-
 );
-
 
 
 }
