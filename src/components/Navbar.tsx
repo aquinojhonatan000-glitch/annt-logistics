@@ -60,11 +60,11 @@ export default function Navbar() {
         <Image
           src="/logo.png"
           alt="ANNT LOGISTICS"
-          width={320}
-          height={140}
+          width={600}
+          height={200}
           className="
-            w-72
-            md:w-80
+            w-[400px]
+            md:w-[500px]
             h-auto
             object-contain
             drop-shadow-[0_0_35px_rgba(245,184,0,0.5)]
