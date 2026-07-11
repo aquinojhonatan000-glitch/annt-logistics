@@ -5,69 +5,119 @@ import Image from "next/image";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 
-export default function Navbar() {
-  const { usuario, cerrarSesion } = useUser();
+export default function Navbar(){
+
+  const {
+    usuario,
+    cerrarSesion
+  } = useUser();
+
   const router = useRouter();
 
-  const salir = () => {
+  const salir = ()=>{
     cerrarSesion();
     router.push("/login");
   };
 
   return (
-    <nav className="bg-[#111] border-b border-[#333] px-4 md:px-8 py-3">
-      <div className="flex items-center justify-between gap-4">
 
-        {/* LOGO */}
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/logo.png"
-            alt="ANNT LOGISTICS"
-            width={140}
-            height={70}
-            className="w-28 md:w-36 h-auto object-contain"
-            priority
-          />
+    <nav className="flex items-center justify-between px-6 py-4 bg-[#181818] shadow">
+
+      {/* LOGO */}
+      <Link href="/" className="flex items-center">
+        <Image
+          src="/logo.png"
+          alt="ANNT LOGISTICS"
+          width={140}
+          height={70}
+          className="w-28 md:w-36 h-auto object-contain"
+          priority
+        />
+      </Link>
+
+
+      {/* MENÚ */}
+      <div className="flex items-center gap-6 text-white font-semibold">
+
+        <Link 
+          href="/"
+          className="hover:text-[#f5b800] transition"
+        >
+          Inicio
         </Link>
 
-        {/* USUARIO */}
-        <div className="flex items-center gap-3 flex-wrap justify-end">
-          {usuario ? (
+
+        <Link 
+          href="/productos"
+          className="hover:text-[#f5b800] transition"
+        >
+          Productos
+        </Link>
+
+
+        <Link 
+          href="/carrito"
+          className="hover:text-[#f5b800] transition"
+        >
+          Carrito
+        </Link>
+
+
+        <Link 
+          href="/contacto"
+          className="hover:text-[#f5b800] transition"
+        >
+          Contacto
+        </Link>
+
+
+        {
+          usuario ? (
             <>
+
               <Link
                 href="/perfil"
-                className="bg-[#181818] px-4 py-2 rounded-xl"
+                className="bg-white text-black px-4 py-2 rounded-xl hover:bg-gray-200 transition"
               >
                 👤 {usuario.nombre}
               </Link>
 
-              {usuario.rol === "admin" && (
-                <Link
-                  href="/admin"
-                  className="text-[#f5b800] font-bold"
-                >
-                  ⚙️ Admin
-                </Link>
-              )}
+
+              {
+                usuario.rol === "admin" && (
+                  <Link
+                    href="/admin"
+                    className="text-[#f5b800] font-bold"
+                  >
+                    ⚙️ Admin
+                  </Link>
+                )
+              }
+
 
               <button
                 onClick={salir}
-                className="bg-red-500 px-4 py-2 rounded-xl font-bold text-white"
+                className="bg-red-500 text-white px-4 py-2 rounded-xl font-bold hover:bg-red-600 transition"
               >
                 Cerrar sesión
               </button>
+
             </>
           ) : (
+
             <Link
               href="/login"
-              className="bg-[#f5b800] text-black px-5 py-2 rounded-xl font-bold"
+              className="bg-[#f5b800] text-black px-5 py-2 rounded-xl font-bold hover:bg-yellow-400 transition"
             >
               Iniciar sesión
             </Link>
-          )}
-        </div>
+
+          )
+        }
 
       </div>
+
     </nav>
+
   );
 }
