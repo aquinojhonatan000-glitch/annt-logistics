@@ -4,33 +4,52 @@ import { useState } from "react";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import WelcomeToast from "@/components/WelcomeToast";
+
 
 export default function Login(){
 
+
 const { actualizarUsuario } = useUser();
+
 const router = useRouter();
+
 
 const [modo,setModo] = useState("login");
 
+const [bienvenida,setBienvenida] = useState(false);
+
+
+
 const [datos,setDatos] = useState({
-  nombre:"",
-  correo:"",
-  contraseña:""
+
+nombre:"",
+correo:"",
+contraseña:""
+
 });
+
 
 
 const crearPerfil = async(usuario,nombre)=>{
 
-const perfil = {
 
-id: usuario.id,
-nombre: nombre || usuario.email.split("@")[0],
-correo: usuario.email,
+const perfil={
+
+id:usuario.id,
+
+nombre:nombre || usuario.email.split("@")[0],
+
+correo:usuario.email,
+
 rol:"cliente",
+
 telefono:"",
+
 direccion:""
 
 };
+
 
 
 const {error}=await supabase
@@ -43,11 +62,7 @@ const {error}=await supabase
 
 if(error){
 
-console.log("ERROR PERFIL:",error);
-
-alert(
-"Error creando perfil: " + error.message
-);
+alert(error.message);
 
 return null;
 
@@ -56,11 +71,15 @@ return null;
 
 return perfil;
 
+
 };
 
 
 
-const enviar = async(e)=>{
+
+
+const enviar=async(e)=>{
+
 
 e.preventDefault();
 
@@ -98,7 +117,7 @@ return;
 
 
 
-const perfil = await crearPerfil(
+const perfil=await crearPerfil(
 
 data.user,
 
@@ -108,11 +127,7 @@ datos.nombre
 
 
 
-if(!perfil){
-
-return;
-
-}
+if(!perfil)return;
 
 
 
@@ -129,8 +144,6 @@ JSON.stringify(perfil)
 
 
 
-alert("✅ Cuenta creada correctamente");
-
 router.push("/perfil");
 
 
@@ -145,6 +158,7 @@ email:datos.correo,
 password:datos.contraseña
 
 });
+
 
 
 if(error){
@@ -176,7 +190,7 @@ const {data:perfilDB,error:perfilError}=await supabase
 if(perfilError){
 
 
-perfil = await crearPerfil(
+perfil=await crearPerfil(
 
 data.user,
 
@@ -185,26 +199,19 @@ data.user.email.split("@")[0]
 );
 
 
-
-if(!perfil){
-
-return;
-
-}
-
-
-
 }else{
 
 
-perfil = perfilDB;
-
+perfil=perfilDB;
 
 }
+
+
 
 
 
 const usuario={
+
 
 id:data.user.id,
 
@@ -218,11 +225,14 @@ direccion:perfil.direccion || "",
 
 rol:perfil.rol || "cliente"
 
+
 };
 
 
 
+
 actualizarUsuario(usuario);
+
 
 
 localStorage.setItem(
@@ -235,8 +245,11 @@ JSON.stringify(usuario)
 
 
 
-alert("✅ Bienvenido a ANNT LOGISTICS");
+setBienvenida(true);
 
+
+
+setTimeout(()=>{
 
 
 if(usuario.rol==="admin"){
@@ -250,6 +263,10 @@ router.push("/perfil");
 }
 
 
+},1500);
+
+
+
 }
 
 
@@ -258,36 +275,101 @@ router.push("/perfil");
 
 
 
-return(
-
-<main className="min-h-screen bg-[#111] text-white flex items-center justify-center p-8">
-
-<div className="bg-[#181818] border border-[#333] rounded-2xl p-8 w-full max-w-md">
 
 
-<h1 className="text-4xl font-bold text-center mb-8">
+return (
 
-ANNT <span className="text-[#f5b800]">LOGISTICS</span>
+<main className="
+min-h-screen
+bg-[#111]
+text-white
+flex
+items-center
+justify-center
+p-6
+">
+
+
+{
+
+bienvenida && (
+
+<WelcomeToast
+
+nombre={datos.correo.split("@")[0]}
+
+onClose={()=>setBienvenida(false)}
+
+/>
+
+)
+
+}
+
+
+
+
+<div className="
+bg-[#181818]
+border
+border-[#333]
+rounded-3xl
+p-8
+w-full
+max-w-md
+">
+
+
+<h1 className="
+text-3xl
+font-bold
+text-center
+text-[#f5b800]
+mb-8
+">
+
+ANNT LOGISTICS
 
 </h1>
 
 
-<h2 className="text-2xl font-bold text-center mb-6">
 
-{modo==="login" ? "Iniciar sesión" : "Crear cuenta"}
+<h2 className="
+text-xl
+font-bold
+mb-6
+text-center
+">
+
+{modo==="login"
+?
+"Iniciar sesión"
+:
+"Crear cuenta"}
 
 </h2>
+
 
 
 
 <form onSubmit={enviar}>
 
 
-{modo==="registro" && (
+{
+
+modo==="registro" && (
 
 <input
 
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+className="
+w-full
+bg-[#111]
+border
+border-[#333]
+p-3
+rounded-lg
+mb-4
+"
 
 placeholder="Nombre completo"
 
@@ -303,13 +385,24 @@ nombre:e.target.value
 
 />
 
-)}
+)
+
+}
+
 
 
 
 <input
 
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+className="
+w-full
+bg-[#111]
+border
+border-[#333]
+p-3
+rounded-lg
+mb-4
+"
 
 placeholder="Correo electrónico"
 
@@ -329,9 +422,19 @@ correo:e.target.value
 
 
 
+
+
 <input
 
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-6"
+className="
+w-full
+bg-[#111]
+border
+border-[#333]
+p-3
+rounded-lg
+mb-6
+"
 
 placeholder="Contraseña"
 
@@ -351,18 +454,38 @@ contraseña:e.target.value
 
 
 
+
+
 <button
 
-className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-xl"
+className="
+w-full
+bg-[#f5b800]
+text-black
+font-bold
+py-3
+rounded-xl
+hover:bg-[#ffd700]
+transition
+"
 
 >
 
-{modo==="login" ? "Entrar" : "Registrarme"}
+
+{modo==="login"
+?
+"Entrar"
+:
+"Registrarme"}
+
 
 </button>
 
 
+
 </form>
+
+
 
 
 
@@ -370,23 +493,41 @@ className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-xl"
 
 onClick={()=>setModo(
 
-modo==="login" ? "registro" : "login"
+modo==="login"
+?
+"registro"
+:
+"login"
 
 )}
 
-className="mt-6 w-full text-[#f5b800]"
+className="
+mt-6
+w-full
+text-[#f5b800]
+"
 
 >
 
-{modo==="login" ? "Crear una cuenta" : "Ya tengo cuenta"}
+
+{modo==="login"
+?
+"Crear una cuenta"
+:
+"Ya tengo cuenta"}
+
 
 </button>
 
 
+
 </div>
+
+
 
 </main>
 
 );
+
 
 }
