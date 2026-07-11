@@ -96,7 +96,8 @@ proveedor, descuentos ya vencidos y costos de importación.
 
 <p className="mt-2 font-normal">
 🚚 Entrega estimada: 6 a 15 días hábiles.
- 📲 Atención al cliente: Si necesitamos confirmar algún detalle de tu pedido, nos comunicaremos contigo mediante WhatsApp.
+ 
+📲 Atención al cliente: Si necesitamos confirmar algún detalle de tu pedido, nos comunicaremos contigo mediante WhatsApp.
 </p>
 
 </div>
