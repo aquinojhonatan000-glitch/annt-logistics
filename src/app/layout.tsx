@@ -7,12 +7,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
 
-
 import { CartProvider } from "@/context/CartContext";
 import { ProductProvider } from "@/context/ProductContext";
 import { OrderProvider } from "@/context/OrderContext";
 import { UserProvider } from "@/context/UserContext";
-
 
 
 const geistSans = Geist({
@@ -27,98 +25,71 @@ const geistMono = Geist_Mono({
 });
 
 
-
 export const metadata: Metadata = {
-
   title: "ANNT LOGISTICS",
-
   description: "Tienda online ANNT LOGISTICS",
-
 };
 
 
 
 export default function RootLayout({
-
   children,
-
 }: Readonly<{
-
   children: React.ReactNode;
-
 }>) {
 
+  return (
 
-return (
+    <html lang="es">
 
-<html lang="es">
+      <body
+        className={`
+          ${geistSans.variable}
+          ${geistMono.variable}
+          antialiased
+          bg-[#111111]
+          text-white
+          min-h-screen
+        `}
+      >
 
-<body
-
-className={`
-${geistSans.variable}
-${geistMono.variable}
-antialiased
-bg-[#111111]
-text-white
-min-h-screen
-`}
-
->
-
-
-<ProductProvider>
-
-
-<CartProvider>
+        <UserProvider>
+          <ProductProvider>
+            <CartProvider>
+              <OrderProvider>
 
 
-<OrderProvider>
+                <div className="
+                  min-h-screen
+                  bg-gradient-to-b
+                  from-[#111111]
+                  via-[#181818]
+                  to-[#0a0a0a]
+                ">
 
 
-<UserProvider>
+                  <Navbar />
 
 
-<Navbar />
+                  {children}
 
 
-<main
-
-className="
-min-h-screen
-bg-gradient-to-b
-from-[#111111]
-via-[#181818]
-to-[#0a0a0a]
-"
-
->
-
-{children}
-
-</main>
+                  <FloatingCart />
 
 
-<FloatingCart />
+                </div>
 
 
-</UserProvider>
+              </OrderProvider>
+            </CartProvider>
+          </ProductProvider>
+        </UserProvider>
 
 
-</OrderProvider>
+      </body>
 
+    </html>
 
-</CartProvider>
-
-
-</ProductProvider>
-
-
-</body>
-
-
-</html>
-
-);
+  );
 
 }
