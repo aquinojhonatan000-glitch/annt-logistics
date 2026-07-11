@@ -9,8 +9,27 @@ export default function PedidosAdmin(){
 const {
 pedidos,
 cambiarEstado,
-cambiarTiempoEntrega
+cambiarTiempoEntrega,
+estadosPedido
+
 }=useOrders();
+
+
+
+
+const tiempos=[
+
+"Pendiente",
+
+"1-3 días",
+
+"4-7 días",
+
+"8-15 días",
+
+"15-30 días"
+
+];
 
 
 
@@ -18,18 +37,17 @@ cambiarTiempoEntrega
 return(
 
 
-<main className="
+<div className="
 min-h-screen
+p-8
 bg-[#111]
 text-white
-p-8
 ">
 
 
 <h1 className="
 text-4xl
 font-bold
-text-[#f5b800]
 mb-8
 ">
 
@@ -40,20 +58,18 @@ mb-8
 
 
 
+
 {
 
 pedidos.length === 0 ? (
 
 
-<div className="
-card-dark
-p-6
-text-center
-">
+<p>
 
 No hay pedidos todavía
 
-</div>
+</p>
+
 
 
 ):(
@@ -61,6 +77,7 @@ No hay pedidos todavía
 
 
 pedidos.map((pedido)=>(
+
 
 
 <div
@@ -80,11 +97,10 @@ mb-8
 
 
 
+
 <h2 className="
-text-xl
+text-2xl
 font-bold
-text-[#f5b800]
-mb-5
 ">
 
 🛒 Pedido #{String(pedido.id).slice(0,8)}
@@ -95,18 +111,10 @@ mb-5
 
 
 
-<div className="
-bg-[#111]
-rounded-xl
-p-4
-mb-6
-">
-
-
 <h3 className="
-text-xl
+mt-5
 font-bold
-mb-4
+text-[#f5b800]
 ">
 
 👤 Datos del cliente
@@ -114,53 +122,25 @@ mb-4
 </h3>
 
 
-
 <p>
-Nombre:
-{" "}
-<b>
-{pedido.cliente?.nombre || "Sin nombre"}
-</b>
+
+{pedido.cliente?.nombre}
+
 </p>
 
 
-
 <p>
-🪪 DNI:
-{" "}
-<b>
-{pedido.cliente?.dni || "No registrado"}
-</b>
+
+{pedido.cliente?.telefono}
+
 </p>
 
 
-
 <p>
-📱 Teléfono:
-{" "}
-{pedido.cliente?.telefono || "-"}
+
+{pedido.cliente?.direccion}
+
 </p>
-
-
-
-<p>
-📍 Dirección:
-{" "}
-{pedido.cliente?.direccion || "-"}
-</p>
-
-
-
-<p>
-🏙️ Ciudad:
-{" "}
-{pedido.cliente?.ciudad || "-"}
-</p>
-
-
-
-</div>
-
 
 
 
@@ -168,15 +148,14 @@ Nombre:
 
 
 <h3 className="
-text-xl
+mt-5
 font-bold
-mb-4
+text-[#f5b800]
 ">
 
 📦 Productos
 
 </h3>
-
 
 
 
@@ -222,6 +201,7 @@ rounded-xl
 
 
 
+
 <div>
 
 
@@ -233,17 +213,22 @@ rounded-xl
 
 
 
+
 {
 
 producto.talla && (
 
 <p>
-👕 Talla: {producto.talla}
+
+Talla: {producto.talla}
+
 </p>
 
 )
 
 }
+
+
 
 
 
@@ -252,7 +237,9 @@ producto.talla && (
 producto.color && (
 
 <p>
-🎨 Color: {producto.color}
+
+Color: {producto.color}
+
 </p>
 
 )
@@ -261,7 +248,9 @@ producto.color && (
 
 
 
-<p className="text-[#f5b800] font-bold">
+
+
+<p>
 
 S/ {Number(producto.precio).toFixed(2)}
 
@@ -280,9 +269,8 @@ Cantidad: {producto.cantidad}
 </div>
 
 
-
-
 </div>
+
 
 
 ))
@@ -295,24 +283,16 @@ Cantidad: {producto.cantidad}
 
 
 <p className="
-text-3xl
+text-xl
 font-bold
-mt-6
+mt-5
 ">
-
 
 💰 Total:
 
-<span className="text-[#f5b800]">
-
-{" "}
 S/ {Number(pedido.total).toFixed(2)}
 
-</span>
-
-
 </p>
-
 
 
 
@@ -324,19 +304,14 @@ S/ {Number(pedido.total).toFixed(2)}
 pedido.comprobante && (
 
 
-<div className="mt-6">
+<div className="mt-5">
 
 
-<h3 className="
-text-xl
-font-bold
-mb-3
-">
+<h3 className="font-bold">
 
 🧾 Comprobante de pago
 
 </h3>
-
 
 
 <img
@@ -348,13 +323,14 @@ w-64
 rounded-xl
 border
 border-[#333]
+mt-3
 "
 
 />
 
 
-
 </div>
+
 
 
 )
@@ -363,6 +339,19 @@ border-[#333]
 
 
 
+
+
+
+
+<h3 className="
+mt-6
+font-bold
+text-[#f5b800]
+">
+
+🚚 Estado del pedido
+
+</h3>
 
 
 
@@ -376,7 +365,7 @@ border
 border-[#333]
 p-3
 rounded-xl
-mt-6
+mt-3
 "
 
 value={pedido.estado}
@@ -396,35 +385,47 @@ e.target.value
 >
 
 
-<option>
-Esperando pago
+{
+
+estadosPedido.map((estado)=>(
+
+
+<option
+
+key={estado}
+
+value={estado}
+
+>
+
+{estado}
+
 </option>
 
 
-<option>
-Pagado
-</option>
+))
 
 
-<option>
-Preparando pedido
-</option>
-
-
-<option>
-Enviado
-</option>
-
-
-<option>
-Entregado
-</option>
+}
 
 
 </select>
 
 
 
+
+
+
+
+<h3 className="
+mt-6
+font-bold
+text-[#f5b800]
+">
+
+⏳ Tiempo estimado
+
+</h3>
 
 
 
@@ -459,29 +460,30 @@ e.target.value
 >
 
 
-<option>
-Pendiente
+{
+
+tiempos.map((tiempo)=>(
+
+
+<option
+
+key={tiempo}
+
+value={tiempo}
+
+>
+
+{tiempo}
+
 </option>
 
 
-<option>
-1-3 días hábiles
-</option>
+
+))
 
 
-<option>
-4-7 días hábiles
-</option>
+}
 
-
-<option>
-6-15 días hábiles
-</option>
-
-
-<option>
-Entregado
-</option>
 
 
 </select>
@@ -490,7 +492,64 @@ Entregado
 
 
 
+<h3 className="
+mt-6
+font-bold
+">
+
+📍 Historial
+
+</h3>
+
+
+
+{
+
+pedido.historial_estado?.map((historial,index)=>(
+
+
+<div
+
+key={index}
+
+className="
+mt-3
+border-l-2
+border-[#f5b800]
+pl-4
+"
+
+
+>
+
+
+<p>
+
+✅ {historial.estado}
+
+</p>
+
+
+<p className="text-gray-400 text-sm">
+
+{historial.fecha} - {historial.hora}
+
+</p>
+
+
+
 </div>
+
+
+))
+
+
+}
+
+
+
+</div>
+
 
 
 ))
@@ -502,7 +561,8 @@ Entregado
 
 
 
-</main>
+</div>
+
 
 
 );

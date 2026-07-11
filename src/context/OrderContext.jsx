@@ -14,6 +14,7 @@ const [pedidos,setPedidos] = useState([]);
 
 
 
+
 // Estados disponibles
 
 const estadosPedido = [
@@ -43,6 +44,7 @@ const estadosPedido = [
 "Entregado"
 
 ];
+
 
 
 
@@ -96,7 +98,6 @@ cargarPedidos();
 
 
 
-
 // Crear pedido
 
 const agregarPedido = async(pedido)=>{
@@ -108,22 +109,16 @@ const fechaActual = new Date().toISOString();
 
 const primerEstado = {
 
-
 estado:"Pendiente de pago",
-
 
 fecha:new Date().toLocaleDateString("es-PE"),
 
-
 hora:new Date().toLocaleTimeString("es-PE"),
-
 
 descripcion:
 "Pedido creado, esperando confirmación de pago"
 
-
 };
-
 
 
 
@@ -135,9 +130,7 @@ const pedidoGuardar={
 numero_pedido:pedido.id,
 
 
-
 cliente:{
-
 
 nombre:pedido.cliente?.nombre || "",
 
@@ -155,7 +148,6 @@ correo:pedido.cliente?.correo || ""
 
 
 
-
 productos:JSON.parse(
 
 JSON.stringify(
@@ -166,16 +158,13 @@ pedido.productos || []
 
 
 
-
 total:Number(
 pedido.total || 0
 ),
 
 
 
-
 estado:"Pendiente de pago",
-
 
 
 
@@ -187,11 +176,9 @@ primerEstado
 
 
 
-
 pago:
 
 pedido.pago || "Yape",
-
 
 
 
@@ -201,11 +188,9 @@ pedido.comprobante || "",
 
 
 
-
 fecha:
 
 fechaActual,
-
 
 
 
@@ -233,19 +218,12 @@ const {data,error}=await supabase
 
 
 
-
 if(error){
 
 console.log(
 "ERROR GUARDANDO PEDIDO:",
 error
 );
-
-
-alert(
-"❌ Error guardando pedido"
-);
-
 
 return false;
 
@@ -278,10 +256,9 @@ return true;
 
 
 
-// Cambiar estado con historial
+// Cambiar estado
 
 const cambiarEstado = async(id, estado)=>{
-
 
 
 const pedidoActual = pedidos.find(
@@ -297,21 +274,16 @@ if(!pedidoActual)return;
 
 
 
-
 const nuevoEstado={
-
 
 
 estado:estado,
 
 
-
 fecha:new Date().toLocaleDateString("es-PE"),
 
 
-
 hora:new Date().toLocaleTimeString("es-PE"),
-
 
 
 descripcion:
@@ -319,9 +291,7 @@ descripcion:
 `Pedido actualizado a: ${estado}`
 
 
-
 };
-
 
 
 
@@ -369,11 +339,9 @@ error
 
 );
 
-
 return;
 
 }
-
 
 
 
@@ -415,6 +383,78 @@ pedido
 
 
 
+
+
+// Cambiar tiempo de entrega
+
+const cambiarTiempoEntrega = async(id, tiempo)=>{
+
+
+const {error}=await supabase
+
+.from("pedidos")
+
+.update({
+
+tiempo_entrega:tiempo
+
+})
+
+.eq("id",id);
+
+
+
+
+if(error){
+
+console.log(
+"ERROR CAMBIANDO TIEMPO:",
+error
+);
+
+return;
+
+}
+
+
+
+
+
+setPedidos((prev)=>
+
+prev.map((pedido)=>
+
+pedido.id===id
+
+?
+
+{
+
+...pedido,
+
+tiempo_entrega:tiempo
+
+}
+
+:
+
+pedido
+
+)
+
+);
+
+
+
+};
+
+
+
+
+
+
+
+
 return(
 
 <OrderContext.Provider
@@ -426,6 +466,8 @@ pedidos,
 agregarPedido,
 
 cambiarEstado,
+
+cambiarTiempoEntrega,
 
 cargarPedidos,
 
@@ -444,7 +486,6 @@ estadosPedido
 
 
 }
-
 
 
 
