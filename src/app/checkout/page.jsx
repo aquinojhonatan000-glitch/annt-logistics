@@ -6,6 +6,7 @@ import { useUser } from "@/context/UserContext";
 import { useOrders } from "@/context/OrderContext";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import Notification from "@/components/Notification";
 
 
 export default function Checkout(){
@@ -41,6 +42,7 @@ const [nombreArchivo,setNombreArchivo]=useState("");
 const [subiendo,setSubiendo]=useState(false);
 
 const [enviando,setEnviando]=useState(false);
+const [notificacion,setNotificacion]=useState("");
 
 
 
@@ -214,16 +216,25 @@ tiempo_entrega:"Pendiente"
 
 
 
-await agregarPedido(pedido);
+const guardado = await agregarPedido(pedido);
 
-
+if(guardado){
 
 limpiarCarrito();
 
+setNotificacion(
+"Pedido confirmado correctamente. ANNT LOGISTICS ya está preparando tu compra."
+);
 
 
-alert("✅ Pedido enviado correctamente");
+setTimeout(()=>{
 
+router.push("/");
+
+},3000);
+
+
+}
 
 
 router.push("/");
@@ -802,7 +813,19 @@ enviando
 
 </div>
 
+{
+notificacion && (
 
+<Notification
+
+mensaje={notificacion}
+
+onClose={()=>setNotificacion("")}
+
+/>
+
+)
+}
 
 
 

@@ -191,38 +191,27 @@ const {data,error}=await supabase
 
 if(error){
 
-
 console.log(
 "ERROR GUARDANDO PEDIDO:",
 error
 );
 
-
 alert(
-"Error guardando pedido"
+"❌ ANNT LOGISTICS: Error guardando pedido"
 );
 
-
-return;
-
+return false;
 
 }
 
 
 
-
-
 setPedidos((prev)=>[
-
-data[0],
-
+data?.[0],
 ...prev
-
 ]);
 
-
-
-
+return true;
 
 };
 
