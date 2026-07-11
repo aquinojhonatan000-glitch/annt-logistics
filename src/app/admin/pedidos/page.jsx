@@ -14,19 +14,41 @@ cambiarTiempoEntrega
 
 return(
 
-<main className="min-h-screen bg-[#111] text-white p-8">
+<main className="
+min-h-screen
+bg-[#111]
+text-white
+p-8
+">
 
 
-<h1 className="text-4xl font-bold mb-8">
-📦 Pedidos de clientes
+<h1 className="
+text-4xl
+font-bold
+text-[#f5b800]
+mb-8
+">
+
+📦 Pedidos ANNT LOGISTICS
+
 </h1>
 
 
 
-{pedidos.length === 0 ? (
+{
 
-<div className="bg-[#181818] border border-[#333] p-6 rounded-xl">
-No hay pedidos todavía.
+pedidos.length === 0 ? (
+
+
+<div className="
+card-dark
+p-10
+text-center
+text-xl
+">
+
+No hay pedidos todavía
+
 </div>
 
 
@@ -37,48 +59,83 @@ No hay pedidos todavía.
 pedidos.map((pedido)=>(
 
 
-
 <div
 
 key={pedido.id}
 
-className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
+className="
+bg-[#181818]
+border
+border-[#333]
+rounded-2xl
+p-6
+mb-8
+"
+
 
 >
 
 
+<h2 className="
+text-2xl
+font-bold
+mb-5
+">
 
-<h2 className="text-2xl font-bold text-[#f5b800]">
-📦 Pedido #{pedido.numero_pedido || pedido.id}
+🛒 Pedido #{pedido.id.slice(0,8)}
+
 </h2>
 
 
 
+<div className="
+mb-6
+bg-[#111]
+p-4
+rounded-xl
+border
+border-[#333]
+">
 
-<div className="mt-5">
 
-<h3 className="font-bold text-xl">
-👤 Cliente
+<h3 className="
+font-bold
+text-[#f5b800]
+mb-3
+">
+
+👤 Datos del cliente
+
 </h3>
 
 
 <p>
-Nombre: {pedido.cliente?.nombre}
+Nombre:
+{" "}
+<b>
+{pedido.cliente?.nombre || "Sin nombre"}
+</b>
 </p>
 
 
 <p>
-📞 Teléfono: {pedido.cliente?.telefono}
+📱 Teléfono:
+{" "}
+{pedido.cliente?.telefono}
 </p>
 
 
 <p>
-📍 Dirección: {pedido.cliente?.direccion}
+📍 Dirección:
+{" "}
+{pedido.cliente?.direccion}
 </p>
 
 
 <p>
-🏙️ Ciudad: {pedido.cliente?.ciudad}
+🏙️ Ciudad:
+{" "}
+{pedido.cliente?.ciudad}
 </p>
 
 
@@ -88,28 +145,38 @@ Nombre: {pedido.cliente?.nombre}
 
 
 
+<h3 className="
+text-xl
+font-bold
+mb-4
+">
 
+📦 Productos
 
-<div className="mt-6">
-
-
-<h3 className="font-bold text-xl mb-4">
-🛒 Productos
 </h3>
 
 
 
-{pedido.productos?.map((producto,index)=>(
+{
+
+pedido.productos?.map((producto,index)=>(
 
 
 <div
 
 key={index}
 
-className="flex gap-5 items-center border-b border-[#333] py-4"
+className="
+flex
+gap-5
+items-center
+border-b
+border-[#333]
+py-4
+"
+
 
 >
-
 
 
 <img
@@ -118,17 +185,25 @@ src={producto.imagen}
 
 alt={producto.nombre}
 
-className="w-24 h-24 object-cover rounded-lg border border-[#333]"
+className="
+w-24
+h-24
+object-contain
+bg-white
+rounded-xl
+"
 
 />
-
 
 
 
 <div>
 
 
-<p className="font-bold text-lg">
+<p className="
+font-bold
+text-lg
+">
 
 {producto.nombre}
 
@@ -137,68 +212,80 @@ className="w-24 h-24 object-cover rounded-lg border border-[#333]"
 
 
 <p>
-Cantidad: {producto.cantidad}
+Cantidad:
+{producto.cantidad}
 </p>
 
 
 
+{
 
-{producto.talla && (
+producto.talla && (
 
 <p>
 👕 Talla: {producto.talla}
 </p>
 
-)}
+)
+
+}
 
 
 
 
-{producto.color && (
+{
+
+producto.color && (
 
 <p>
 🎨 Color: {producto.color}
 </p>
 
-)}
+)
+
+}
 
 
 
+<p className="
+text-[#f5b800]
+font-bold
+">
 
-<p className="text-[#f5b800] font-bold mt-2">
-
-S/ {producto.precio}
+S/ {Number(producto.precio).toFixed(2)}
 
 </p>
 
 
-
 </div>
-
-
-
-</div>
-
-
-
-))}
-
 
 
 </div>
 
 
+))
+
+
+}
 
 
 
 
-<div className="mt-6 text-2xl font-bold">
+
+<div className="
+mt-6
+text-3xl
+font-bold
+">
+
 
 💰 Total:
 
-<span className="text-[#f5b800]">
+<span className="
+text-[#f5b800]
+">
 
-{" "}S/ {pedido.total}
+S/ {Number(pedido.total).toFixed(2)}
 
 </span>
 
@@ -210,40 +297,38 @@ S/ {producto.precio}
 
 
 
-<div className="mt-5">
+{
 
-<p>
-💳 Método de pago: {pedido.pago}
-</p>
+pedido.comprobante && (
 
 
-</div>
+<div className="
+mt-6
+">
 
 
+<h3 className="
+font-bold
+text-xl
+mb-3
+">
 
-
-
-
-
-
-{pedido.comprobante && (
-
-
-<div className="mt-6">
-
-
-<h3 className="font-bold">
-
-🧾 Comprobante
+🧾 Comprobante de pago
 
 </h3>
+
 
 
 <img
 
 src={pedido.comprobante}
 
-className="w-64 rounded-xl mt-3 border border-[#333]"
+className="
+w-64
+rounded-xl
+border
+border-[#333]
+"
 
 />
 
@@ -251,36 +336,34 @@ className="w-64 rounded-xl mt-3 border border-[#333]"
 </div>
 
 
-)}
+)
+
+}
 
 
 
 
-
-
-
-<div className="mt-6">
-
-
-<label className="font-bold">
-🚚 Estado del pedido
-</label>
 
 
 <select
 
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mt-2"
+className="
+w-full
+bg-[#111]
+border
+border-[#333]
+p-3
+rounded-xl
+mt-6
+"
 
 value={pedido.estado}
 
 onChange={(e)=>
 
 cambiarEstado(
-
 pedido.id,
-
 e.target.value
-
 )
 
 }
@@ -292,16 +375,17 @@ e.target.value
 Esperando pago
 </option>
 
+<option>
+Pago confirmado
+</option>
 
 <option>
 Preparando pedido
 </option>
 
-
 <option>
-En camino
+Enviado
 </option>
-
 
 <option>
 Entregado
@@ -311,37 +395,31 @@ Entregado
 </select>
 
 
-</div>
 
-
-
-
-
-
-
-<div className="mt-6">
-
-
-<label className="font-bold">
-⏳ Tiempo de entrega
-</label>
 
 
 
 <select
 
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mt-2"
+className="
+w-full
+bg-[#111]
+border
+border-[#333]
+p-3
+rounded-xl
+mt-3
+"
 
-value={pedido.tiempo_entrega || "Pendiente"}
+value={
+pedido.tiempo_entrega || "Pendiente"
+}
 
 onChange={(e)=>
 
 cambiarTiempoEntrega(
-
 pedido.id,
-
 e.target.value
-
 )
 
 }
@@ -353,27 +431,20 @@ e.target.value
 Pendiente
 </option>
 
+<option>
+1-3 días
+</option>
+
+<option>
+3-7 días
+</option>
 
 <option>
 6-15 días hábiles
 </option>
 
 
-<option>
-15-20 días hábiles
-</option>
-
-
-<option>
-Más de 20 días hábiles
-</option>
-
-
 </select>
-
-
-
-</div>
 
 
 
@@ -385,7 +456,11 @@ Más de 20 días hábiles
 
 ))
 
-)}
+
+)
+
+
+}
 
 
 
@@ -393,5 +468,6 @@ Más de 20 días hábiles
 
 
 );
+
 
 }
