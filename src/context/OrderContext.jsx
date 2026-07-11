@@ -3,16 +3,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-
-const OrderContext = createContext<any>(null);
-
+const OrderContext = createContext(null);
 
 
-export function OrderProvider({ children }:any){
+
+export function OrderProvider({ children }) {
 
 
-const [pedidos,setPedidos] = useState<any[]>([]);
-
+const [pedidos,setPedidos] = useState([]);
 
 
 
@@ -51,7 +49,6 @@ const estadosPedido = [
 
 
 // Cargar pedidos
-
 
 const cargarPedidos = async()=>{
 
@@ -101,12 +98,9 @@ cargarPedidos();
 
 
 
-
-
 // Crear pedido
 
-
-const agregarPedido = async(pedido:any)=>{
+const agregarPedido = async(pedido)=>{
 
 
 const fechaActual = new Date().toISOString();
@@ -171,40 +165,43 @@ pedido.total || 0
 
 
 
-
 estado:"Pendiente de pago",
 
 
 
 historial_estado:[
+
 primerEstado
+
 ],
 
 
 
-
 pago:
+
 pedido.pago || "Yape",
 
 
 
 comprobante:
+
 pedido.comprobante || "",
 
 
 
 fecha:
+
 fechaActual,
 
 
 
 tiempo_entrega:
+
 pedido.tiempo_entrega || "6-15 días hábiles"
 
 
 
 };
-
 
 
 
@@ -241,6 +238,7 @@ return false;
 
 
 
+
 setPedidos((prev)=>[
 
 data?.[0],
@@ -254,9 +252,7 @@ data?.[0],
 return true;
 
 
-
 };
-
 
 
 
@@ -267,8 +263,7 @@ return true;
 
 // Cambiar estado con historial
 
-
-const cambiarEstado = async(id:number, estado:string)=>{
+const cambiarEstado = async(id, estado)=>{
 
 
 
@@ -288,7 +283,7 @@ if(!pedidoActual)return;
 const nuevoEstado={
 
 
-estado,
+estado:estado,
 
 
 fecha:new Date().toLocaleDateString("es-PE"),
@@ -316,7 +311,6 @@ nuevoEstado
 
 
 
-
 const {error}=await supabase
 
 .from("pedidos")
@@ -335,11 +329,15 @@ historial_estado:historialNuevo
 
 
 
+
 if(error){
 
 console.log(
+
 "ERROR CAMBIANDO ESTADO:",
+
 error
+
 );
 
 return;
@@ -362,7 +360,7 @@ pedido.id===id
 
 ...pedido,
 
-estado,
+estado:estado,
 
 historial_estado:historialNuevo
 
@@ -379,7 +377,6 @@ pedido
 
 
 };
-
 
 
 
@@ -416,6 +413,7 @@ estadosPedido
 
 
 }
+
 
 
 
