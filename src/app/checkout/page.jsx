@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 
 export default function Checkout(){
 
+
 const { carrito, limpiarCarrito } = useCart();
 
 const { usuario } = useUser();
@@ -17,6 +18,7 @@ const { usuario } = useUser();
 const { agregarPedido } = useOrders();
 
 const router = useRouter();
+
 
 
 const [datos,setDatos]=useState({
@@ -30,6 +32,7 @@ pago:"Yape"
 });
 
 
+
 const [comprobante,setComprobante]=useState("");
 
 const [nombreArchivo,setNombreArchivo]=useState("");
@@ -40,6 +43,7 @@ const [enviando,setEnviando]=useState(false);
 
 
 
+
 const total = carrito.reduce(
 (sum,p)=>sum + Number(p.precio)*p.cantidad,
 0
@@ -47,7 +51,10 @@ const total = carrito.reduce(
 
 
 
+
+
 const subirComprobante = async(e)=>{
+
 
 const archivo=e.target.files[0];
 
@@ -55,6 +62,7 @@ if(!archivo)return;
 
 
 setSubiendo(true);
+
 
 
 const nombre=
@@ -71,8 +79,6 @@ const {error}=await supabase.storage
 
 if(error){
 
-console.log(error);
-
 alert("Error subiendo comprobante");
 
 setSubiendo(false);
@@ -80,6 +86,7 @@ setSubiendo(false);
 return;
 
 }
+
 
 
 
@@ -96,12 +103,17 @@ setNombreArchivo(archivo.name);
 
 setSubiendo(false);
 
+
 };
 
 
 
 
+
+
+
 const confirmarCompra=async(e)=>{
+
 
 e.preventDefault();
 
@@ -109,7 +121,7 @@ e.preventDefault();
 
 if(!comprobante){
 
-alert("Debes subir tu comprobante de pago");
+alert("Sube tu comprobante de pago");
 
 return;
 
@@ -124,7 +136,7 @@ if(
 !datos.ciudad
 ){
 
-alert("Completa todos tus datos de entrega");
+alert("Completa tus datos de entrega");
 
 return;
 
@@ -136,9 +148,12 @@ setEnviando(true);
 
 
 
+
 const pedido={
 
+
 id:crypto.randomUUID(),
+
 
 cliente:{
 
@@ -163,12 +178,13 @@ pago:datos.pago,
 
 comprobante,
 
-
 fecha:new Date().toISOString(),
 
 tiempo_entrega:"Pendiente"
 
+
 };
+
 
 
 
@@ -179,42 +195,90 @@ await agregarPedido(pedido);
 limpiarCarrito();
 
 
+
 alert("✅ Pedido enviado correctamente");
 
 
 router.push("/");
+
 
 };
 
 
 
 
+
+
+
 return(
 
-<main className="min-h-screen bg-[#111] text-white p-8">
+
+<main className="
+min-h-screen
+px-6
+py-10
+">
 
 
-<h1 className="text-4xl font-bold mb-8">
-💳 Checkout ANNT LOGISTICS
+
+<h1 className="
+text-4xl
+md:text-5xl
+font-bold
+text-center
+mb-10
+">
+
+💳 Checkout
+
+<span className="text-[#f5b800]">
+ ANNT LOGISTICS
+</span>
+
+
 </h1>
 
 
 
-<div className="grid md:grid-cols-2 gap-8">
+
+
+<div className="
+grid
+lg:grid-cols-2
+gap-8
+">
 
 
 
-<div className="bg-[#181818] border border-[#333] rounded-xl p-6">
 
 
-<h2 className="text-2xl font-bold mb-5">
+{/* DATOS */}
+
+
+<div className="
+card-dark
+p-6
+">
+
+
+<h2 className="
+text-2xl
+font-bold
+mb-6
+">
+
 📦 Datos de entrega
+
 </h2>
+
+
 
 
 <input
 
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+className="
+input-style
+"
 
 placeholder="Nombre completo"
 
@@ -231,7 +295,9 @@ nombre:e.target.value
 
 <input
 
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+className="
+input-style
+"
 
 placeholder="Teléfono"
 
@@ -248,7 +314,9 @@ telefono:e.target.value
 
 <textarea
 
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+className="
+input-style
+"
 
 placeholder="Dirección completa"
 
@@ -265,7 +333,9 @@ direccion:e.target.value
 
 <input
 
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+className="
+input-style
+"
 
 placeholder="Ciudad"
 
@@ -276,15 +346,29 @@ onChange={(e)=>setDatos({
 ciudad:e.target.value
 })}
 
-/> 
-<h2 className="text-xl font-bold">
-Método de pago
-</h2>
+/>
+
+
+
+
+<h3 className="
+text-xl
+font-bold
+mt-5
+">
+
+💳 Método de pago
+
+</h3>
+
+
 
 
 <select
 
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mt-3"
+className="
+input-style
+"
 
 value={datos.pago}
 
@@ -295,13 +379,20 @@ pago:e.target.value
 
 >
 
+
 <option>Yape</option>
+
 <option>Plin</option>
+
 <option>Prexpe</option>
+
 <option>Transferencia BCP</option>
+
 <option>Transferencia BBVA</option>
 
+
 </select>
+
 
 
 </div>
@@ -310,26 +401,76 @@ pago:e.target.value
 
 
 
-<div className="bg-[#181818] border border-[#333] rounded-xl p-6">
 
 
-<h2 className="text-2xl font-bold mb-5">
+
+
+{/* RESUMEN */}
+
+
+<div className="
+card-dark
+p-6
+">
+
+
+<h2 className="
+text-2xl
+font-bold
+mb-6
+">
+
 🛒 Resumen del pedido
+
 </h2>
 
 
 
 
-{carrito.map((p)=>(
+
+{
+
+carrito.map((p)=>(
 
 
 <div
 
 key={p.id}
 
-className="border-b border-[#333] pb-3 mb-3"
+className="
+border-b
+border-[#333]
+pb-4
+mb-4
+"
+
 
 >
+
+
+<div className="
+flex
+gap-4
+">
+
+
+<img
+
+src={p.imagen}
+
+className="
+w-20
+h-20
+bg-white
+rounded-xl
+object-contain
+"
+
+/>
+
+
+
+<div>
 
 
 <p className="font-bold">
@@ -346,44 +487,54 @@ Cantidad: {p.cantidad}
 </p>
 
 
-{p.talla && (
 
-<p>
-👕 Talla: {p.talla}
-</p>
+{
 
-)}
+p.talla && <p>👕 {p.talla}</p>
 
+}
 
 
-{p.color && (
 
-<p>
-🎨 Color: {p.color}
-</p>
+{
 
-)}
+p.color && <p>🎨 {p.color}</p>
 
+}
 
 
 </div>
 
 
-))}
+</div>
+
+
+</div>
+
+
+
+))
+
+}
 
 
 
 
 
-<p className="text-3xl font-bold mt-5">
+<p className="
+text-3xl
+font-bold
+mt-6
+">
 
 Total:
 
 <span className="text-[#f5b800]">
 
-{" "}S/ {total.toFixed(2)}
+ S/ {total.toFixed(2)}
 
 </span>
+
 
 </p>
 
@@ -391,39 +542,51 @@ Total:
 
 
 
-<div className="mt-6 bg-[#111] border border-[#333] rounded-xl p-5">
 
 
-<h3 className="text-xl font-bold text-[#f5b800]">
+
+
+<div className="
+mt-8
+bg-[#111]
+border
+border-[#333]
+rounded-2xl
+p-5
+">
+
+
+<h3 className="
+text-xl
+font-bold
+text-[#f5b800]
+">
+
 💳 Datos de pago
+
 </h3>
 
 
 
-<div className="mt-4 space-y-4 text-gray-200">
 
-
-<div>
+<p className="mt-4">
 
 📱 Yape / Plin / Prexpe
 
-<p className="font-bold text-white">
+<br/>
 
+<b>
 907025944
+</b>
 
 </p>
 
-</div>
 
 
 
-<div>
+<p className="mt-4">
 
 🏦 BCP Soles
-
-<p>
-
-Cuenta:
 
 <br/>
 
@@ -434,30 +597,11 @@ Cuenta:
 </p>
 
 
-<p>
-
-CCI:
-
-<br/>
-
-<b>
-00237510795635207541
-</b>
-
-</p>
-
-</div>
 
 
-
-
-<div>
+<p className="mt-4">
 
 🏦 BBVA Soles
-
-<p>
-
-Cuenta:
 
 <br/>
 
@@ -468,41 +612,28 @@ Cuenta:
 </p>
 
 
-<p>
-
-CCI:
-
-<br/>
-
-<b>
-01181400027866491616
-</b>
-
-</p>
-
-</div>
 
 
-
-
-<div>
+<p className="mt-4">
 
 👤 Titular:
 
-<p className="text-[#f5b800] font-bold">
+<br/>
+
+<span className="text-[#f5b800] font-bold">
 
 Jhonatan Antoni Aquiño López
 
+</span>
+
+
 </p>
 
-</div>
-
-
-
-</div>
 
 
 </div>
+
+
 
 
 
@@ -512,15 +643,20 @@ Jhonatan Antoni Aquiño López
 <div className="mt-6">
 
 
-<p className="font-bold mb-3">
-📷 Comprobante de pago
-</p>
-
-
-
 <label
 
-className="block text-center bg-[#f5b800] text-black font-bold py-3 rounded-xl cursor-pointer hover:bg-yellow-500"
+className="
+block
+text-center
+bg-[#f5b800]
+text-black
+font-bold
+py-4
+rounded-xl
+cursor-pointer
+hover:bg-[#ffd700]
+transition
+"
 
 >
 
@@ -547,32 +683,43 @@ className="hidden"
 
 
 
-{subiendo && (
 
-<p className="mt-3 text-yellow-400">
+{
 
-⏳ Subiendo comprobante...
+subiendo && (
+
+<p className="text-yellow-400 mt-3">
+
+⏳ Subiendo...
 
 </p>
 
-)}
+)
+
+}
 
 
 
+{
 
-{nombreArchivo && (
+nombreArchivo && (
 
-<p className="mt-3 text-green-400 font-bold">
+<p className="text-green-400 mt-3 font-bold">
 
 ✅ {nombreArchivo}
 
 </p>
 
-)}
+)
+
+}
 
 
 
 </div>
+
+
+
 
 
 
@@ -584,24 +731,47 @@ onClick={confirmarCompra}
 
 disabled={enviando}
 
-className="mt-6 w-full bg-[#f5b800] text-black font-bold py-4 rounded-xl hover:bg-yellow-500"
+className="
+mt-6
+w-full
+btn-gold
+py-4
+"
+
 
 >
 
 
-{enviando ? "Enviando pedido..." : "✅ Confirmar compra"}
+{
 
+enviando
+
+?
+
+"⏳ Enviando pedido..."
+
+:
+
+"✅ Confirmar compra"
+
+}
 
 
 </button>
 
 
 
+
+</div>
+
+
+
+
 </div>
 
 
 
-</div>
+
 
 
 </main>

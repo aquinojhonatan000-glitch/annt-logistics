@@ -1,46 +1,43 @@
-"use client";
-
 import Link from "next/link";
-import { useProducts } from "@/context/ProductContext";
-
 
 export default function Home() {
 
-
-const { productos } = useProducts();
-
-
-const destacados = productos?.slice(0,4) || [];
-
-
-
 return (
 
-<main className="min-h-screen px-6 md:px-12 py-12">
-
-
+<main className="min-h-screen">
 
 {/* HERO */}
 
 <section className="
+relative
+overflow-hidden
 text-center
-max-w-5xl
-mx-auto
-py-16
+py-24
+px-6
 ">
+
+<div className="
+absolute
+inset-0
+bg-gradient-to-b
+from-[#1f1f1f]
+to-[#111]
+-z-10
+"></div>
+
+
+<div className="max-w-5xl mx-auto">
 
 
 <p className="
 text-[#f5b800]
 font-bold
-text-xl
-mb-5
+tracking-widest
+mb-4
+text-lg
 ">
-
 ANNT LOGISTICS
-
 </p>
-
 
 
 <h1 className="
@@ -48,6 +45,7 @@ text-5xl
 md:text-7xl
 font-bold
 leading-tight
+mb-6
 ">
 
 Compra fácil.
@@ -55,33 +53,26 @@ Compra fácil.
 <br />
 
 <span className="text-[#f5b800]">
-
 Recibe rápido.
-
 </span>
-
 
 </h1>
 
 
 
-
 <p className="
 text-gray-400
-text-lg
-md:text-xl
+text-xl
 max-w-3xl
 mx-auto
-mt-8
+mb-10
 ">
 
 Descubre productos de tecnología, moda y hogar
 con una experiencia de compra moderna,
 segura y rápida.
 
-
 </p>
-
 
 
 
@@ -90,19 +81,18 @@ flex
 justify-center
 gap-5
 flex-wrap
-mt-10
 ">
 
 
 <Link
 href="/productos"
-className="btn-gold"
+className="
+btn-gold
+shadow-[0_0_35px_rgba(245,184,0,0.35)]
+"
 >
-
 🛒 Ver productos
-
 </Link>
-
 
 
 
@@ -121,150 +111,120 @@ hover:text-black
 transition
 "
 >
-
 Comprar ahora
-
 </Link>
 
 
 </div>
 
 
+</div>
+
 </section>
 
 
 
 
+{/* PRODUCTO DESTACADO */}
 
 
+<section className="
+px-6
+py-16
+">
 
-{/* PRODUCTOS DESTACADOS */}
+
+<div className="
+max-w-5xl
+mx-auto
+bg-[#181818]
+border
+border-[#333]
+rounded-3xl
+p-10
+flex
+flex-col
+md:flex-row
+items-center
+justify-between
+gap-8
+hover:border-[#f5b800]
+transition
+">
 
 
-<section className="mb-20">
+<div>
+
+
+<span className="
+bg-[#f5b800]
+text-black
+px-4
+py-1
+rounded-full
+font-bold
+text-sm
+">
+
+NEW
+
+</span>
+
 
 
 <h2 className="
-text-3xl
-md:text-4xl
+text-4xl
 font-bold
-mb-10
+mt-5
 ">
 
-🔥 Productos destacados
+Premium Store
 
 </h2>
 
 
-
-<div className="
-grid
-sm:grid-cols-2
-lg:grid-cols-4
-gap-6
-">
-
-
-{
-
-destacados.map((producto)=>(
-
-
-<div
-
-key={producto.id}
-
-className="
-card-dark
-p-5
-hover:-translate-y-2
-transition
-"
-
->
-
-
-<img
-
-src={producto.imagen}
-
-alt={producto.nombre}
-
-className="
-w-full
-h-52
-object-contain
-bg-white
-rounded-2xl
-"
-
-/>
-
-
-
-<h3 className="
-font-bold
-text-lg
-mt-5
-">
-
-{producto.nombre}
-
-</h3>
-
-
-
-
 <p className="
-text-[#f5b800]
-font-bold
-text-2xl
-mt-3
+text-gray-400
+mt-4
+max-w-xl
 ">
 
-S/ {Number(producto.precio).toFixed(2)}
+Productos seleccionados con calidad,
+precio competitivo y envío seguro.
 
 </p>
 
 
-
-
 <Link
-
 href="/productos"
-
 className="
-block
-text-center
-mt-5
+inline-block
+mt-6
 btn-gold
 "
-
 >
-
-Ver producto
-
+Explorar colección
 </Link>
-
 
 
 </div>
 
 
-))
 
+<div className="
+text-8xl
+animate-pulse
+">
 
-}
+🚀
+
+</div>
 
 
 </div>
 
 
 </section>
-
-
-
-
 
 
 
@@ -273,16 +233,17 @@ Ver producto
 {/* CATEGORIAS */}
 
 
-
-<section className="mb-20">
+<section className="
+px-6
+py-16
+">
 
 
 <h2 className="
-text-3xl
-md:text-4xl
+text-4xl
 font-bold
-mb-10
 text-center
+mb-10
 ">
 
 Explora nuestras categorías
@@ -291,18 +252,18 @@ Explora nuestras categorías
 
 
 
-
 <div className="
 grid
 md:grid-cols-4
 gap-6
+max-w-6xl
+mx-auto
 ">
 
 
 {
 
 [
-
 {
 nombre:"Tecnología",
 icono:"💻"
@@ -323,38 +284,37 @@ nombre:"Accesorios",
 icono:"✨"
 }
 
-
 ].map((cat)=>(
 
 
 <div
-
 key={cat.nombre}
-
 className="
 card-dark
 p-8
 text-center
-hover:-translate-y-2
-transition
+hover:-translate-y-3
+hover:border-[#f5b800]
+hover:shadow-[0_0_25px_rgba(245,184,0,0.20)]
+transition-all
+duration-300
 cursor-pointer
-"
-
->
+">
 
 
-<div className="text-5xl mb-4">
-
+<div className="
+text-5xl
+mb-4
+">
 {cat.icono}
-
 </div>
 
 
-
-<h3 className="text-xl font-bold">
-
+<h3 className="
+text-xl
+font-bold
+">
 {cat.nombre}
-
 </h3>
 
 
@@ -375,18 +335,13 @@ cursor-pointer
 
 
 
-
-
-
 {/* CONFIANZA */}
-
 
 
 <section className="
 text-center
-max-w-3xl
-mx-auto
-pb-10
+px-6
+py-20
 ">
 
 
@@ -401,26 +356,22 @@ La nueva forma de comprar online
 </h2>
 
 
-
 <p className="
 text-gray-400
 text-lg
 ">
 
 Seguridad, rapidez y logística inteligente.
+<br/>
 Trabajamos para llevar tus productos hasta donde estés.
 
-
 </p>
-
 
 
 </section>
 
 
-
 </main>
-
 
 );
 

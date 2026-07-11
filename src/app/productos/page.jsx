@@ -9,7 +9,9 @@ import CountdownProduct from "@/components/CountdownProduct";
 
 export default function Productos() {
 
-const { carrito, agregarCarrito, mensajeCarrito } = useCart();
+
+const { carrito, agregarCarrito } = useCart();
+
 const { productos } = useProducts();
 
 
@@ -18,7 +20,9 @@ const [categoria,setCategoria] = useState("Todos");
 const [selecciones,setSelecciones] = useState({});
 
 
+
 const categorias=[
+
 "Todos",
 "Moda",
 "Zapatillas",
@@ -35,6 +39,7 @@ const categorias=[
 "Bebés",
 "Automóvil",
 "Otros",
+
 ];
 
 
@@ -46,24 +51,6 @@ if(!fecha) return false;
 return new Date(fecha) > new Date();
 
 };
-
-
-
-const productosFiltrados = productos.filter((producto)=>{
-
-const nombre = producto.nombre
-?.toLowerCase()
-.includes(busqueda.toLowerCase());
-
-
-const cat =
-categoria==="Todos" ||
-producto.categoria===categoria;
-
-
-return nombre && cat;
-
-});
 
 
 
@@ -87,55 +74,61 @@ setSelecciones((prev)=>({
 
 
 
+const productosFiltrados = productos.filter((producto)=>{
+
+
+const nombre =
+producto.nombre
+?.toLowerCase()
+.includes(busqueda.toLowerCase());
+
+
+const cat =
+categoria==="Todos" ||
+producto.categoria===categoria;
+
+
+
+return nombre && cat;
+
+
+});
+
+
 
 return (
 
-<main className="min-h-screen px-5 md:px-10 py-10">
+<main className="min-h-screen px-6 py-10">
 
 
+<h1 className="
+text-4xl
+font-bold
+mb-3
+text-center
+">
 
-<h1 className="text-4xl md:text-5xl font-bold mb-8">
-
-🛍️ Catálogo 
-
-<span className="text-[#f5b800]">
- ANNT LOGISTICS
-</span>
+🛍️ Catálogo ANNT LOGISTICS
 
 </h1>
 
 
 
-<div className="
-bg-[#181818]
-border
-border-[#333]
-rounded-3xl
-p-6
+<p className="
+text-center
+text-gray-400
 mb-8
-shadow-xl
 ">
-
-<h2 className="text-xl font-bold text-[#f5b800]">
-📢 Aviso importante
-</h2>
-
-
-<p className="text-gray-400 mt-3">
 
 Precios sujetos a disponibilidad del producto,
 proveedor y costos de importación.
 
-</p>
-
-
-<p className="text-gray-400 mt-3">
+<br/>
 
 🚚 Entrega estimada: 6 a 15 días hábiles.
 
 </p>
 
-</div>
 
 
 
@@ -151,6 +144,7 @@ p-4
 rounded-2xl
 mb-8
 focus:border-[#f5b800]
+outline-none
 "
 
 placeholder="🔎 Buscar productos..."
@@ -164,15 +158,19 @@ onChange={(e)=>setBusqueda(e.target.value)}
 
 
 
+
 <div className="
 flex
-flex-wrap
 gap-3
+flex-wrap
 mb-10
 ">
 
 
-{categorias.map((cat)=>(
+{
+
+categorias.map((cat)=>(
+
 
 <button
 
@@ -181,18 +179,20 @@ key={cat}
 onClick={()=>setCategoria(cat)}
 
 className={`
+
 px-5
 py-2
 rounded-full
 border
 transition
-${
 
+
+${
 categoria===cat
 
 ?
 
-"bg-[#f5b800] text-black font-bold"
+"bg-[#f5b800] text-black font-bold border-[#f5b800]"
 
 :
 
@@ -208,7 +208,10 @@ categoria===cat
 
 </button>
 
-))}
+
+))
+
+}
 
 
 </div>
@@ -219,13 +222,14 @@ categoria===cat
 
 <div className="
 grid
-sm:grid-cols-2
-lg:grid-cols-3
+md:grid-cols-3
 gap-8
 ">
 
 
-{productosFiltrados.map((producto)=>(
+{
+
+productosFiltrados.map((producto)=>(
 
 
 <div
@@ -235,27 +239,39 @@ key={producto.id}
 className="
 card-dark
 p-5
-fade-up
 relative
+hover:-translate-y-2
+transition
+duration-300
 "
+
 
 >
 
 
-{ofertaActiva(producto.descuento_hasta) && (
+{
+
+ofertaActiva(producto.descuento_hasta) && (
 
 <span className="
 absolute
-top-5
-left-5
-badge-offer
+top-4
+left-4
+bg-red-600
+px-3
+py-1
+rounded-full
+font-bold
+text-sm
 ">
 
 🔥 OFERTA
 
 </span>
 
-)}
+)
+
+}
 
 
 
@@ -267,18 +283,22 @@ src={producto.imagen}
 alt={producto.nombre}
 
 className="
-product-image
 w-full
 h-80
 object-contain
+bg-white
+rounded-2xl
+mb-5
 "
 
 />
 
 
 
-
-<p className="text-[#f5b800] mt-5 font-bold">
+<p className="
+text-[#f5b800]
+font-bold
+">
 
 {producto.categoria}
 
@@ -286,7 +306,11 @@ object-contain
 
 
 
-<h2 className="text-2xl font-bold mt-2">
+<h2 className="
+text-xl
+font-bold
+mt-2
+">
 
 {producto.nombre}
 
@@ -294,26 +318,27 @@ object-contain
 
 
 
+{
 
-{producto.descripcion && (
+producto.descripcion && (
 
 <p className="
 text-gray-400
 mt-3
-text-sm
-line-clamp-3
 ">
 
 {producto.descripcion}
 
 </p>
 
-)}
+)
+
+}
 
 
 
 
-<div className="mt-5">
+
 
 
 {
@@ -328,23 +353,36 @@ Number(producto.descuento)>0
 
 (
 
-<div>
+<div className="
+mt-4
+">
 
-<p className="
+
+<span className="
 text-gray-400
 line-through
+mr-3
 ">
 
 S/ {Number(producto.precio_original).toFixed(2)}
 
-</p>
+</span>
 
 
-<span className="badge-offer">
+
+<span className="
+bg-red-600
+px-3
+py-1
+rounded-full
+text-sm
+font-bold
+">
 
 -{producto.descuento}% OFF
 
 </span>
+
 
 </div>
 
@@ -354,11 +392,13 @@ S/ {Number(producto.precio_original).toFixed(2)}
 
 
 
+
+
 <p className="
 text-3xl
 font-bold
 text-[#f5b800]
-mt-2
+mt-3
 ">
 
 S/
@@ -380,6 +420,9 @@ Number(producto.precio_original || producto.precio).toFixed(2)
 </p>
 
 
+
+
+
 {
 
 ofertaActiva(producto.descuento_hasta)
@@ -388,111 +431,85 @@ ofertaActiva(producto.descuento_hasta)
 
 (
 
-<CountdownProduct fecha={producto.descuento_hasta}/>
+<CountdownProduct 
+
+fecha={producto.descuento_hasta}
+
+/>
 
 )
 
 }
 
 
-</div>
 
 
 
 
 
-{producto.tallas && (
-
-<div className="mt-5">
-
-<p className="mb-2">
-👕 Talla
-</p>
-
-
-<div className="flex flex-wrap gap-2">
 
 {
 
-producto.tallas.split(",").map((talla)=>(
+producto.tallas && (
 
+<div className="mt-5">
+
+<p>👕 Talla</p>
+
+
+<div className="flex gap-2 flex-wrap mt-2">
+
+
+{
+
+producto.tallas.split(",").map((talla)=>{
+
+
+const tallaLimpia=talla.trim();
+
+
+
+return (
 
 <button
 
-key={talla}
+key={tallaLimpia}
 
-onClick={()=>seleccionar(producto.id,"talla",talla.trim())}
+onClick={()=>seleccionar(producto.id,"talla",tallaLimpia)}
 
-className="
+className={`
+
 px-3
 py-1
 rounded-lg
 border
-bg-[#111]
-"
 
->
+${
+selecciones[producto.id]?.talla===tallaLimpia
 
-{talla.trim()}
+?
 
-</button>
+"bg-[#f5b800] text-black"
 
+:
 
-))
+"bg-[#111]"
 
 }
 
-</div>
-
-</div>
-
-)}
-
-
-
-
-
-
-
-{producto.colores && (
-
-<div className="mt-5">
-
-<p className="mb-2">
-🎨 Color
-</p>
-
-
-<div className="flex flex-wrap gap-2">
-
-
-{
-
-producto.colores.split(",").map((color)=>(
-
-
-<button
-
-key={color}
-
-onClick={()=>seleccionar(producto.id,"color",color.trim())}
-
-className="
-px-3
-py-1
-rounded-lg
-border
-bg-[#111]
-"
+`}
 
 >
 
-{color.trim()}
+{tallaLimpia}
 
 </button>
 
 
-))
+)
+
+
+})
 
 }
 
@@ -501,7 +518,91 @@ bg-[#111]
 
 </div>
 
-)}
+)
+
+}
+
+
+
+
+
+
+
+{
+
+producto.colores && (
+
+<div className="mt-5">
+
+<p>🎨 Color</p>
+
+
+<div className="flex gap-2 flex-wrap mt-2">
+
+
+{
+
+producto.colores.split(",").map((color)=>{
+
+
+const colorLimpio=color.trim();
+
+
+
+return (
+
+<button
+
+key={colorLimpio}
+
+onClick={()=>seleccionar(producto.id,"color",colorLimpio)}
+
+className={`
+
+px-3
+py-1
+rounded-lg
+border
+
+${
+selecciones[producto.id]?.color===colorLimpio
+
+?
+
+"bg-[#f5b800] text-black"
+
+:
+
+"bg-[#111]"
+
+}
+
+`}
+
+>
+
+{colorLimpio}
+
+</button>
+
+
+)
+
+
+})
+
+}
+
+
+</div>
+
+</div>
+
+)
+
+}
+
+
 
 
 
@@ -512,7 +613,9 @@ bg-[#111]
 
 onClick={()=>{
 
-const elegido = selecciones[producto.id] || {};
+
+const elegido=selecciones[producto.id] || {};
+
 
 
 if(producto.tallas && !elegido.talla){
@@ -522,6 +625,7 @@ alert("Selecciona una talla");
 return;
 
 }
+
 
 
 if(producto.colores && !elegido.color){
@@ -534,13 +638,14 @@ return;
 
 
 
+
 agregarCarrito({
 
 ...producto,
 
 talla:elegido.talla || "",
 
-color:elegido.color || "",
+color:elegido.color || ""
 
 });
 
@@ -563,20 +668,28 @@ btn-gold
 
 
 
-</div>
-
-
-))}
-
 
 </div>
 
 
+))
+
+
+}
+
+
+</div>
 
 
 
 
-{mensajeCarrito && (
+
+
+{
+
+
+carrito.length > 0 && (
+
 
 <div className="
 fixed
@@ -587,16 +700,58 @@ border
 border-[#f5b800]
 rounded-2xl
 p-5
-shadow-xl
+shadow-2xl
+w-80
 z-50
 ">
 
 
-<p className="font-bold mb-3">
+<h3 className="
+font-bold
+text-xl
+mb-2
+">
 
-✅ Producto agregado
+🛒 Tu carrito
+
+</h3>
+
+
+
+<p className="text-gray-300">
+
+{carrito.length} producto(s)
 
 </p>
+
+
+
+<p className="
+text-[#f5b800]
+text-2xl
+font-bold
+my-3
+">
+
+S/
+
+{
+
+carrito.reduce(
+
+(total,item)=>
+
+total + Number(item.precio),
+
+0
+
+).toFixed(2)
+
+}
+
+</p>
+
+
 
 
 <Link
@@ -604,26 +759,36 @@ z-50
 href="/carrito"
 
 className="
-btn-gold
 block
 text-center
+bg-[#f5b800]
+text-black
+font-bold
+py-3
+rounded-xl
+hover:bg-[#ffd700]
+transition
 "
 
 >
 
-🛒 Ver carrito
+Ver carrito 🛒
+
 
 </Link>
 
 
 </div>
 
-)}
+
+)
+
+}
+
 
 
 
 </main>
-
 
 );
 
