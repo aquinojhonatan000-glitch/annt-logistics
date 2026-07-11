@@ -4,19 +4,54 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 
-const OrderContext = createContext();
+const OrderContext = createContext<any>(null);
 
 
 
-export function OrderProvider({ children }) {
+export function OrderProvider({ children }:any){
 
 
-const [pedidos, setPedidos] = useState([]);
+const [pedidos,setPedidos] = useState<any[]>([]);
+
+
+
+
+// Estados disponibles
+
+const estadosPedido = [
+
+"Pendiente de pago",
+
+"Pago confirmado",
+
+"Orden aceptada",
+
+"Orden rechazada",
+
+"Preparando pedido",
+
+"Salió del aeropuerto",
+
+"Pasando aduanas",
+
+"Aduanas correctamente",
+
+"En tránsito",
+
+"En agencia",
+
+"En ruta de entrega",
+
+"Entregado"
+
+];
+
 
 
 
 
 // Cargar pedidos
+
 
 const cargarPedidos = async()=>{
 
@@ -44,13 +79,6 @@ return;
 
 
 
-console.log(
-"PEDIDOS CARGADOS:",
-data
-);
-
-
-
 setPedidos(data || []);
 
 
@@ -73,14 +101,33 @@ cargarPedidos();
 
 
 
+
+
 // Crear pedido
 
-const agregarPedido = async(pedido)=>{
+
+const agregarPedido = async(pedido:any)=>{
+
+
+const fechaActual = new Date().toISOString();
+
+
+
+const primerEstado = {
+
+estado:"Pendiente de pago",
+
+fecha:new Date().toLocaleDateString("es-PE"),
+
+hora:new Date().toLocaleTimeString("es-PE")
+
+};
+
+
 
 
 
 const pedidoGuardar={
-
 
 
 numero_pedido:pedido.id,
@@ -92,25 +139,17 @@ cliente:{
 
 nombre:pedido.cliente?.nombre || "",
 
-
 dni:pedido.cliente?.dni || "",
-
 
 telefono:pedido.cliente?.telefono || "",
 
-
 direccion:pedido.cliente?.direccion || "",
-
 
 ciudad:pedido.cliente?.ciudad || "",
 
-
 correo:pedido.cliente?.correo || ""
 
-
 },
-
-
 
 
 
@@ -126,17 +165,20 @@ pedido.productos || []
 
 
 
-
-total:Number(pedido.total || 0),
-
-
-
+total:Number(
+pedido.total || 0
+),
 
 
-estado:
-pedido.estado || "Esperando pago",
 
 
+estado:"Pendiente de pago",
+
+
+
+historial_estado:[
+primerEstado
+],
 
 
 
@@ -146,26 +188,18 @@ pedido.pago || "Yape",
 
 
 
-
-
 comprobante:
 pedido.comprobante || "",
 
 
 
-
-
 fecha:
-pedido.fecha || new Date().toISOString(),
-
-
+fechaActual,
 
 
 
 tiempo_entrega:
 pedido.tiempo_entrega || "6-15 días hábiles"
-
-
 
 
 
@@ -197,7 +231,7 @@ error
 );
 
 alert(
-"❌ ANNT LOGISTICS: Error guardando pedido"
+"❌ Error guardando pedido"
 );
 
 return false;
@@ -206,12 +240,20 @@ return false;
 
 
 
+
 setPedidos((prev)=>[
+
 data?.[0],
+
 ...prev
+
 ]);
 
+
+
 return true;
+
+
 
 };
 
@@ -223,10 +265,55 @@ return true;
 
 
 
-// Cambiar estado pedido
+// Cambiar estado con historial
 
 
-const cambiarEstado=async(id,estado)=>{
+const cambiarEstado = async(id:number, estado:string)=>{
+
+
+
+const pedidoActual = pedidos.find(
+
+(p)=>p.id===id
+
+);
+
+
+
+if(!pedidoActual)return;
+
+
+
+
+const nuevoEstado={
+
+
+estado,
+
+
+fecha:new Date().toLocaleDateString("es-PE"),
+
+
+hora:new Date().toLocaleTimeString("es-PE")
+
+
+
+};
+
+
+
+
+
+const historialNuevo=[
+
+...(pedidoActual.historial_estado || []),
+
+nuevoEstado
+
+];
+
+
+
 
 
 
@@ -236,7 +323,9 @@ const {error}=await supabase
 
 .update({
 
-estado
+estado:estado,
+
+historial_estado:historialNuevo
 
 })
 
@@ -246,21 +335,16 @@ estado
 
 
 
-
 if(error){
-
 
 console.log(
 "ERROR CAMBIANDO ESTADO:",
 error
 );
 
-
 return;
 
-
 }
-
 
 
 
@@ -278,7 +362,9 @@ pedido.id===id
 
 ...pedido,
 
-estado
+estado,
+
+historial_estado:historialNuevo
 
 }
 
@@ -292,92 +378,8 @@ pedido
 
 
 
-
-
 };
 
-
-
-
-
-
-
-
-
-// Cambiar tiempo entrega
-
-
-const cambiarTiempoEntrega=async(id,tiempo)=>{
-
-
-
-const {error}=await supabase
-
-.from("pedidos")
-
-.update({
-
-tiempo_entrega:tiempo
-
-})
-
-.eq("id",id);
-
-
-
-
-
-
-if(error){
-
-
-console.log(
-"ERROR TIEMPO ENTREGA:",
-error
-);
-
-
-return;
-
-
-}
-
-
-
-
-
-
-
-setPedidos((prev)=>
-
-prev.map((pedido)=>
-
-pedido.id===id
-
-?
-
-{
-
-...pedido,
-
-tiempo_entrega:tiempo
-
-}
-
-:
-
-pedido
-
-)
-
-);
-
-
-
-
-
-
-};
 
 
 
@@ -388,44 +390,29 @@ pedido
 
 return(
 
-
 <OrderContext.Provider
-
 
 value={{
 
-
 pedidos,
-
 
 agregarPedido,
 
-
 cambiarEstado,
 
+cargarPedidos,
 
-cambiarTiempoEntrega,
-
-
-cargarPedidos
-
+estadosPedido
 
 }}
 
-
 >
-
 
 {children}
 
-
-
 </OrderContext.Provider>
 
-
-
 );
-
 
 
 }
@@ -435,11 +422,8 @@ cargarPedidos
 
 
 
-
 export function useOrders(){
 
-
 return useContext(OrderContext);
-
 
 }
