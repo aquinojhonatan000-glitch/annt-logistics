@@ -4,254 +4,444 @@ import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { useProducts } from "@/context/ProductContext";
 import Link from "next/link";
+import CountdownProduct from "@/components/CountdownProduct";
 
 export default function Productos() {
-  const { carrito, agregarCarrito, mensajeCarrito } = useCart();
-  const { productos } = useProducts();
 
-  const [busqueda, setBusqueda] = useState("");
-  const [categoria, setCategoria] = useState("Todos");
-  const [selecciones, setSelecciones] = useState({});
+const { carrito, agregarCarrito, mensajeCarrito } = useCart();
+const { productos } = useProducts();
 
-  const categorias = [
-    "Todos",
-    "Moda",
-    "Zapatillas",
-    "Electrónica",
-    "Hogar",
-    "Belleza",
-    "Accesorios",
-    "Gaming",
-    "Mascotas",
-    "Deportes",
-    "Oficina",
-    "Herramientas",
-    "Juguetes",
-    "Bebés",
-    "Automóvil",
-    "Otros",
-  ];
+const [busqueda, setBusqueda] = useState("");
+const [categoria, setCategoria] = useState("Todos");
+const [selecciones, setSelecciones] = useState({});
 
-  const productosFiltrados = productos.filter((producto) => {
-    const nombre = producto.nombre
-      ?.toLowerCase()
-      .includes(busqueda.toLowerCase());
 
-    const cat =
-      categoria === "Todos" ||
-      producto.categoria === categoria;
+const categorias = [
+"Todos",
+"Moda",
+"Zapatillas",
+"Electrónica",
+"Hogar",
+"Belleza",
+"Accesorios",
+"Gaming",
+"Mascotas",
+"Deportes",
+"Oficina",
+"Herramientas",
+"Juguetes",
+"Bebés",
+"Automóvil",
+"Otros",
+];
 
-    return nombre && cat;
-  });
 
-  const seleccionar = (id, campo, valor) => {
-    setSelecciones((prev) => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        [campo]: valor,
-      },
-    }));
-  };
+const productosFiltrados = productos.filter((producto) => {
 
-  return (
-    <main className="min-h-screen bg-[#111] text-white p-4 md:p-8">
+const nombre = producto.nombre
+?.toLowerCase()
+.includes(busqueda.toLowerCase());
 
-      <h1 className="text-3xl md:text-4xl font-bold mb-5">
-        🛍️ Catálogo ANNT LOGISTICS
-      </h1>
 
-      <div className="bg-yellow-500 text-black rounded-xl p-5 mb-6 font-bold">
-        📢 Aviso importante ANNT LOGISTICS
+const cat =
+categoria === "Todos" ||
+producto.categoria === categoria;
 
-        <p className="mt-2 font-normal">
-          Algunos precios pueden variar según disponibilidad del producto,
-          proveedor y costos de importación.
-        </p>
 
-        <p className="mt-4 font-normal">
-          🚚 Entrega estimada: 6 a 15 días hábiles.
-        </p>
+return nombre && cat;
 
-        <p className="mt-4 font-normal">
-          📲 Atención al cliente: Si necesitamos confirmar algún detalle de tu
-          pedido, nos comunicaremos contigo mediante WhatsApp.
-        </p>
-      </div>
+});
 
-      <div className="mb-5 font-bold text-xl">
-        🛒 Carrito: {carrito.length} productos
-      </div>
 
-      <input
-        className="w-full bg-[#181818] border border-[#333] p-3 rounded-lg mb-6"
-        placeholder="Buscar productos..."
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-      />
 
-      <div className="flex flex-wrap gap-3 mb-8">
-        {categorias.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setCategoria(cat)}
-            className={`px-5 py-2 rounded-full border ${
-              categoria === cat
-                ? "bg-[#f5b800] text-black font-bold"
-                : "bg-[#181818] border-[#333]"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+const seleccionar = (id, campo, valor) => {
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+setSelecciones((prev)=>({
 
-        {productosFiltrados.map((producto) => (
-          <div
-            key={producto.id}
-            className="bg-[#181818] border border-[#333] rounded-xl p-5"
-          >
+...prev,
 
-            <img
-              src={producto.imagen}
-              alt={producto.nombre}
-              className="w-full h-80 object-contain rounded-lg bg-white"
-            />
+[id]:{
 
-            <p className="text-[#f5b800] mt-3">
-              {producto.categoria}
-            </p>
+...prev[id],
 
-            <h2 className="text-xl font-bold">
-              {producto.nombre}
-            </h2>
+[campo]:valor,
 
-            {/* PRECIO Y DESCUENTO */}
-            <div className="mt-3">
+},
 
-              {Number(producto.precio_original) > Number(producto.precio) && (
-                <div className="flex items-center gap-3 mb-1">
-                  <span className="text-gray-400 line-through">
-                    S/ {Number(producto.precio_original).toFixed(2)}
-                  </span>
+}));
 
-                  {Number(producto.descuento) > 0 && (
-                    <span className="bg-red-600 text-white text-sm font-bold px-2 py-1 rounded">
-                      -{producto.descuento}% OFF
-                    </span>
-                  )}
-                </div>
-              )}
+};
 
-              <p className="text-2xl font-bold text-[#f5b800]">
-                S/ {Number(producto.precio).toFixed(2)}
-              </p>
 
-            </div>
 
-            {producto.tallas && (
-              <div className="mt-4">
-                <p className="mb-2">👕 Talla:</p>
+return (
 
-                <div className="flex flex-wrap gap-2">
-                  {producto.tallas.split(",").map((talla) => {
-                    const tallaLimpia = talla.trim();
+<main className="min-h-screen bg-[#111111] text-white p-8">
 
-                    return (
-                      <button
-                        key={tallaLimpia}
-                        onClick={() =>
-                          seleccionar(producto.id, "talla", tallaLimpia)
-                        }
-                        className={`px-3 py-1 rounded border ${
-                          selecciones[producto.id]?.talla === tallaLimpia
-                            ? "bg-[#f5b800] text-black"
-                            : "bg-[#111]"
-                        }`}
-                      >
-                        {tallaLimpia}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
 
-            {producto.colores && (
-              <div className="mt-4">
-                <p className="mb-2">🎨 Color:</p>
+<h1 className="text-3xl md:text-4xl font-bold mb-5">
+🛍️ Catálogo ANNT LOGISTICS
+</h1>
 
-                <div className="flex flex-wrap gap-2">
-                  {producto.colores.split(",").map((color) => {
-                    const colorLimpio = color.trim();
 
-                    return (
-                      <button
-                        key={colorLimpio}
-                        onClick={() =>
-                          seleccionar(producto.id, "color", colorLimpio)
-                        }
-                        className={`px-3 py-1 rounded border ${
-                          selecciones[producto.id]?.color === colorLimpio
-                            ? "bg-[#f5b800] text-black"
-                            : "bg-[#111]"
-                        }`}
-                      >
-                        {colorLimpio}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
 
-            <button
-              onClick={() => {
-                const elegido = selecciones[producto.id] || {};
+<div className="bg-yellow-500 text-black rounded-xl p-5 mb-6 font-bold">
 
-                if (producto.tallas && !elegido.talla) {
-                  alert("Selecciona una talla");
-                  return;
-                }
+📢 Aviso importante ANNT LOGISTICS
 
-                if (producto.colores && !elegido.color) {
-                  alert("Selecciona un color");
-                  return;
-                }
 
-                agregarCarrito({
-                  ...producto,
-                  talla: elegido.talla || "",
-                  color: elegido.color || "",
-                });
-              }}
-              className="mt-5 w-full bg-[#f5b800] text-black py-3 rounded-lg font-bold"
-            >
-              🛒 Agregar al carrito
-            </button>
+<p className="mt-2 font-normal">
+Algunos precios pueden variar según disponibilidad del producto,
+proveedor y costos de importación.
+</p>
 
-          </div>
-        ))}
 
-      </div>
+<p className="mt-4 font-normal">
+🚚 Entrega estimada: 6 a 15 días hábiles.
+</p>
 
-      {mensajeCarrito && (
-        <div className="fixed bottom-5 right-5 left-5 md:left-auto bg-[#181818] border border-[#f5b800] p-5 rounded-xl shadow-xl z-50">
-          <p className="font-bold mb-3">
-            ✅ Producto agregado al carrito
-          </p>
 
-          <Link
-            href="/carrito"
-            className="block text-center bg-[#f5b800] text-black px-5 py-2 rounded-lg font-bold"
-          >
-            🛒 Ver carrito
-          </Link>
-        </div>
-      )}
+<p className="mt-4 font-normal">
+📲 Atención al cliente: Si necesitamos confirmar algún detalle de tu
+pedido, nos comunicaremos contigo mediante WhatsApp.
+</p>
 
-    </main>
-  );
+
+</div>
+
+
+
+
+<div className="mb-5 font-bold text-xl">
+🛒 Carrito: {carrito.length} productos
+</div>
+
+
+
+<input
+className="w-full bg-[#181818] border border-[#333] p-3 rounded-lg mb-6"
+placeholder="Buscar productos..."
+value={busqueda}
+onChange={(e)=>setBusqueda(e.target.value)}
+/>
+
+
+
+
+<div className="flex flex-wrap gap-3 mb-8">
+
+{categorias.map((cat)=>(
+
+<button
+key={cat}
+onClick={()=>setCategoria(cat)}
+className={`px-5 py-2 rounded-full border ${
+categoria===cat
+?"bg-[#f5b800] text-black font-bold"
+:"bg-[#181818] border-[#333]"
+}`}
+>
+
+{cat}
+
+</button>
+
+))}
+
+</div>
+
+
+
+
+<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+
+{productosFiltrados.map((producto)=>(
+
+
+<div
+key={producto.id}
+className="bg-[#181818] border border-[#333] rounded-2xl p-5 hover:border-[#f5b800] transition"
+>
+
+
+
+<img
+src={producto.imagen}
+alt={producto.nombre}
+className="w-full h-80 object-contain rounded-lg bg-white"
+/>
+
+
+
+<p className="text-[#f5b800] mt-3 text-sm font-bold">
+{producto.categoria}
+</p>
+
+
+
+<h2 className="text-xl font-bold mt-2">
+{producto.nombre}
+</h2>
+
+
+
+
+{/* DESCRIPCIÓN AESTHETIC */}
+
+{producto.descripcion && (
+
+<p className="text-gray-400 text-sm leading-relaxed mt-3 line-clamp-3">
+{producto.descripcion}
+</p>
+
+)}
+
+
+
+
+
+{/* PRECIO Y DESCUENTO */}
+
+<div className="mt-4">
+
+
+{Number(producto.precio_original) > Number(producto.precio) && (
+
+<div className="flex items-center gap-3 mb-2">
+
+
+<span className="text-gray-400 line-through">
+S/ {Number(producto.precio_original).toFixed(2)}
+</span>
+
+
+
+{Number(producto.descuento)>0 && (
+
+<span className="bg-red-600 text-white text-sm font-bold px-2 py-1 rounded">
+-{producto.descuento}% OFF
+</span>
+
+)}
+
+
+</div>
+
+)}
+
+
+
+<p className="text-2xl font-bold text-[#f5b800]">
+S/ {Number(producto.precio).toFixed(2)}
+</p>
+
+
+
+
+{producto.descuento_hasta && (
+
+<CountdownProduct fecha={producto.descuento_hasta}/>
+
+)}
+
+
+</div>
+
+
+
+
+
+{producto.tallas && (
+
+<div className="mt-4">
+
+<p className="mb-2">
+👕 Talla:
+</p>
+
+
+<div className="flex flex-wrap gap-2">
+
+
+{producto.tallas.split(",").map((talla)=>{
+
+
+const tallaLimpia=talla.trim();
+
+
+return (
+
+<button
+key={tallaLimpia}
+onClick={()=>seleccionar(producto.id,"talla",tallaLimpia)}
+className={`px-3 py-1 rounded border ${
+selecciones[producto.id]?.talla===tallaLimpia
+?"bg-[#f5b800] text-black"
+:"bg-[#111]"
+}`}
+>
+
+{tallaLimpia}
+
+</button>
+
+);
+
+
+})}
+
+
+</div>
+
+</div>
+
+)}
+
+
+
+
+{producto.colores && (
+
+<div className="mt-4">
+
+<p className="mb-2">
+🎨 Color:
+</p>
+
+
+<div className="flex flex-wrap gap-2">
+
+
+{producto.colores.split(",").map((color)=>{
+
+
+const colorLimpio=color.trim();
+
+
+return (
+
+<button
+key={colorLimpio}
+onClick={()=>seleccionar(producto.id,"color",colorLimpio)}
+className={`px-3 py-1 rounded border ${
+selecciones[producto.id]?.color===colorLimpio
+?"bg-[#f5b800] text-black"
+:"bg-[#111]"
+}`}
+>
+
+{colorLimpio}
+
+</button>
+
+);
+
+
+})}
+
+
+</div>
+
+</div>
+
+)}
+
+
+
+
+
+<button
+
+onClick={()=>{
+
+
+const elegido=selecciones[producto.id] || {};
+
+
+if(producto.tallas && !elegido.talla){
+
+alert("Selecciona una talla");
+
+return;
+
+}
+
+
+if(producto.colores && !elegido.color){
+
+alert("Selecciona un color");
+
+return;
+
+}
+
+
+
+agregarCarrito({
+
+...producto,
+
+talla:elegido.talla || "",
+
+color:elegido.color || "",
+
+});
+
+
+}}
+
+
+className="mt-5 w-full bg-[#f5b800] text-black py-3 rounded-lg font-bold hover:bg-yellow-400 transition"
+
+>
+
+🛒 Agregar al carrito
+
+</button>
+
+
+
+</div>
+
+
+))}
+
+
+</div>
+
+
+
+
+
+{mensajeCarrito && (
+
+<div className="fixed bottom-5 right-5 left-5 md:left-auto bg-[#181818] border border-[#f5b800] p-5 rounded-xl shadow-xl z-50">
+
+
+<p className="font-bold mb-3">
+✅ Producto agregado al carrito
+</p>
+
+
+
+<Link
+href="/carrito"
+className="block text-center bg-[#f5b800] text-black px-5 py-2 rounded-lg font-bold"
+>
+
+🛒 Ver carrito
+
+</Link>
+
+
+</div>
+
+)}
+
+
+</main>
+
+);
+
 }
