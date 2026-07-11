@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useProducts } from "@/context/ProductContext";
-import { useOrders } from "@/context/OrderContext";
 import { supabase } from "@/lib/supabase";
+import Link from "next/link";
+
 
 export default function Admin() {
 
@@ -13,13 +14,6 @@ productos,
 agregarProducto,
 eliminarProducto
 }=useProducts();
-
-
-const {
-pedidos,
-cambiarEstado,
-cambiarTiempoEntrega
-}=useOrders();
 
 
 
@@ -44,8 +38,6 @@ const [subiendo,setSubiendo]=useState(false);
 
 
 
-
-
 const subirImagen=async(e)=>{
 
 
@@ -59,8 +51,7 @@ setSubiendo(true);
 
 
 
-const nombreArchivo=
-
+const nombreArchivo =
 Date.now()+"-"+archivo.name;
 
 
@@ -69,10 +60,7 @@ const {error}=await supabase.storage
 
 .from("imagenes")
 
-.upload(
-nombreArchivo,
-archivo
-);
+.upload(nombreArchivo,archivo);
 
 
 
@@ -118,8 +106,6 @@ setSubiendo(false);
 
 
 
-
-
 const guardarProducto=async(e)=>{
 
 
@@ -153,7 +139,6 @@ stock:Number(producto.stock)
 
 
 
-
 setProducto({
 
 nombre:"",
@@ -176,14 +161,14 @@ imagen:""
 
 
 
-
 return(
 
 
 <main className="min-h-screen bg-[#111] text-white p-8">
 
 
-<h1 className="text-3xl font-bold mb-8">
+
+<h1 className="text-4xl font-bold mb-8">
 
 ⚙️ ANNT LOGISTICS ADMIN
 
@@ -192,10 +177,26 @@ return(
 
 
 
+<Link
+
+href="/admin/pedidos"
+
+className="inline-block bg-[#f5b800] text-black font-bold px-6 py-3 rounded-xl mb-8"
+
+>
+
+📦 Ver pedidos de clientes
+
+</Link>
+
+
+
+
+
 <div className="bg-[#181818] border border-[#333] p-6 rounded-xl mb-10">
 
 
-<h2 className="text-xl font-bold mb-5">
+<h2 className="text-2xl font-bold mb-5">
 
 🛍️ Agregar producto
 
@@ -203,8 +204,8 @@ return(
 
 
 
-<form onSubmit={guardarProducto}>
 
+<form onSubmit={guardarProducto}>
 
 
 
@@ -212,17 +213,11 @@ return(
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
 
-placeholder="Nombre del producto"
+placeholder="Nombre producto"
 
 value={producto.nombre}
 
-onChange={(e)=>setProducto({
-
-...producto,
-
-nombre:e.target.value
-
-})}
+onChange={(e)=>setProducto({...producto,nombre:e.target.value})}
 
 />
 
@@ -236,13 +231,7 @@ placeholder="Descripción"
 
 value={producto.descripcion}
 
-onChange={(e)=>setProducto({
-
-...producto,
-
-descripcion:e.target.value
-
-})}
+onChange={(e)=>setProducto({...producto,descripcion:e.target.value})}
 
 />
 
@@ -256,13 +245,7 @@ placeholder="Categoría"
 
 value={producto.categoria}
 
-onChange={(e)=>setProducto({
-
-...producto,
-
-categoria:e.target.value
-
-})}
+onChange={(e)=>setProducto({...producto,categoria:e.target.value})}
 
 />
 
@@ -274,17 +257,11 @@ type="number"
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
 
-placeholder="Precio actual"
+placeholder="Precio"
 
 value={producto.precio}
 
-onChange={(e)=>setProducto({
-
-...producto,
-
-precio:e.target.value
-
-})}
+onChange={(e)=>setProducto({...producto,precio:e.target.value})}
 
 />
 
@@ -300,13 +277,7 @@ placeholder="Precio anterior"
 
 value={producto.precio_original}
 
-onChange={(e)=>setProducto({
-
-...producto,
-
-precio_original:e.target.value
-
-})}
+onChange={(e)=>setProducto({...producto,precio_original:e.target.value})}
 
 />
 
@@ -322,123 +293,102 @@ placeholder="Descuento %"
 
 value={producto.descuento}
 
-onChange={(e)=>setProducto({
-
-...producto,
-
-descuento:e.target.value
-
-})}
+onChange={(e)=>setProducto({...producto,descuento:e.target.value})}
 
 />
 
-      <input
-
-      type="number"
-
-      className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
-
-      placeholder="Stock"
-
-      value={producto.stock}
-
-      onChange={(e)=>setProducto({
-
-      ...producto,
-
-      stock:e.target.value
-
-      })}
-
-      />
 
 
-      <input
+<input
 
-      className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+type="number"
 
-      placeholder="Tallas: S,M,L,XL o 39,40,41"
+className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
 
-      value={producto.tallas}
+placeholder="Stock"
 
-      onChange={(e)=>setProducto({
+value={producto.stock}
 
-      ...producto,
+onChange={(e)=>setProducto({...producto,stock:e.target.value})}
 
-      tallas:e.target.value
-
-      })}
-
-      />
-
-
-      <input
-
-      className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
-
-      placeholder="Colores: Negro,Blanco,Azul"
-
-      value={producto.colores}
-
-      onChange={(e)=>setProducto({
-
-      ...producto,
-
-      colores:e.target.value
-
-      })}
-
-      />
-
-
-      <input
-
-      type="file"
-
-      accept="image/*"
-
-      onChange={subirImagen}
-
-      className="mb-4"
-
-      />
-
-
-      {subiendo && (
-
-      <p>
-      ⏳ Subiendo imagen...
-      </p>
-
-      )}
-
-
-      {producto.imagen && (
-
-      <img
-
-      src={producto.imagen}
-
-      className="w-40 rounded-lg mb-4"
-
-      />
-
-      )}
+/>
 
 
 
-      <button
+<input
 
-      className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-lg"
+className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
 
-      >
+placeholder="Tallas S,M,L o 39,40"
 
-      ➕ Guardar producto
+value={producto.tallas}
 
-      </button>
+onChange={(e)=>setProducto({...producto,tallas:e.target.value})}
+
+/>
+
+
+
+<input
+
+className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+
+placeholder="Colores Negro,Blanco"
+
+value={producto.colores}
+
+onChange={(e)=>setProducto({...producto,colores:e.target.value})}
+
+/>
+
+
+
+<input
+
+type="file"
+
+accept="image/*"
+
+onChange={subirImagen}
+
+className="mb-4"
+
+/>
+
+
+
+{subiendo && <p>⏳ Subiendo imagen...</p>}
+
+
+
+{producto.imagen && (
+
+<img
+
+src={producto.imagen}
+
+className="w-40 rounded-lg mb-4"
+
+/>
+
+)}
+
+
+
+<button
+
+className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-lg"
+
+>
+
+➕ Guardar producto
+
+</button>
+
 
 
 </form>
+
 
 </div>
 
@@ -446,7 +396,7 @@ descuento:e.target.value
 
 
 
-<h2 className="text-2xl font-bold mb-5">
+<h2 className="text-3xl font-bold mb-5">
 
 📦 Productos
 
@@ -454,7 +404,11 @@ descuento:e.target.value
 
 
 
-{productos?.map((p)=>(
+
+
+{
+
+productos.map((p)=>(
 
 
 <div
@@ -475,6 +429,7 @@ className="w-32 h-32 object-cover rounded-lg"
 />
 
 
+
 <h3 className="text-xl font-bold mt-3">
 
 {p.nombre}
@@ -482,36 +437,20 @@ className="w-32 h-32 object-cover rounded-lg"
 </h3>
 
 
+
 <p>
 
-{p.descripcion}
+S/ {p.precio}
 
 </p>
 
 
-<p>
-
-💲 S/ {p.precio}
-
-</p>
-
-
-{p.tallas && (
 
 <p>
-👕 Tallas: {p.tallas}
+
+📦 Stock: {p.stock}
+
 </p>
-
-)}
-
-
-{p.colores && (
-
-<p>
-🎨 Colores: {p.colores}
-</p>
-
-)}
 
 
 
@@ -532,254 +471,10 @@ className="mt-4 bg-red-600 px-5 py-2 rounded-lg"
 </div>
 
 
-))}
+))
 
-
-
-
-
-
-
-<h2 className="text-2xl font-bold mt-10 mb-5">
-
-📦 Pedidos de clientes
-
-</h2>
-
-
-
-
-{pedidos.map((pedido)=>(
-
-
-<div
-
-key={pedido.id}
-
-className="bg-[#181818] border border-[#333] p-6 rounded-xl mb-5"
-
->
-
-
-<p>
-📦 Pedido: {pedido.numero_pedido}
-</p>
-
-
-<p>
-💰 Total: S/ {pedido.total}
-</p>
-
-
-
-<h3 className="font-bold mt-4">
-
-👤 Cliente
-
-</h3>
-
-
-<p>
-Nombre: {pedido.cliente?.nombre}
-</p>
-
-
-<p>
-📞 Teléfono: {pedido.cliente?.telefono}
-</p>
-
-
-<p>
-📍 Dirección: {pedido.cliente?.direccion}
-</p>
-
-
-<p>
-🏙️ Ciudad: {pedido.cliente?.ciudad}
-</p>
-
-
-
-
-
-<p className="mt-4">
-
-💳 Pago: {pedido.pago}
-
-</p>
-
-
-
-
-
-{pedido.comprobante && (
-
-<div className="mt-4">
-
-
-<p className="font-bold">
-
-🧾 Comprobante
-
-</p>
-
-
-
-<img
-
-src={pedido.comprobante}
-
-alt="Comprobante"
-
-className="w-64 rounded-xl mt-3 border"
-
- />
-
-
-
-</div>
-
-)}
-
-
-
-
-
-
-
-<div className="mt-5">
-
-
-<label>
-
-🚚 Estado
-
-</label>
-
-
-<select
-
-className="bg-[#111] border border-[#333] p-3 rounded-lg w-full mt-2"
-
-value={pedido.estado}
-
-onChange={(e)=>
-
-cambiarEstado(
-
-pedido.id,
-
-e.target.value
-
-)
 
 }
-
->
-
-
-<option>
-Esperando pago
-</option>
-
-
-<option>
-Preparando pedido
-</option>
-
-
-<option>
-En camino
-</option>
-
-
-<option>
-Entregado
-</option>
-
-
-</select>
-
-
-</div>
-
-
-
-
-
-
-<div className="mt-5">
-
-
-<label>
-
-⏳ Tiempo de entrega
-
-</label>
-
-
-<select
-
-className="bg-[#111] border border-[#333] p-3 rounded-lg w-full mt-2"
-
-value={pedido.tiempo_entrega || "Pendiente"}
-
-onChange={(e)=>
-
-cambiarTiempoEntrega(
-
-pedido.id,
-
-e.target.value
-
-)
-
-}
-
->
-
-
-<option>
-Pendiente
-</option>
-
-
-<option>
-1-2 días
-</option>
-
-
-<option>
-3-5 días
-</option>
-
-
-<option>
-5-7 días
-</option>
-
-
-<option>
-10-15 días
-</option>
-
-
-<option>
-Más de 15 días
-</option>
-
-
-</select>
-
-
-</div>
-
-
-
-</div>
-
-
-))}
 
 
 
