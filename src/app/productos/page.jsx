@@ -7,425 +7,432 @@ import Link from "next/link";
 
 export default function Productos() {
 
-const { carrito, agregarCarrito, mensajeCarrito } = useCart();
+  const { carrito, agregarCarrito, mensajeCarrito } = useCart();
 
-const { productos } = useProducts();
+  const { productos } = useProducts();
 
-const [busqueda,setBusqueda]=useState("");
+  const [busqueda, setBusqueda] = useState("");
 
-const [categoria,setCategoria]=useState("Todos");
+  const [categoria, setCategoria] = useState("Todos");
 
-const [selecciones,setSelecciones]=useState({});
+  const [selecciones, setSelecciones] = useState({});
 
 
+  const categorias = [
+    "Todos",
+    "Moda",
+    "Zapatillas",
+    "Electrónica",
+    "Hogar",
+    "Belleza",
+    "Accesorios",
+    "Gaming",
+    "Mascotas",
+    "Deportes",
+    "Oficina",
+    "Herramientas",
+    "Juguetes",
+    "Bebés",
+    "Automóvil",
+    "Otros"
+  ];
 
-const categorias=[
 
-"Todos",
-"Moda",
-"Zapatillas",
-"Electrónica",
-"Hogar",
-"Belleza",
-"Accesorios",
-"Gaming",
-"Mascotas",
-"Deportes",
-"Oficina",
-"Herramientas",
-"Juguetes",
-"Bebés",
-"Automóvil",
-"Otros"
+  const productosFiltrados = productos.filter((producto)=>{
 
-];
+    const nombre = producto.nombre
+    ?.toLowerCase()
+    .includes(busqueda.toLowerCase());
 
 
+    const cat =
+    categoria === "Todos" ||
+    producto.categoria === categoria;
 
-const productosFiltrados = productos.filter((producto)=>{
 
-const nombre = producto.nombre
-?.toLowerCase()
-.includes(busqueda.toLowerCase());
+    return nombre && cat;
 
+  });
 
-const cat =
-categoria==="Todos" ||
-producto.categoria===categoria;
 
 
-return nombre && cat;
+  const seleccionar = (id,campo,valor)=>{
 
-});
+    setSelecciones({
 
+      ...selecciones,
 
+      [id]:{
+        ...selecciones[id],
+        [campo]:valor
+      }
 
-const seleccionar=(id,campo,valor)=>{
+    });
 
-setSelecciones({
+  };
 
-...selecciones,
 
-[id]:{
 
-...selecciones[id],
+  return (
 
-[campo]:valor
+    <main className="min-h-screen bg-[#111] text-white p-8">
 
-}
 
-});
+      <h1 className="text-4xl font-bold mb-5">
+        🛍️ Catálogo ANNT LOGISTICS
+      </h1>
 
-};
 
+      <div className="bg-[#181818] border border-[#333] rounded-xl p-5 mb-6">
 
+        <h2 className="text-xl font-bold text-[#f5b800]">
+          🚚 Tiempo de entrega ANNT LOGISTICS
+        </h2>
 
-return (
 
-<main className="min-h-screen bg-[#111] text-white p-8">
+        <p className="mt-2 text-gray-300">
+          📦 Realizamos envíos a diferentes ciudades.
+        </p>
 
 
-<h1 className="text-4xl font-bold mb-5">
-🛍️ Catálogo ANNT LOGISTICS
-</h1>
+        <p className="mt-2 text-lg font-bold">
+          ⏳ Entrega estimada: 6 a 15 días hábiles
+        </p>
 
 
-<div className="bg-[#181818] border border-[#f5b800] rounded-xl p-5 mb-6">
+        <p className="text-gray-400 mt-2">
+          El tiempo puede variar según la ciudad y disponibilidad del producto.
+        </p>
 
-<h2 className="text-xl font-bold text-[#f5b800]">
-🚚 Tiempo de entrega ANNT LOGISTICS
-</h2>
+      </div>
 
-<p className="text-gray-300 mt-2">
-📦 Preparamos cada pedido cuidadosamente.
-</p>
 
-<p className="text-gray-300 mt-1">
-⏱️ Entrega estimada:
-<span className="text-white font-bold">
- {" "}3 a 7 días hábiles
-</span>
-</p>
 
-<p className="text-gray-400 text-sm mt-2">
-Recibirás actualizaciones del estado de tu pedido.
-</p>
+      <div className="mb-5 font-bold text-xl">
+        🛒 Carrito: {carrito.length} productos
+      </div>
 
-</div>
 
 
+      <input
 
-<p className="mb-5 text-lg">
-🛒 Carrito: {carrito.length} productos
-</p>
+        className="w-full bg-[#181818] border border-[#333] p-3 rounded-lg mb-6"
 
+        placeholder="Buscar productos..."
 
+        value={busqueda}
 
-<input
+        onChange={(e)=>setBusqueda(e.target.value)}
 
-className="w-full bg-[#181818] border border-[#333] p-3 rounded-lg mb-6"
+      />
 
-placeholder="Buscar productos..."
 
-value={busqueda}
 
-onChange={(e)=>setBusqueda(e.target.value)}
+      <div className="flex flex-wrap gap-3 mb-8">
 
-/>
 
+      {categorias.map((cat)=>(
 
+        <button
 
-<div className="flex gap-3 flex-wrap mb-8">
+          key={cat}
 
-{categorias.map((cat)=>(
+          onClick={()=>setCategoria(cat)}
 
-<button
+          className={
 
-key={cat}
+          `px-5 py-2 rounded-full border ${
+            
+            categoria===cat
 
-onClick={()=>setCategoria(cat)}
+            ?
 
-className={`px-5 py-2 rounded-full border ${
-categoria===cat
+            "bg-[#f5b800] text-black font-bold"
 
-?
+            :
 
-"bg-[#f5b800] text-black font-bold"
+            "bg-[#181818] border-[#333]"
 
-:
+          }`
 
-"bg-[#181818] border-[#333]"
+          }
 
-}`}
+        >
 
->
+          {cat}
 
-{cat}
+        </button>
 
-</button>
+      ))}
 
-))}
 
-</div>
+      </div>
 
 
 
 
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
 
+      <div className="grid md:grid-cols-3 gap-6">
 
-{productosFiltrados.map((producto)=>(
 
+      {productosFiltrados.map((producto)=>(
 
-<div
 
-key={producto.id}
+        <div
 
-className="bg-[#181818] border border-[#333] rounded-xl p-5"
+          key={producto.id}
 
->
+          className="bg-[#181818] border border-[#333] rounded-xl p-5"
 
+        >
 
 
-<img
+          <img
 
-src={producto.imagen}
+            src={producto.imagen}
 
-alt={producto.nombre}
+            alt={producto.nombre}
 
-className="w-full h-48 object-cover rounded-lg"
+            className="w-full h-48 object-cover rounded-lg"
 
-/>
+          />
 
 
 
-<p className="text-gray-400 mt-3">
-{producto.categoria}
-</p>
+          <p className="text-[#f5b800] mt-3">
+            {producto.categoria}
+          </p>
 
 
+          <h2 className="text-xl font-bold">
+            {producto.nombre}
+          </h2>
 
-<h2 className="text-xl font-bold">
-{producto.nombre}
-</h2>
 
+          <p className="text-2xl font-bold mt-2">
+            S/ {producto.precio}
+          </p>
 
 
-<p className="text-[#f5b800] text-2xl font-bold mt-2">
-S/ {producto.precio}
-</p>
 
 
+          {producto.tallas && (
 
+            <div className="mt-4">
 
+              <p className="mb-2">
+                👕 Talla:
+              </p>
 
-{producto.tallas && (
 
-<div className="mt-4">
+              <div className="flex flex-wrap gap-2">
 
-<p className="mb-2">
-👕 Talla:
-</p>
+              {producto.tallas.split(",").map((talla)=>(
 
+                <button
 
-<div className="flex gap-2 flex-wrap">
+                  key={talla}
 
-{producto.tallas.split(",").map((talla)=>(
+                  onClick={()=>seleccionar(
+                    producto.id,
+                    "talla",
+                    talla
+                  )}
 
+                  className={
 
-<button
+                  `px-3 py-1 rounded border ${
+                    
+                    selecciones[producto.id]?.talla===talla
 
-key={talla}
+                    ?
 
-onClick={()=>seleccionar(
-producto.id,
-"talla",
-talla
-)}
+                    "bg-[#f5b800] text-black"
 
-className={`px-3 py-1 rounded border ${
-selecciones[producto.id]?.talla===talla
+                    :
 
-?
+                    "bg-[#111]"
 
-"bg-[#f5b800] text-black"
+                  }`
 
-:
+                  }
 
-"bg-[#111]"
-}`}
+                >
 
->
+                {talla}
 
-{talla}
+                </button>
 
-</button>
+              ))}
 
+              </div>
 
-))}
+            </div>
 
-</div>
+          )}
 
-</div>
 
-)}
 
 
 
 
+          {producto.colores && (
 
-{producto.colores && (
+            <div className="mt-4">
 
-<div className="mt-4">
+              <p className="mb-2">
+                🎨 Color:
+              </p>
 
-<p className="mb-2">
-🎨 Color:
-</p>
 
+              <div className="flex flex-wrap gap-2">
 
-<div className="flex gap-2 flex-wrap">
+              {producto.colores.split(",").map((color)=>(
 
+                <button
 
-{producto.colores.split(",").map((color)=>(
+                  key={color}
 
+                  onClick={()=>seleccionar(
+                    producto.id,
+                    "color",
+                    color
+                  )}
 
-<button
+                  className={
 
-key={color}
+                  `px-3 py-1 rounded border ${
+                    
+                    selecciones[producto.id]?.color===color
 
-onClick={()=>seleccionar(
-producto.id,
-"color",
-color
-)}
+                    ?
 
-className={`px-3 py-1 rounded border ${
-selecciones[producto.id]?.color===color
+                    "bg-[#f5b800] text-black"
 
-?
+                    :
 
-"bg-[#f5b800] text-black"
+                    "bg-[#111]"
 
-:
+                  }`
 
-"bg-[#111]"
-}`}
+                  }
 
->
+                >
 
-{color}
+                {color}
 
-</button>
+                </button>
 
+              ))}
 
-))}
+              </div>
 
+            </div>
 
-</div>
+          )}
 
 
-</div>
 
-)}
 
 
 
 
+          <button
 
+          onClick={()=>{
 
-<button
 
-onClick={()=>{
+            const elegido = selecciones[producto.id] || {};
 
 
-const elegido=selecciones[producto.id] || {};
 
+            if(producto.tallas && !elegido.talla){
 
+              alert("Selecciona una talla");
 
-if(producto.tallas && !elegido.talla){
+              return;
 
-alert("Selecciona una talla");
+            }
 
-return;
 
-}
 
+            if(producto.colores && !elegido.color){
 
+              alert("Selecciona un color");
 
-if(producto.colores && !elegido.color){
+              return;
 
-alert("Selecciona un color");
+            }
 
-return;
 
-}
 
+            agregarCarrito({
 
+              ...producto,
 
-agregarCarrito({
+              talla:elegido.talla || "",
 
-...producto,
+              color:elegido.color || ""
 
-talla:elegido.talla || "",
+            });
 
-color:elegido.color || ""
 
-});
+          }}
 
 
-}}
+          className="mt-5 w-full bg-[#f5b800] text-black py-3 rounded-lg font-bold"
 
-className="mt-5 w-full bg-[#f5b800] text-black py-3 rounded-lg font-bold"
+          >
 
->
+          🛒 Agregar al carrito
 
-🛒 Agregar al carrito
+          </button>
 
-</button>
 
 
+        </div>
 
-</div>
 
+      ))}
 
-))}
 
+      </div>
 
-</div>
 
 
 
 
+      {mensajeCarrito && (
 
-{mensajeCarrito && (
+        <div className="fixed bottom-5 right-5 bg-[#181818] border border-[#f5b800] p-5 rounded-xl shadow-xl">
 
-<div className="fixed bottom-5 right-5 bg-[#181818] border border-[#f5b800] p-5 rounded-xl shadow-xl">
 
-<p className="font-bold text-[#f5b800]">
-✅ Producto agregado al carrito
-</p>
+          <p className="font-bold mb-3">
+            ✅ Producto agregado al carrito
+          </p>
 
 
-<Link
+          <Link
 
-href="/carrito"
+          href="/carrito"
 
-className="block mt-3 bg-[#f5b800] text-black text-center px-5 py-2 rounded-lg font-bold"
+          className="block text-center bg-[#f5b800] text-black px-5 py-2 rounded-lg font-bold"
 
->
+          >
 
-🛒 Ver carrito
+          🛒 Ver carrito
 
-</Link>
+          </Link>
 
 
-</div>
+        </div>
 
-)}
+      )}
 
 
-</main>
 
-);
+    </main>
+
+  );
 
 }
