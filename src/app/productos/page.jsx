@@ -6,9 +6,7 @@ import { useCart } from "@/context/CartContext";
 import { useProducts } from "@/context/ProductContext";
 import CountdownProduct from "@/components/CountdownProduct";
 
-
 export default function Productos() {
-
 
 const { carrito, agregarCarrito } = useCart();
 
@@ -17,13 +15,11 @@ const { productos } = useProducts();
 const pathname = usePathname();
 
 
-
 const [busqueda,setBusqueda] = useState("");
 
 const [categoria,setCategoria] = useState("Todos");
 
 const [selecciones,setSelecciones] = useState({});
-
 
 
 
@@ -50,7 +46,6 @@ const categorias=[
 
 
 
-
 const ofertaActiva=(fecha)=>{
 
 if(!fecha) return false;
@@ -58,8 +53,6 @@ if(!fecha) return false;
 return new Date(fecha)>new Date();
 
 };
-
-
 
 
 
@@ -83,10 +76,7 @@ setSelecciones((prev)=>({
 
 
 
-
-
 const productosFiltrados = productos.filter((producto)=>{
-
 
 const nombre =
 producto.nombre
@@ -101,32 +91,31 @@ producto.categoria===categoria;
 
 return nombre && cat;
 
-
 });
-
-
 
 
 
 return (
 
-
-<main className="space-y-8">
-
+<main className="min-h-screen px-6 py-10">
 
 
-<section className="card-dark p-6">
+<h1 className="
+text-4xl
+font-bold
+mb-6
+">
+
+🛍️ Catálogo 
+<span className="text-[#f5b800]">
+ANNT LOGISTICS
+</span>
+
+</h1>
 
 
-<h2 className="text-2xl font-bold">
 
-🛍️ Catálogo ANNT LOGISTICS
-
-</h2>
-
-
-
-<p className="text-gray-300 mt-3">
+<p className="mb-4 text-gray-300">
 
 Todos nuestros productos están sujetos a disponibilidad,
 proveedores y costos de importación.
@@ -135,17 +124,9 @@ proveedores y costos de importación.
 
 
 
-<p className="mt-3">
+<p className="mb-6">
 
 🚚 Entrega estimada: 6 a 15 días hábiles
-
-</p>
-
-
-
-<p className="mt-3">
-
-💬 Atención personalizada por WhatsApp
 
 </p>
 
@@ -159,15 +140,13 @@ target="_blank"
 
 className="
 inline-block
-mt-4
+mb-6
 bg-green-500
 text-white
 font-bold
 px-6
 py-3
 rounded-xl
-hover:bg-green-600
-transition
 "
 
 >
@@ -175,11 +154,6 @@ transition
 💬 WhatsApp: 907025944
 
 </a>
-
-
-</section>
-
-
 
 
 
@@ -192,7 +166,7 @@ border
 border-[#333]
 p-4
 rounded-2xl
-outline-none
+mb-6
 "
 
 placeholder="🔎 Buscar productos..."
@@ -205,15 +179,12 @@ onChange={(e)=>setBusqueda(e.target.value)}
 
 
 
-
-
-<div className="flex flex-wrap gap-3">
+<div className="flex flex-wrap gap-3 mb-8">
 
 
 {
 
 categorias.map((cat)=>(
-
 
 <button
 
@@ -237,7 +208,7 @@ categoria===cat
 
 :
 
-"bg-[#181818] border-[#333]"
+"bg-[#181818]"
 
 }
 
@@ -248,7 +219,6 @@ categoria===cat
 {cat}
 
 </button>
-
 
 ))
 
@@ -261,10 +231,10 @@ categoria===cat
 
 
 
-
 <div className="
 grid
 md:grid-cols-3
+lg:grid-cols-4
 gap-6
 ">
 
@@ -284,29 +254,33 @@ p-5
 relative
 hover:-translate-y-2
 transition
-duration-300
 "
 
-
 >
-
 
 
 {
 
 ofertaActiva(producto.descuento_hasta)&&(
 
-<span className="badge-offer">
+<div className="
+absolute
+top-3
+left-3
+bg-red-500
+px-3
+py-1
+rounded-full
+font-bold
+">
 
 🔥 OFERTA
 
-</span>
+</div>
 
 )
 
 }
-
-
 
 
 
@@ -328,9 +302,11 @@ rounded-2xl
 
 
 
-
-
-<p className="text-gray-400">
+<p className="
+text-sm
+text-gray-400
+mt-4
+">
 
 {producto.categoria}
 
@@ -338,7 +314,10 @@ rounded-2xl
 
 
 
-<h2 className="text-xl font-bold">
+<h2 className="
+font-bold
+text-xl
+">
 
 {producto.nombre}
 
@@ -346,7 +325,9 @@ rounded-2xl
 
 
 
-<p className="text-gray-300 mt-2">
+<p className="
+text-gray-300
+">
 
 {producto.descripcion}
 
@@ -355,14 +336,8 @@ rounded-2xl
 
 
 
-<p className="
-text-3xl
-font-bold
-text-[#f5b800]
-mt-4
-">
+<div className="mt-3">
 
-S/
 
 {
 
@@ -370,16 +345,56 @@ ofertaActiva(producto.descuento_hasta)
 
 ?
 
-Number(producto.precio).toFixed(2)
+(
+
+<>
+
+<p className="
+line-through
+text-gray-400
+">
+
+S/ {Number(producto.precio_original).toFixed(2)}
+
+</p>
+
+
+<p className="
+text-3xl
+font-bold
+text-[#f5b800]
+">
+
+S/ {Number(producto.precio).toFixed(2)}
+
+</p>
+
+</>
+
+)
+
 
 :
 
-Number(producto.precio_original || producto.precio).toFixed(2)
+
+(
+
+<p className="
+text-3xl
+font-bold
+text-[#f5b800]
+">
+
+S/ {Number(producto.precio_original || producto.precio).toFixed(2)}
+
+</p>
+
+)
 
 }
 
 
-</p>
+</div>
 
 
 
@@ -403,26 +418,16 @@ fecha={producto.descuento_hasta}
 
 
 
-
-
 {
 
 producto.tallas && (
 
-<div className="mt-5">
-
-<p>
-👕 Talla
-</p>
-
-
-<div className="flex gap-2 flex-wrap mt-2">
+<div className="flex gap-2 mt-4 flex-wrap">
 
 
 {
 
 producto.tallas.split(",").map((talla)=>{
-
 
 const t=talla.trim();
 
@@ -465,13 +470,10 @@ selecciones[producto.id]?.talla===t
 
 )
 
-
 })
 
 }
 
-
-</div>
 
 </div>
 
@@ -483,26 +485,16 @@ selecciones[producto.id]?.talla===t
 
 
 
-
 {
 
 producto.colores && (
 
-<div className="mt-5">
-
-
-<p>
-🎨 Color
-</p>
-
-
-<div className="flex gap-2 flex-wrap mt-2">
+<div className="flex gap-2 mt-3 flex-wrap">
 
 
 {
 
 producto.colores.split(",").map((color)=>{
-
 
 const c=color.trim();
 
@@ -543,16 +535,12 @@ selecciones[producto.id]?.color===c
 
 </button>
 
-
 )
-
 
 })
 
 }
 
-
-</div>
 
 </div>
 
@@ -638,40 +626,25 @@ btn-gold
 
 
 
-
-
 {
 
 carrito.length>0 && pathname !== "/carrito" && (
-
 
 <div className="
 fixed
 bottom-5
 right-5
-bg-[#181818]
-border
-border-[#333]
-rounded-2xl
+bg-[#f5b800]
+text-black
 p-5
-shadow-xl
-z-50
+rounded-xl
+font-bold
 ">
 
 
-<p className="font-bold">
-
-🛒 Tu carrito
-
-</p>
-
-
-<p>
+🛒 Tu carrito:
 
 {carrito.length} producto(s)
-
-</p>
-
 
 
 <a
@@ -680,13 +653,8 @@ href="/carrito"
 
 className="
 block
-mt-3
-bg-[#f5b800]
-text-black
-font-bold
-px-5
-py-3
-rounded-xl
+mt-2
+underline
 "
 
 >
@@ -698,7 +666,6 @@ Ver carrito
 
 </div>
 
-
 )
 
 }
@@ -707,8 +674,6 @@ Ver carrito
 
 </main>
 
-
 );
-
 
 }
