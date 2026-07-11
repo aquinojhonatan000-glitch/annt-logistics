@@ -8,6 +8,7 @@ import Link from "next/link";
 
 export default function Admin(){
 
+
 const {
 productos,
 agregarProducto,
@@ -17,6 +18,7 @@ eliminarProducto
 
 
 const productoInicial={
+
 nombre:"",
 descripcion:"",
 categoria:"",
@@ -28,6 +30,7 @@ stock:"",
 tallas:"",
 colores:"",
 imagen:"",
+
 };
 
 
@@ -37,6 +40,8 @@ const [producto,setProducto]=useState(productoInicial);
 const [subiendo,setSubiendo]=useState(false);
 
 const [guardando,setGuardando]=useState(false);
+
+
 
 
 
@@ -52,9 +57,12 @@ return new Date(fecha)>new Date();
 
 
 
+
 const subirImagen=async(e)=>{
 
+
 const archivo=e.target.files?.[0];
+
 
 if(!archivo)return;
 
@@ -62,20 +70,24 @@ if(!archivo)return;
 setSubiendo(true);
 
 
+
 const nombreArchivo=
+
 Date.now()+"-"+archivo.name.replace(/\s+/g,"-");
 
 
 
+
 const {error}=await supabase.storage
+
 .from("imagenes")
+
 .upload(nombreArchivo,archivo);
 
 
 
-if(error){
 
-console.log(error);
+if(error){
 
 alert("Error subiendo imagen");
 
@@ -87,9 +99,14 @@ return;
 
 
 
+
+
 const {data}=supabase.storage
+
 .from("imagenes")
+
 .getPublicUrl(nombreArchivo);
+
 
 
 
@@ -112,19 +129,23 @@ setSubiendo(false);
 
 
 
+
+
+
 const guardarProducto=async(e)=>{
+
 
 e.preventDefault();
 
 
-if(!producto.nombre.trim()){
+
+if(!producto.nombre){
 
 alert("Escribe el nombre del producto");
 
 return;
 
 }
-
 
 
 if(!producto.imagen){
@@ -134,7 +155,6 @@ alert("Sube una imagen");
 return;
 
 }
-
 
 
 if(!producto.precio){
@@ -151,6 +171,7 @@ setGuardando(true);
 
 
 
+
 try{
 
 
@@ -160,6 +181,7 @@ await agregarProducto({
 
 
 precio:Number(producto.precio),
+
 
 
 precio_original:
@@ -173,6 +195,7 @@ Number(producto.precio_original)
 :
 
 null,
+
 
 
 
@@ -190,6 +213,7 @@ Number(producto.descuento)
 
 
 
+
 stock:
 
 producto.stock
@@ -201,6 +225,7 @@ Number(producto.stock)
 :
 
 0,
+
 
 
 
@@ -221,11 +246,13 @@ null,
 
 
 
+
+
 setProducto(productoInicial);
 
 
 
-alert("✅ Producto guardado correctamente");
+alert("✅ Producto guardado");
 
 
 
@@ -245,7 +272,9 @@ setGuardando(false);
 }
 
 
+
 };
+
 
 
 
@@ -254,18 +283,19 @@ setGuardando(false);
 
 return(
 
+
 <main className="
 min-h-screen
 bg-[#111]
 text-white
-p-6
-md:p-10
+p-8
 ">
+
 
 
 <h1 className="
 text-4xl
-font-black
+font-bold
 mb-8
 text-[#f5b800]
 ">
@@ -276,13 +306,14 @@ text-[#f5b800]
 
 
 
+
+
 <Link
 
 href="/admin/pedidos"
 
 className="
 inline-flex
-items-center
 bg-[#f5b800]
 text-black
 font-bold
@@ -290,8 +321,6 @@ px-6
 py-3
 rounded-xl
 mb-10
-hover:bg-[#ffd700]
-transition
 "
 
 >
@@ -304,13 +333,10 @@ transition
 
 
 
+
 <div className="
-bg-[#181818]
-border
-border-[#333]
-rounded-3xl
+card-dark
 p-6
-shadow-xl
 mb-10
 ">
 
@@ -327,14 +353,16 @@ mb-6
 
 
 
+
+
 <form onSubmit={guardarProducto}>
+
+
 
 
 <input
 
-className="
-admin-input
-"
+className="admin-input"
 
 placeholder="Nombre del producto"
 
@@ -352,14 +380,13 @@ nombre:e.target.value
 
 
 
+
+
 <textarea
 
-className="
-admin-input
-h-32
-"
+className="admin-input"
 
-placeholder="Descripción del producto"
+placeholder="Descripción"
 
 value={producto.descripcion}
 
@@ -375,13 +402,13 @@ descripcion:e.target.value
 
 
 
+
+
 <input
 
-className="
-admin-input
-"
+className="admin-input"
 
-placeholder="Categoría (Tecnología, Moda...)"
+placeholder="Categoría"
 
 value={producto.categoria}
 
@@ -397,18 +424,13 @@ categoria:e.target.value
 
 
 
-<div className="grid md:grid-cols-2 gap-4">
 
 
 <input
 
+className="admin-input"
+
 type="number"
-
-step="0.01"
-
-className="
-admin-input
-"
 
 placeholder="Precio oferta"
 
@@ -426,15 +448,13 @@ precio:e.target.value
 
 
 
+
+
 <input
 
+className="admin-input"
+
 type="number"
-
-step="0.01"
-
-className="
-admin-input
-"
 
 placeholder="Precio original"
 
@@ -451,15 +471,14 @@ precio_original:e.target.value
 />
 
 
-</div>
-<div className="grid md:grid-cols-2 gap-4">
+
 
 
 <input
 
-type="number"
-
 className="admin-input"
+
+type="number"
 
 placeholder="Descuento %"
 
@@ -477,11 +496,35 @@ descuento:e.target.value
 
 
 
+
+
 <input
 
-type="number"
+className="admin-input"
+
+type="datetime-local"
+
+value={producto.descuento_hasta}
+
+onChange={(e)=>setProducto({
+
+...producto,
+
+descuento_hasta:e.target.value
+
+})}
+
+/>
+
+
+
+
+
+<input
 
 className="admin-input"
+
+type="number"
 
 placeholder="Stock"
 
@@ -498,56 +541,6 @@ stock:e.target.value
 />
 
 
-</div>
-
-
-
-
-
-<div className="
-bg-[#111]
-border
-border-[#333]
-rounded-2xl
-p-4
-mb-5
-">
-
-
-<label className="
-text-[#f5b800]
-font-bold
-">
-
-⏰ Final de oferta
-
-</label>
-
-
-
-<input
-
-type="datetime-local"
-
-className="admin-input mt-3"
-
-value={producto.descuento_hasta}
-
-onChange={(e)=>setProducto({
-
-...producto,
-
-descuento_hasta:e.target.value
-
-})}
-
-/>
-
-
-</div>
-
-
-
 
 
 
@@ -555,7 +548,7 @@ descuento_hasta:e.target.value
 
 className="admin-input"
 
-placeholder="Tallas: S,M,L,XL"
+placeholder="Tallas (Ej: S,M,L)"
 
 value={producto.tallas}
 
@@ -577,7 +570,7 @@ tallas:e.target.value
 
 className="admin-input"
 
-placeholder="Colores: Negro, Blanco"
+placeholder="Colores (Ej: Negro,Azul)"
 
 value={producto.colores}
 
@@ -595,24 +588,6 @@ colores:e.target.value
 
 
 
-
-<div className="
-bg-[#111]
-border
-border-[#333]
-rounded-2xl
-p-5
-">
-
-
-<p className="font-bold mb-3">
-
-🖼️ Imagen del producto
-
-</p>
-
-
-
 <input
 
 type="file"
@@ -625,40 +600,29 @@ onChange={subirImagen}
 
 
 
-{subiendo && (
-
-<p className="text-yellow-400 mt-3">
-
-⏳ Subiendo imagen...
-
-</p>
-
-)}
 
 
-
-{producto.imagen && (
+{
+producto.imagen && (
 
 <img
 
 src={producto.imagen}
 
 className="
-w-52
-h-52
+w-40
+h-40
 object-contain
 bg-white
-rounded-2xl
+rounded-xl
 mt-5
 "
 
 />
 
-)}
+)
 
-
-</div>
-
+}
 
 
 
@@ -670,14 +634,8 @@ disabled={subiendo || guardando}
 
 className="
 w-full
+btn-gold
 mt-6
-bg-[#f5b800]
-text-black
-font-black
-py-4
-rounded-xl
-hover:bg-[#ffd700]
-transition
 "
 
 >
@@ -689,7 +647,7 @@ guardando
 
 ?
 
-"⏳ Guardando..."
+"Guardando..."
 
 :
 
@@ -702,7 +660,9 @@ guardando
 
 
 
+
 </form>
+
 
 
 </div>
@@ -716,8 +676,8 @@ guardando
 
 <h2 className="
 text-3xl
-font-black
-mb-6
+font-bold
+mb-5
 ">
 
 📦 Productos publicados
@@ -729,18 +689,10 @@ mb-6
 
 
 
-
-<div className="
-grid
-md:grid-cols-2
-xl:grid-cols-3
-gap-6
-">
-
-
 {
 
-productos?.map((p)=>(
+productos.map((p)=>(
+
 
 
 <div
@@ -748,77 +700,35 @@ productos?.map((p)=>(
 key={p.id}
 
 className="
-bg-[#181818]
-border
-border-[#333]
-rounded-3xl
+card-dark
 p-5
-hover:border-[#f5b800]
-hover:-translate-y-2
-transition
-duration-300
+mb-5
 "
 
+
 >
-
-
-
-<div className="relative">
 
 
 <img
 
 src={p.imagen}
 
-alt={p.nombre}
-
 className="
-w-full
-h-64
-object-contain
+w-40
+h-40
 bg-white
-rounded-2xl
+object-contain
+rounded-xl
 "
 
 />
 
 
 
-{
-
-ofertaActiva(p.descuento_hasta) && (
-
-<span className="
-absolute
-top-3
-left-3
-bg-red-600
-px-4
-py-1
-rounded-full
-font-bold
-">
-
-🔥 OFERTA
-
-</span>
-
-)
-
-}
-
-
-
-</div>
-
-
-
-
-
 <h3 className="
 text-xl
 font-bold
-mt-5
+mt-4
 ">
 
 {p.nombre}
@@ -827,123 +737,19 @@ mt-5
 
 
 
+<p className="text-[#f5b800] text-xl font-bold">
 
-
-<p className="
-text-gray-400
-mt-2
-">
-
-{p.categoria}
+S/ {p.precio}
 
 </p>
 
 
 
+<p>
 
-
-<p className="
-text-[#f5b800]
-font-black
-text-2xl
-mt-3
-">
-
-S/ {
-
-ofertaActiva(p.descuento_hasta)
-
-?
-
-Number(p.precio).toFixed(2)
-
-:
-
-Number(
-p.precio_original || p.precio
-).toFixed(2)
-
-}
-
+Stock: {p.stock}
 
 </p>
-
-
-
-
-
-
-
-{
-
-ofertaActiva(p.descuento_hasta)
-&& Number(p.descuento)>0 && (
-
-<p className="
-text-red-400
-font-bold
-">
-
-🔥 {p.descuento}% OFF
-
-</p>
-
-)
-
-}
-
-
-
-
-
-
-{
-
-p.descuento_hasta && (
-
-<p className="text-gray-300 mt-3">
-
-
-{
-
-ofertaActiva(p.descuento_hasta)
-
-?
-
-"⏰ Oferta termina: "
-
-+
-
-new Date(
-p.descuento_hasta
-).toLocaleString()
-
-:
-
-"⌛ Oferta finalizada - Precio normal"
-
-}
-
-
-</p>
-
-)
-
-}
-
-
-
-
-
-
-<p className="mt-3">
-
-📦 Stock: {p.stock}
-
-</p>
-
-
-
 
 
 
@@ -952,14 +758,12 @@ p.descuento_hasta
 onClick={()=>eliminarProducto(p.id)}
 
 className="
-mt-5
+mt-4
 bg-red-600
 px-5
-py-3
+py-2
 rounded-xl
 font-bold
-hover:bg-red-700
-transition
 "
 
 >
@@ -973,19 +777,17 @@ transition
 </div>
 
 
-
 ))
 
 
 }
 
 
-</div>
-
-
 
 </main>
 
+
 );
+
 
 }
