@@ -8,26 +8,107 @@ const UserContext = createContext();
 
 export function UserProvider({children}) {
 
+
 const [usuario,setUsuario] = useState(null);
 
 
-// cargar usuario guardado
+
+// Cargar sesión automáticamente
 
 useEffect(()=>{
 
-const guardado = localStorage.getItem("usuario");
 
-if(guardado){
+const cargarUsuario = async()=>{
 
-setUsuario(JSON.parse(guardado));
+
+const {
+data:{
+session
+}
+
+}=await supabase.auth.getSession();
+
+
+
+if(!session){
+
+return;
 
 }
+
+
+
+const {data:perfil,error}=await supabase
+
+.from("perfiles")
+
+.select("*")
+
+.eq("id",session.user.id)
+
+.single();
+
+
+
+if(error){
+
+console.log("ERROR CARGANDO PERFIL:",error);
+
+return;
+
+}
+
+
+
+const usuarioCompleto={
+
+id:session.user.id,
+
+correo:session.user.email,
+
+nombre:perfil.nombre,
+
+rol:perfil.rol,
+
+telefono:perfil.telefono || "",
+
+direccion:perfil.direccion || ""
+
+};
+
+
+
+setUsuario(usuarioCompleto);
+
+
+
+localStorage.setItem(
+
+"usuario",
+
+JSON.stringify(usuarioCompleto)
+
+);
+
+
+
+};
+
+
+
+cargarUsuario();
+
+
 
 },[]);
 
 
 
-// iniciar sesión
+
+
+
+
+// Iniciar sesión
 
 const iniciarSesion = async(correo, contraseña)=>{
 
@@ -41,6 +122,7 @@ password:contraseña
 });
 
 
+
 if(error){
 
 console.log("ERROR LOGIN:",error);
@@ -48,6 +130,8 @@ console.log("ERROR LOGIN:",error);
 return false;
 
 }
+
+
 
 
 
@@ -63,6 +147,8 @@ const {data:perfil,error:perfilError}=await supabase
 
 
 
+
+
 if(perfilError){
 
 console.log("ERROR PERFIL:",perfilError);
@@ -73,7 +159,10 @@ return false;
 
 
 
+
+
 const usuarioCompleto={
+
 
 id:data.user.id,
 
@@ -91,7 +180,10 @@ direccion:perfil.direccion || ""
 
 
 
+
+
 setUsuario(usuarioCompleto);
+
 
 
 localStorage.setItem(
@@ -104,6 +196,8 @@ JSON.stringify(usuarioCompleto)
 
 
 
+
+
 return true;
 
 
@@ -113,7 +207,10 @@ return true;
 
 
 
-// registrar usuario nuevo
+
+
+
+// Registrar usuario nuevo
 
 const registrarUsuario = async(datos)=>{
 
@@ -127,6 +224,8 @@ password:datos.contraseña
 });
 
 
+
+
 if(error){
 
 console.log("ERROR REGISTRO:",error);
@@ -134,6 +233,10 @@ console.log("ERROR REGISTRO:",error);
 return false;
 
 }
+
+
+
+
 
 
 
@@ -149,9 +252,15 @@ nombre:datos.nombre,
 
 correo:datos.correo,
 
+telefono:datos.telefono || "",
+
+direccion:datos.direccion || "",
+
 rol:"cliente"
 
 });
+
+
 
 
 
@@ -165,6 +274,7 @@ return false;
 
 
 
+
 return true;
 
 
@@ -174,12 +284,16 @@ return true;
 
 
 
-// actualizar datos del perfil
 
-const actualizarUsuario=(datos)=>{
+
+
+// Actualizar datos del perfil
+
+const actualizarUsuario = async(datos)=>{
 
 
 setUsuario(datos);
+
 
 
 localStorage.setItem(
@@ -191,33 +305,72 @@ JSON.stringify(datos)
 );
 
 
+
+
+
+const {error}=await supabase
+
+.from("perfiles")
+
+.update({
+
+nombre:datos.nombre,
+
+telefono:datos.telefono,
+
+direccion:datos.direccion
+
+})
+
+.eq("id",datos.id);
+
+
+
+
+
+if(error){
+
+console.log("ERROR ACTUALIZANDO PERFIL:",error);
+
+}
+
+
+
 };
 
 
 
 
 
-// cerrar sesión
 
-const cerrarSesion=async()=>{
+
+
+// Cerrar sesión
+
+const cerrarSesion = async()=>{
 
 
 await supabase.auth.signOut();
 
 
+
 setUsuario(null);
 
 
-localStorage.removeItem("usuario");
+// NO borrar localStorage
+// así mantiene datos del perfil
 
 
 };
+
+
 
 
 
 
 
 return(
+
 
 <UserContext.Provider
 
@@ -237,13 +390,20 @@ cerrarSesion
 
 >
 
+
 {children}
+
 
 </UserContext.Provider>
 
+
 );
 
+
 }
+
+
+
 
 
 
