@@ -7,272 +7,354 @@ import { useCart } from "@/context/CartContext";
 export default function Carrito() {
 
 
-  const {
-    carrito,
-    eliminarCarrito,
-    cambiarCantidad
-  } = useCart();
+const {
+carrito,
+eliminarCarrito,
+cambiarCantidad
+}=useCart();
 
 
 
 
-  const total = carrito.reduce(
-    (suma, producto) =>
-      suma + producto.precio * producto.cantidad,
-    0
-  );
 
+const total = carrito.reduce(
 
+(suma,producto)=>
 
-  return (
+suma + Number(producto.precio) * producto.cantidad,
 
+0
 
-    <main className="min-h-screen bg-[#111111] text-white p-8">
+);
 
 
 
-      <h1 className="text-4xl font-bold mb-6">
-        🛒 Mi Carrito
-      </h1>
 
 
 
+return(
 
 
-      {carrito.length === 0 ? (
+<main className="min-h-screen bg-[#111] text-white p-8">
 
 
 
-        <div className="bg-[#181818] border border-[#2b2b2b] rounded-xl p-6">
+<h1 className="text-4xl font-bold mb-8">
 
+🛒 Mi Carrito ANNT LOGISTICS
 
-          <h2 className="text-2xl font-bold">
-            Tu carrito está vacío
-          </h2>
+</h1>
 
 
-          <p className="mt-3 text-gray-400">
-            Agrega productos desde el catálogo.
-          </p>
 
 
-        </div>
 
+{carrito.length===0 ? (
 
 
-      ) : (
+<div className="bg-[#181818] border border-[#333] rounded-xl p-6">
 
 
+<h2 className="text-2xl font-bold">
 
-        <div>
+Tu carrito está vacío
 
+</h2>
 
 
-          <div className="grid gap-5">
 
+<p className="text-gray-400 mt-3">
 
+Agrega productos desde el catálogo.
 
-            {carrito.map((producto)=>(
+</p>
 
 
+<Link
 
-              <div
+href="/productos"
 
-                key={producto.id}
+className="inline-block mt-5 bg-[#f5b800] text-black px-6 py-3 rounded-lg font-bold"
 
-                className="bg-[#181818] border border-[#2b2b2b] rounded-xl p-5 flex items-center justify-between"
+>
 
-              >
+🛍️ Ver productos
 
+</Link>
 
 
-                <div className="flex items-center gap-5">
+</div>
 
 
 
-                  <img
+):(
 
-                    src={producto.imagen}
 
-                    alt={producto.nombre}
 
-                    className="w-24 h-24 object-cover rounded-lg"
+<div>
 
-                  />
 
 
 
-                  <div>
+<div className="grid gap-5">
 
 
-                    <h2 className="text-xl font-bold">
 
-                      {producto.nombre}
+{carrito.map((producto)=>(
 
-                    </h2>
 
 
+<div
 
-                    <p className="text-[#f5b800] font-bold">
+key={producto.id}
 
-                      S/ {producto.precio}
+className="bg-[#181818] border border-[#333] rounded-xl p-5 flex flex-col md:flex-row justify-between gap-5"
 
-                    </p>
+>
 
 
 
-                  </div>
 
 
 
-                </div>
+<div className="flex gap-5">
 
 
+<img
 
+src={producto.imagen}
 
+alt={producto.nombre}
 
+className="w-28 h-28 object-cover rounded-lg"
 
-                <div className="text-center">
+/>
 
 
-                  <p className="mb-2 font-bold">
-                    Cantidad
-                  </p>
 
+<div>
 
 
-                  <div className="flex items-center gap-3">
+<h2 className="text-xl font-bold">
 
+{producto.nombre}
 
-                    <button
+</h2>
 
-                      onClick={() =>
-                        cambiarCantidad(
-                          producto.id,
-                          producto.cantidad - 1
-                        )
-                      }
 
-                      className="border border-[#444] px-3 py-1 rounded"
 
-                    >
-                      -
-                    </button>
 
+<p className="text-[#f5b800] text-xl font-bold">
 
+S/ {producto.precio}
 
+</p>
 
-                    <span className="font-bold">
 
-                      {producto.cantidad}
 
-                    </span>
 
 
 
+{producto.talla && (
 
-                    <button
+<p className="text-gray-300 mt-2">
 
-                      onClick={() =>
-                        cambiarCantidad(
-                          producto.id,
-                          producto.cantidad + 1
-                        )
-                      }
+👕 Talla: {producto.talla}
 
-                      className="border border-[#444] px-3 py-1 rounded"
+</p>
 
-                    >
-                      +
-                    </button>
+)}
 
 
 
-                  </div>
 
 
+{producto.color && (
 
+<p className="text-gray-300">
 
-                  <button
+🎨 Color: {producto.color}
 
-                    onClick={() =>
-                      eliminarCarrito(producto.id)
-                    }
+</p>
 
-                    className="text-red-400 mt-3"
+)}
 
-                  >
 
-                    ❌ Eliminar
 
-                  </button>
 
 
+</div>
 
-                </div>
 
 
+</div>
 
-              </div>
 
 
 
-            ))}
 
 
 
-          </div>
+<div className="flex flex-col items-center">
 
 
+<p className="font-bold mb-2">
 
+Cantidad
 
+</p>
 
 
-          <div className="mt-8 text-3xl font-bold">
 
-            Total:
+<div className="flex items-center gap-3">
 
-            <span className="text-[#f5b800]">
 
-              {" "}S/ {total.toFixed(2)}
+<button
 
-            </span>
+onClick={()=>cambiarCantidad(
 
+producto.id,
 
-          </div>
+producto.cantidad-1
 
+)}
 
+className="border border-[#444] px-3 py-1 rounded"
 
+>
 
+-
 
+</button>
 
 
-          <Link
 
-            href="/checkout"
 
-            className="mt-6 block text-center bg-[#f5b800] text-black font-bold px-8 py-4 rounded-xl hover:bg-[#ffd700]"
 
-          >
+<span className="font-bold">
 
-            💳 Comprar ahora
+{producto.cantidad}
 
-          </Link>
+</span>
 
 
 
 
-        </div>
 
+<button
 
+onClick={()=>cambiarCantidad(
 
-      )}
+producto.id,
 
+producto.cantidad+1
 
+)}
 
-    </main>
+className="border border-[#444] px-3 py-1 rounded"
 
+>
 
-  );
++
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+<button
+
+onClick={()=>eliminarCarrito(producto.id)}
+
+className="text-red-400 mt-4"
+
+>
+
+🗑️ Eliminar
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+))}
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div className="bg-[#181818] border border-[#333] rounded-xl p-6 mt-8">
+
+
+<h2 className="text-3xl font-bold">
+
+Total:
+
+<span className="text-[#f5b800]">
+
+{" "}S/ {total.toFixed(2)}
+
+</span>
+
+
+</h2>
+
+
+
+
+<Link
+
+href="/checkout"
+
+className="mt-6 block text-center bg-[#f5b800] text-black font-bold py-4 rounded-xl hover:bg-yellow-400"
+
+>
+
+💳 Continuar compra
+
+</Link>
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+)}
+
+
+
+
+</main>
+
+
+);
+
 
 }

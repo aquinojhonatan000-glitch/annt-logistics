@@ -1,298 +1,540 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { useOrders } from "@/context/OrderContext";
 import { useUser } from "@/context/UserContext";
+import { useOrders } from "@/context/OrderContext";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
-export default function Checkout() {
-  const router = useRouter();
 
-  const { carrito, limpiarCarrito } = useCart();
-  const { agregarPedido } = useOrders();
-  const { usuario } = useUser();
+export default function Checkout(){
 
-  const [datosEntrega, setDatosEntrega] = useState({
-    nombre: usuario?.nombre || "",
-    telefono: usuario?.telefono || "",
-    direccion: usuario?.direccion || "",
-    ciudad: "",
-  });
 
-  const [pago, setPago] = useState("Yape / Plin");
-  const [comprobante, setComprobante] = useState("");
+const { carrito, limpiarCarrito } = useCart();
 
-  const total = carrito.reduce(
-    (suma, producto) =>
-      suma + producto.precio * producto.cantidad,
-    0
-  );
+const { usuario } = useUser();
 
-  const subirComprobante = (e) => {
-    const archivo = e.target.files[0];
+const { agregarPedido } = useOrders();
 
-    if (!archivo) return;
+const router = useRouter();
 
-    const lector = new FileReader();
 
-    lector.onload = () => {
-      setComprobante(lector.result);
-    };
-
-    lector.readAsDataURL(archivo);
-  };
-
-  const confirmarPedido = () => {
-    if (carrito.length === 0) {
-      alert("El carrito está vacío.");
-      return;
-    }
-
-    const numeroPedido =
-      "ANNT-" + Math.floor(Math.random() * 1000000);
-
-    const nuevoPedido = {
-      id: numeroPedido,
-
-      productos: carrito,
-
-      total,
-
-      estado: "Esperando pago",
-
-      pago,
-
-      cliente: {
-        ...datosEntrega,
-        correo: usuario?.correo || "",
-      },
-
-      comprobante,
-
-      fecha: new Date().toLocaleString(),
-    };
-
-    agregarPedido(nuevoPedido);
-
-    if (limpiarCarrito) {
-      limpiarCarrito();
-    }
-
-    alert(
-      `✅ Pedido creado correctamente
-
-Número: ${numeroPedido}`
-    );
-
-    router.push("/perfil");
-  };
-
-  return (
-    <main className="min-h-screen bg-[#111] text-white p-8">
-
-      <h1 className="text-5xl font-bold mb-8">
-        Finalizar
-        <span className="text-[#f5b800]">
-          {" "}Compra
-        </span>
-      </h1>
-
-      <div className="grid md:grid-cols-2 gap-8">
-
-        <section className="bg-[#181818] border border-[#333] rounded-2xl p-6">
-
-          <h2 className="text-2xl font-bold mb-6">
-            📍 Dirección de entrega
-          </h2>
-
-          <input
-            className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
-            placeholder="Nombre completo"
-            value={datosEntrega.nombre}
-            onChange={(e) =>
-              setDatosEntrega({
-                ...datosEntrega,
-                nombre: e.target.value,
-              })
-            }
-          />
-
-          <input
-            className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
-            placeholder="Teléfono"
-            value={datosEntrega.telefono}
-            onChange={(e) =>
-              setDatosEntrega({
-                ...datosEntrega,
-                telefono: e.target.value,
-              })
-            }
-          />
-
-          <input
-            className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
-            placeholder="Dirección"
-            value={datosEntrega.direccion}
-            onChange={(e) =>
-              setDatosEntrega({
-                ...datosEntrega,
-                direccion: e.target.value,
-              })
-            }
-          />
-
-          <input
-            className="w-full bg-[#111] border border-[#333] p-3 rounded-lg"
-            placeholder="Ciudad"
-            value={datosEntrega.ciudad}
-            onChange={(e) =>
-              setDatosEntrega({
-                ...datosEntrega,
-                ciudad: e.target.value,
-              })
-            }
-          />
-
-        </section>
-
-        <section className="bg-[#181818] border border-[#333] rounded-2xl p-6">
-
-          <h2 className="text-2xl font-bold mb-5">
-            💳 Método de pago
-          </h2>
-
-          <select
-            value={pago}
-            onChange={(e) => setPago(e.target.value)}
-            className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-5"
-          >
-            <option>Yape / Plin</option>
-            <option>Transferencia bancaria</option>
-            <option>Tarjeta</option>
-            <option>Pago contra entrega</option>
-          </select>
-
-          <div className="bg-[#111] rounded-xl p-5">
-
-            <p>📱 Yape / Plin: <b>907025944</b></p>
-
-            <p className="mt-2">
-              🏦 BBVA Perú
-            </p>
 
-            <p>
-              Cuenta: <b>0011-0814-0278664916</b>
-            </p>
+const [datos,setDatos]=useState({
 
-            <p>
-              CCI:
-              <b> 01181400027866491616</b>
-            </p>
+nombre: usuario?.nombre || "",
 
-            <img
-              src="/qr.png"
-              alt="QR"
-              className="w-48 mt-5 rounded-lg"
-            />
+telefono: usuario?.telefono || "",
 
-          </div>
+direccion: usuario?.direccion || "",
 
-          <h3 className="font-bold mt-6">
-            📎 Subir comprobante
-          </h3>
+pago:"Yape"
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={subirComprobante}
-            className="w-full mt-3"
-          />
+});
 
-          {comprobante && (
-            <img
-              src={comprobante}
-              alt="Comprobante"
-              className="w-48 mt-4 rounded-lg"
-            />
-          )}
 
-          <h2 className="text-2xl font-bold mt-8">
-            🛒 Resumen del pedido
-          </h2>
-                    {carrito.length === 0 ? (
 
-            <p className="text-gray-400 mt-4">
-              No hay productos en el carrito.
-            </p>
+const [comprobante,setComprobante]=useState("");
 
-          ) : (
+const [subiendo,setSubiendo]=useState(false);
 
-            carrito.map((producto) => (
+const [enviando,setEnviando]=useState(false);
 
-              <div
-                key={producto.id}
-                className="flex justify-between border-b border-[#333] py-3"
-              >
 
-                <div>
 
-                  <p className="font-bold">
-                    {producto.nombre}
-                  </p>
 
-                  <p className="text-gray-400 text-sm">
-                    Cantidad: {producto.cantidad}
-                  </p>
 
-                </div>
+const total = carrito.reduce(
 
-                <div className="font-bold">
+(sum,p)=>sum + Number(p.precio)*p.cantidad,
 
-                  S/ {(producto.precio * producto.cantidad).toFixed(2)}
+0
 
-                </div>
+);
 
-              </div>
 
-            ))
 
-          )}
 
-          <div className="mt-8">
 
-            <p className="text-3xl font-bold">
 
-              Total:
+const subirComprobante=async(e)=>{
 
-              <span className="text-[#f5b800]">
 
-                {" "}S/ {total.toFixed(2)}
+const archivo=e.target.files[0];
 
-              </span>
 
-            </p>
+if(!archivo)return;
 
-            <button
 
-              onClick={confirmarPedido}
 
-              className="w-full mt-8 bg-[#f5b800] text-black font-bold py-4 rounded-xl hover:bg-yellow-400 transition"
+setSubiendo(true);
 
-            >
 
-              🚚 Confirmar pedido
 
-            </button>
+const nombreArchivo=
 
-          </div>
+"comprobantes/"+Date.now()+"-"+archivo.name;
 
-        </section>
 
-      </div>
 
-    </main>
 
-  );
+
+const {error}=await supabase.storage
+
+.from("imagenes")
+
+.upload(
+
+nombreArchivo,
+
+archivo
+
+);
+
+
+
+
+
+if(error){
+
+console.log(error);
+
+alert("Error subiendo comprobante");
+
+setSubiendo(false);
+
+return;
+
+}
+
+
+
+
+
+
+const url=supabase.storage
+
+.from("imagenes")
+
+.getPublicUrl(nombreArchivo)
+
+.data.publicUrl;
+
+
+
+
+
+setComprobante(url);
+
+
+
+setSubiendo(false);
+
+
+
+};
+
+
+
+
+
+
+
+const confirmarCompra=async(e)=>{
+
+
+e.preventDefault();
+
+
+
+if(!comprobante){
+
+alert("Sube tu comprobante de pago");
+
+return;
+
+}
+
+
+
+setEnviando(true);
+
+
+
+
+
+const pedido={
+
+
+id:crypto.randomUUID(),
+
+
+cliente:{
+
+nombre:datos.nombre,
+
+telefono:datos.telefono,
+
+direccion:datos.direccion
+
+},
+
+
+productos:carrito,
+
+
+total,
+
+
+estado:"Esperando pago",
+
+
+pago:datos.pago,
+
+
+comprobante,
+
+
+fecha:new Date().toISOString(),
+
+
+tiempo_entrega:"Pendiente"
+
+
+};
+
+
+
+
+
+await agregarPedido(pedido);
+
+
+
+
+
+limpiarCarrito();
+
+
+
+alert("✅ Pedido enviado correctamente");
+
+
+
+router.push("/");
+
+
+};
+
+
+
+
+
+
+
+
+return(
+
+
+<main className="min-h-screen bg-[#111] text-white p-8">
+
+
+
+<h1 className="text-4xl font-bold mb-8">
+
+💳 Checkout ANNT LOGISTICS
+
+</h1>
+
+
+
+
+
+
+<div className="grid md:grid-cols-2 gap-8">
+
+
+
+
+
+
+<div className="bg-[#181818] border border-[#333] rounded-xl p-6">
+
+
+<h2 className="text-2xl font-bold mb-5">
+
+Datos de entrega
+
+</h2>
+
+
+
+
+<input
+
+className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+
+placeholder="Nombre"
+
+value={datos.nombre}
+
+onChange={(e)=>setDatos({
+
+...datos,
+
+nombre:e.target.value
+
+})}
+
+/>
+
+
+
+
+
+<input
+
+className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+
+placeholder="Teléfono"
+
+value={datos.telefono}
+
+onChange={(e)=>setDatos({
+
+...datos,
+
+telefono:e.target.value
+
+})}
+
+/>
+
+
+
+
+
+
+<textarea
+
+className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+
+placeholder="Dirección"
+
+value={datos.direccion}
+
+onChange={(e)=>setDatos({
+
+...datos,
+
+direccion:e.target.value
+
+})}
+
+/>
+
+
+
+
+
+
+<h2 className="text-xl font-bold">
+
+Método de pago
+
+</h2>
+
+
+
+
+
+<select
+
+className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mt-3"
+
+value={datos.pago}
+
+onChange={(e)=>setDatos({
+
+...datos,
+
+pago:e.target.value
+
+})}
+
+>
+
+<option>Yape</option>
+
+<option>Plin</option>
+
+<option>Transferencia</option>
+
+</select>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div className="bg-[#181818] border border-[#333] rounded-xl p-6">
+
+
+
+<h2 className="text-2xl font-bold mb-5">
+
+Resumen del pedido
+
+</h2>
+
+
+
+
+
+{carrito.map((p)=>(
+
+
+<div key={p.id} className="mb-4">
+
+
+<p className="font-bold">
+
+{p.nombre}
+
+</p>
+
+
+<p>
+
+Cantidad: {p.cantidad}
+
+</p>
+
+
+{p.talla && <p>👕 {p.talla}</p>}
+
+
+{p.color && <p>🎨 {p.color}</p>}
+
+
+</div>
+
+
+))}
+
+
+
+
+
+
+<p className="text-3xl font-bold mt-5">
+
+Total:
+
+<span className="text-[#f5b800]">
+
+{" "}S/ {total.toFixed(2)}
+
+</span>
+
+</p>
+
+
+
+
+
+
+<img
+
+src="/qr.png"
+
+className="w-48 mt-5 rounded-lg"
+
+/>
+
+
+
+
+
+<p className="mt-5">
+
+📷 Subir comprobante
+
+</p>
+
+
+
+
+<input
+
+type="file"
+
+accept="image/*"
+
+onChange={subirComprobante}
+
+className="mt-3"
+
+/>
+
+
+
+
+{subiendo && <p>⏳ Subiendo...</p>}
+
+
+
+
+
+
+
+<button
+
+onClick={confirmarCompra}
+
+disabled={enviando}
+
+className="mt-6 w-full bg-[#f5b800] text-black font-bold py-4 rounded-xl"
+
+>
+
+
+{enviando ? "Enviando..." : "✅ Confirmar compra"}
+
+
+</button>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+</main>
+
+
+);
+
 
 }

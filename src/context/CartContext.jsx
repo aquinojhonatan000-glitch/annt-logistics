@@ -8,216 +8,274 @@ const CartContext = createContext();
 export function CartProvider({ children }) {
 
 
-  const [carrito, setCarrito] = useState([]);
+const [carrito,setCarrito] = useState([]);
 
+const [mensajeCarrito,setMensajeCarrito] = useState("");
 
 
-  useEffect(()=>{
 
-    const guardado = localStorage.getItem("carrito");
+// cargar carrito
 
-    if(guardado){
+useEffect(()=>{
 
-      setCarrito(JSON.parse(guardado));
 
-    }
+const guardado = localStorage.getItem("carrito");
 
-  },[]);
 
+if(guardado){
 
+setCarrito(JSON.parse(guardado));
 
+}
 
-  useEffect(()=>{
 
-    localStorage.setItem(
-      "carrito",
-      JSON.stringify(carrito)
-    );
+},[]);
 
-  },[carrito]);
 
 
 
 
+// guardar carrito
 
+useEffect(()=>{
 
-  const agregarCarrito = (
-    producto,
-    talla="",
-    color=""
-  )=>{
 
+localStorage.setItem(
 
-    setCarrito((actual)=>{
+"carrito",
 
+JSON.stringify(carrito)
 
-      const existe = actual.find(
+);
 
-        (item)=>
 
-          item.id === producto.id &&
+},[carrito]);
 
-          item.talla === talla &&
 
-          item.color === color
 
-      );
 
 
 
 
-      if(existe){
 
+// agregar producto
 
-        return actual.map((item)=>
+const agregarCarrito = (producto)=>{
 
-          item.id === producto.id &&
 
-          item.talla === talla &&
+setCarrito((actual)=>{
 
-          item.color === color
 
-          ?
+const existe = actual.find(
 
-          {
+(item)=>item.id === producto.id
 
-            ...item,
+);
 
-            cantidad:item.cantidad + 1
 
-          }
 
-          :
+if(existe){
 
-          item
 
-        );
+return actual.map((item)=>
 
 
-      }
+item.id === producto.id
 
+?
 
+{
 
+...item,
 
+cantidad:item.cantidad + 1
 
+}
 
-      return [
+:
 
-        ...actual,
+item
 
-        {
 
-          ...producto,
+);
 
-          talla,
 
-          color,
+}
 
-          cantidad:1
 
-        }
 
-      ];
+return [
 
+...actual,
 
+{
 
-    });
+...producto,
 
+cantidad:1
 
+}
 
-  };
+];
 
 
+});
 
 
 
 
+// mensaje flotante
 
+setMensajeCarrito(
 
-  const eliminarCarrito = (id)=>{
+`✅ ${producto.nombre} agregado al carrito`
 
+);
 
-    setCarrito((actual)=>
 
-      actual.filter(
 
-        (producto)=>
+// quitar mensaje después de 3 segundos
 
-        producto.id !== id
+setTimeout(()=>{
 
-      )
 
-    );
+setMensajeCarrito("");
 
 
-  };
+},3000);
 
 
 
+};
 
 
 
 
-  const cambiarCantidad = (id,cantidad)=>{
 
 
-    setCarrito((actual)=>
 
-      actual.map((producto)=>
 
-        producto.id === id
+// eliminar producto
 
-        ?
+const eliminarCarrito = (id)=>{
 
-        {
 
-          ...producto,
+setCarrito((actual)=>
 
-          cantidad:cantidad < 1 ? 1 : cantidad
 
-        }
+actual.filter(
 
-        :
+(producto)=>producto.id !== id
 
-        producto
+)
 
 
-      )
+);
 
-    );
 
+};
 
-  };
 
 
 
 
 
 
-  return (
 
-    <CartContext.Provider
+// cambiar cantidad
 
-      value={{
+const cambiarCantidad = (id,cantidad)=>{
 
-        carrito,
 
-        agregarCarrito,
+setCarrito((actual)=>
 
-        eliminarCarrito,
 
-        cambiarCantidad
+actual.map((producto)=>
 
-      }}
 
-    >
+producto.id === id
 
-      {children}
+?
 
-    </CartContext.Provider>
+{
 
+...producto,
 
-  );
+cantidad:cantidad < 1 ? 1 : cantidad
+
+}
+
+:
+
+producto
+
+
+)
+
+
+);
+
+
+};
+
+
+
+
+
+
+
+
+// vaciar carrito
+
+const limpiarCarrito = ()=>{
+
+
+setCarrito([]);
+
+
+};
+
+
+
+
+
+
+
+
+return(
+
+
+<CartContext.Provider
+
+
+value={{
+
+carrito,
+
+agregarCarrito,
+
+eliminarCarrito,
+
+cambiarCantidad,
+
+limpiarCarrito,
+
+mensajeCarrito
+
+}}
+
+
+
+>
+
+
+{children}
+
+
+</CartContext.Provider>
+
+
+);
 
 
 }
@@ -226,8 +284,12 @@ export function CartProvider({ children }) {
 
 
 
+
+
 export function useCart(){
 
-  return useContext(CartContext);
+
+return useContext(CartContext);
+
 
 }
