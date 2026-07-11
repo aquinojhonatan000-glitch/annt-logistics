@@ -14,7 +14,7 @@ const destacados = productos?.slice(0,4) || [];
 
 
 
-const categorias=[
+const categorias = [
 
 {
 nombre:"Tecnología",
@@ -52,12 +52,11 @@ icono:"💄"
 
 return (
 
-
 <main className="min-h-screen px-6 py-10">
 
 
-
 {/* HERO */}
+
 
 <section className="
 text-center
@@ -84,7 +83,7 @@ ANNT LOGISTICS
 <h2 className="
 text-4xl
 font-bold
-mb-4
+mb-5
 ">
 
 Compra fácil.
@@ -121,11 +120,8 @@ mt-8
 
 
 <Link
-
 href="/productos"
-
 className="btn-gold"
-
 >
 
 🛒 Ver productos
@@ -168,6 +164,8 @@ Comprar ahora
 
 
 
+
+
 {/* PRODUCTOS DESTACADOS */}
 
 
@@ -196,7 +194,7 @@ gap-6
 
 {
 
-destacados.map((producto)=>(
+destacados.map((producto:any)=>(
 
 
 <div
@@ -328,7 +326,9 @@ hover:[animation-play-state:paused]
 ">
 
 
-{[...categorias,...categorias].map((cat,index)=>(
+{
+
+[...categorias,...categorias].map((cat,index)=>(
 
 
 <div
@@ -375,15 +375,15 @@ font-bold
 </div>
 
 
-))}
+))
 
+}
 
 
 </div>
 
 
 </section>
-
 
 
 
@@ -431,7 +431,6 @@ Trabajamos para llevar tus productos hasta donde estés.
 
 
 </main>
-
 
 );
 
