@@ -11,11 +11,9 @@ usuario,
 actualizarUsuario
 }=useUser();
 
-
 const {
 pedidos
 }=useOrders();
-
 
 
 
@@ -35,52 +33,39 @@ direccion: usuario?.direccion || ""
 
 
 
-
-
 if(!usuario){
 
 return(
+<div className="p-10 text-center">
 
-<main className="min-h-screen bg-[#111] text-white flex items-center justify-center p-8">
-
-<div className="bg-[#181818] p-8 rounded-xl text-center">
-
-<h1 className="text-3xl font-bold mb-5">
-
+<h2 className="text-2xl font-bold">
 👤 No has iniciado sesión
-
-</h1>
-
+</h2>
 
 <a
-
 href="/login"
-
-className="bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
-
+className="
+inline-block
+mt-5
+bg-[#f5b800]
+text-black
+px-6
+py-3
+rounded-xl
+font-bold
+"
 >
-
 Iniciar sesión
-
 </a>
 
-
 </div>
-
-</main>
-
 );
 
 }
 
 
 
-
-
-
-
 const guardar=()=>{
-
 
 actualizarUsuario({
 
@@ -90,16 +75,9 @@ actualizarUsuario({
 
 });
 
-
 setEditar(false);
 
-
 };
-
-
-
-
-
 
 
 
@@ -107,10 +85,8 @@ setEditar(false);
 
 const misPedidos = pedidos.filter((pedido)=>{
 
-
 const correoPedido =
 pedido.cliente?.correo?.toLowerCase();
-
 
 const correoUsuario =
 usuario.correo?.toLowerCase();
@@ -120,8 +96,6 @@ usuario.correo?.toLowerCase();
 const telefonoPedido =
 pedido.cliente?.telefono;
 
-
-
 const telefonoUsuario =
 usuario.telefono;
 
@@ -129,8 +103,6 @@ usuario.telefono;
 
 const nombrePedido =
 pedido.cliente?.nombre?.toLowerCase();
-
-
 
 const nombreUsuario =
 usuario.nombre?.toLowerCase();
@@ -151,42 +123,43 @@ nombrePedido === nombreUsuario
 
 );
 
-
 });
-
-
-
-
-
-
-
 
 
 
 return(
 
-
-<main className="min-h-screen bg-[#111] text-white p-8">
-
+<main className="px-6 py-10">
 
 
-<h1 className="text-4xl font-bold mb-8">
-
+<h1 className="text-4xl font-bold mb-10">
 👤 Mi Perfil ANNT
-
 </h1>
 
 
 
+<div className="
+bg-[#181818]
+border
+border-[#333]
+rounded-2xl
+p-6
+mb-10
+">
 
 
-<section className="bg-[#181818] border border-[#333] rounded-xl p-6">
-
-
-<div className="flex items-center gap-5 mb-6">
-
-
-<div className="w-24 h-24 rounded-full bg-[#f5b800] text-black flex items-center justify-center text-5xl font-bold">
+<div className="
+w-20
+h-20
+rounded-full
+bg-[#f5b800]
+text-black
+flex
+items-center
+justify-center
+text-4xl
+font-bold
+">
 
 {usuario.nombre?.charAt(0) || "U"}
 
@@ -194,41 +167,31 @@ return(
 
 
 
-<h2 className="text-3xl font-bold">
-
+<h2 className="text-2xl font-bold mt-4">
 {usuario.nombre}
-
 </h2>
 
 
 
-</div>
-
-
-
-
-
-
-
-
-
 {
-
 editar ?
-
 
 (
 
-
 <>
 
-
 <input
-
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
-
+className="
+w-full
+bg-[#111]
+border
+border-[#333]
+p-3
+rounded-lg
+mb-4
+mt-5
+"
 value={datos.nombre}
-
 onChange={(e)=>
 
 setDatos({
@@ -240,18 +203,21 @@ nombre:e.target.value
 })
 
 }
-
 />
 
 
 
-
 <input
-
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
-
+className="
+w-full
+bg-[#111]
+border
+border-[#333]
+p-3
+rounded-lg
+mb-4
+"
 value={datos.telefono}
-
 onChange={(e)=>
 
 setDatos({
@@ -263,19 +229,21 @@ telefono:e.target.value
 })
 
 }
-
 />
 
 
 
-
-
 <input
-
-className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
-
+className="
+w-full
+bg-[#111]
+border
+border-[#333]
+p-3
+rounded-lg
+mb-4
+"
 value={datos.direccion}
-
 onChange={(e)=>
 
 setDatos({
@@ -287,10 +255,7 @@ direccion:e.target.value
 })
 
 }
-
 />
-
-
 
 
 
@@ -298,7 +263,14 @@ direccion:e.target.value
 
 onClick={guardar}
 
-className="bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
+className="
+bg-[#f5b800]
+text-black
+px-6
+py-3
+rounded-xl
+font-bold
+"
 
 >
 
@@ -307,46 +279,30 @@ className="bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 </button>
 
 
-
 </>
-
 
 )
 
 
-
 :
-
 
 (
 
-
 <>
 
-
-<p>
-
+<p className="mt-5">
 📧 {usuario.correo}
-
 </p>
 
 
-
 <p>
-
 📞 {usuario.telefono || "Sin teléfono"}
-
 </p>
-
 
 
 <p>
-
 📍 {usuario.direccion || "Sin dirección"}
-
 </p>
-
-
 
 
 
@@ -354,7 +310,15 @@ className="bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 
 onClick={()=>setEditar(true)}
 
-className="mt-5 bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
+className="
+mt-5
+bg-[#f5b800]
+text-black
+px-6
+py-3
+rounded-xl
+font-bold
+"
 
 >
 
@@ -363,38 +327,21 @@ className="mt-5 bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 </button>
 
 
-
 </>
-
 
 )
 
 }
 
 
+</div>
 
 
 
 
-</section>
-
-
-
-
-
-
-
-
-
-<section className="mt-10">
-
-
-<h2 className="text-3xl font-bold mb-5">
-
+<h2 className="text-3xl font-bold mb-6">
 📦 Mis pedidos
-
 </h2>
-
 
 
 
@@ -406,13 +353,9 @@ misPedidos.length === 0 ?
 
 (
 
-
 <p className="text-gray-400">
-
 No tienes pedidos todavía.
-
 </p>
-
 
 )
 
@@ -422,78 +365,141 @@ No tienes pedidos todavía.
 
 (
 
-
 misPedidos.map((pedido)=>(
-
-
 
 <div
 
 key={pedido.id}
 
-className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
+className="
+bg-[#181818]
+border
+border-[#333]
+rounded-2xl
+p-6
+mb-8
+"
 
 >
 
 
-
 <h3 className="text-xl font-bold">
-
 📦 Pedido #{pedido.numero_pedido || pedido.id}
-
 </h3>
 
 
 
 <p className="mt-3">
-
 📅 Fecha:
-
 {" "}
-
 {new Date(pedido.fecha).toLocaleDateString()}
-
 </p>
 
 
 
-
-<p className="text-[#f5b800] font-bold mt-3">
-
-🚚 Estado:
-
+<p className="mt-2 text-[#f5b800] font-bold">
+🚚 Estado actual:
 {" "}
-
 {pedido.estado}
-
 </p>
 
 
 
-
-<p className="text-[#f5b800] font-bold">
-
+<p>
 ⏳ Entrega:
-
 {" "}
-
 {pedido.tiempo_entrega || "6-15 días hábiles"}
-
 </p>
 
 
 
 
 
+{/* SEGUIMIENTO */}
 
-<h3 className="text-xl font-bold mt-5">
+{
 
-🛒 Productos
+pedido.historial_estado &&
 
+<div className="
+mt-6
+bg-[#111]
+border
+border-[#333]
+rounded-xl
+p-5
+">
+
+
+<h3 className="text-xl font-bold mb-5">
+📍 Seguimiento del pedido
 </h3>
 
 
 
+{
+
+pedido.historial_estado.map((historia,index)=>(
+
+<div
+
+key={index}
+
+className="
+border-l-2
+border-[#f5b800]
+pl-4
+mb-5
+"
+
+>
+
+
+<p className="
+font-bold
+text-[#f5b800]
+">
+
+{historia.estado}
+
+</p>
+
+
+<p>
+📅 {historia.fecha}
+</p>
+
+
+<p>
+🕒 {historia.hora}
+</p>
+
+
+<p className="text-gray-400 text-sm">
+{historia.descripcion}
+</p>
+
+
+</div>
+
+))
+
+}
+
+
+
+</div>
+
+}
+
+
+
+
+
+
+<h3 className="text-xl font-bold mt-8 mb-4">
+🛒 Productos
+</h3>
 
 
 
@@ -506,10 +512,19 @@ pedido.productos?.map((producto,index)=>(
 
 key={index}
 
-className="flex gap-4 bg-[#111] border border-[#333] rounded-xl p-4 mt-4"
+className="
+flex
+gap-4
+items-center
+bg-[#111]
+border
+border-[#333]
+rounded-xl
+p-4
+mb-4
+"
 
 >
-
 
 
 <img
@@ -518,31 +533,26 @@ src={producto.imagen}
 
 alt={producto.nombre}
 
-className="w-24 h-24 object-cover rounded-lg"
+className="
+w-24
+h-24
+object-cover
+rounded-lg
+"
 
 />
 
 
-
-
-
 <div>
 
-
 <p className="font-bold">
-
 {producto.nombre}
-
 </p>
-
 
 
 <p>
-
 Cantidad: {producto.cantidad}
-
 </p>
-
 
 
 
@@ -551,13 +561,10 @@ Cantidad: {producto.cantidad}
 producto.talla &&
 
 <p>
-
 👕 Talla: {producto.talla}
-
 </p>
 
 }
-
 
 
 
@@ -566,22 +573,17 @@ producto.talla &&
 producto.color &&
 
 <p>
-
 🎨 Color: {producto.color}
-
 </p>
 
 }
 
 
 
-
 </div>
 
 
-
 </div>
-
 
 
 ))
@@ -591,108 +593,31 @@ producto.color &&
 
 
 
-
-
-<p className="text-2xl font-bold mt-5">
+<p className="text-2xl font-bold text-[#f5b800] mt-5">
 
 💰 Total:
 
 {" "}
 
-<span className="text-[#f5b800]">
-
 S/ {Number(pedido.total).toFixed(2)}
 
-</span>
-
-
 </p>
-
-
-
-
-
-
-
-{
-
-pedido.estado==="Esperando pago" &&
-
-<p className="mt-4">
-
-💳 Estamos verificando tu pago
-
-</p>
-
-}
-
-
-
-{
-
-pedido.estado==="Preparando pedido" &&
-
-<p className="mt-4">
-
-📦 Tu pedido está siendo preparado
-
-</p>
-
-}
-
-
-
-{
-
-pedido.estado==="En camino" &&
-
-<p className="mt-4">
-
-🚚 Tu pedido está en camino
-
-</p>
-
-}
-
-
-
-{
-
-pedido.estado==="Entregado" &&
-
-<p className="mt-4">
-
-✅ Pedido entregado correctamente
-
-</p>
-
-}
 
 
 
 </div>
 
 
-
 ))
 
-
 )
-
 
 }
 
 
 
-</section>
-
-
-
-
 </main>
 
-
 );
-
 
 }
