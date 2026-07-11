@@ -4,9 +4,7 @@ import { useState } from "react";
 import { useUser } from "@/context/UserContext";
 import { useOrders } from "@/context/OrderContext";
 
-
 export default function Perfil(){
-
 
 const {
 usuario,
@@ -14,11 +12,9 @@ actualizarUsuario
 }=useUser();
 
 
-
 const {
 pedidos
 }=useOrders();
-
 
 
 
@@ -38,8 +34,6 @@ direccion: usuario?.direccion || ""
 
 
 
-
-
 if(!usuario){
 
 return(
@@ -49,9 +43,7 @@ return(
 <div className="bg-[#181818] p-8 rounded-xl text-center">
 
 <h1 className="text-3xl font-bold mb-5">
-
 👤 No has iniciado sesión
-
 </h1>
 
 
@@ -82,7 +74,6 @@ Iniciar sesión
 
 const guardar=()=>{
 
-
 actualizarUsuario({
 
 ...usuario,
@@ -94,9 +85,7 @@ actualizarUsuario({
 
 setEditar(false);
 
-
 };
-
 
 
 
@@ -106,7 +95,7 @@ const misPedidos = pedidos.filter(
 
 (pedido)=>
 
-pedido.cliente?.telefono === usuario.telefono
+pedido.cliente?.correo?.toLowerCase() === usuario.correo?.toLowerCase()
 
 );
 
@@ -132,8 +121,7 @@ return(
 
 
 
-
-<section className="bg-[#181818] border border-[#333] rounded-2xl p-6 max-w-xl">
+<section className="bg-[#181818] border border-[#333] rounded-xl p-6">
 
 
 
@@ -142,9 +130,7 @@ return(
 
 <div className="w-28 h-28 rounded-full bg-[#f5b800] text-black flex items-center justify-center text-5xl font-bold">
 
-
 {usuario.nombre?.charAt(0) || "U"}
-
 
 </div>
 
@@ -157,10 +143,7 @@ return(
 </h2>
 
 
-
 </div>
-
-
 
 
 
@@ -168,6 +151,7 @@ return(
 
 {
 editar ?
+
 
 (
 
@@ -198,7 +182,6 @@ nombre:e.target.value
 
 
 
-
 <input
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
@@ -218,7 +201,6 @@ telefono:e.target.value
 }
 
 />
-
 
 
 
@@ -246,7 +228,6 @@ direccion:e.target.value
 
 
 
-
 <button
 
 onClick={guardar}
@@ -268,6 +249,7 @@ className="bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 
 
 :
+
 
 (
 
@@ -298,7 +280,6 @@ className="bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 
 
 
-
 <button
 
 onClick={()=>setEditar(true)}
@@ -312,19 +293,17 @@ className="mt-5 bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 </button>
 
 
+
 </>
 
 
 )
-
 
 }
 
 
 
 </section>
-
-
 
 
 
@@ -344,12 +323,13 @@ className="mt-5 bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 
 
 
-
 {
+
 misPedidos.length===0 ?
 
 
 (
+
 
 <p className="text-gray-400">
 
@@ -381,7 +361,7 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 
 
 
-<h3 className="text-2xl font-bold">
+<h3 className="text-xl font-bold">
 
 📦 Pedido #{pedido.numero_pedido || pedido.id}
 
@@ -393,7 +373,9 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 <p className="mt-3">
 
 📅 Fecha:
+
 {" "}
+
 {new Date(pedido.fecha).toLocaleDateString()}
 
 </p>
@@ -401,7 +383,8 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 
 
 
-<p className="mt-3 text-[#f5b800] font-bold">
+
+<p className="text-[#f5b800] font-bold mt-3">
 
 🚚 Estado:
 
@@ -414,7 +397,8 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 
 
 
-<p className="text-[#f5b800] font-bold">
+
+<p className="text-[#f5b800] font-bold mt-2">
 
 ⏳ Entrega:
 
@@ -429,7 +413,8 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 
 
 
-<h3 className="text-xl font-bold mt-6">
+
+<h3 className="text-xl font-bold mt-5">
 
 🛒 Productos
 
@@ -439,10 +424,8 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 
 
 
-<div className="grid gap-4 mt-4">
-
-
 {
+
 pedido.productos?.map((producto,index)=>(
 
 
@@ -451,9 +434,10 @@ pedido.productos?.map((producto,index)=>(
 
 key={index}
 
-className="flex gap-4 bg-[#111] p-4 rounded-xl border border-[#333]"
+className="flex gap-4 bg-[#111] border border-[#333] rounded-xl p-4 mt-4"
 
 >
+
 
 
 
@@ -474,11 +458,12 @@ className="w-24 h-24 object-cover rounded-lg"
 <div>
 
 
-<p className="font-bold text-lg">
+<p className="font-bold">
 
 {producto.nombre}
 
 </p>
+
 
 
 <p>
@@ -489,7 +474,9 @@ Cantidad: {producto.cantidad}
 
 
 
+
 {
+
 producto.talla &&
 
 <p>
@@ -503,6 +490,7 @@ producto.talla &&
 
 
 {
+
 producto.color &&
 
 <p>
@@ -515,9 +503,7 @@ producto.color &&
 
 
 
-
 </div>
-
 
 
 </div>
@@ -526,28 +512,23 @@ producto.color &&
 
 ))
 
+
 }
 
 
-</div>
 
 
 
-
-
-
-<p className="text-2xl font-bold mt-6">
+<p className="text-2xl font-bold mt-5">
 
 💰 Total:
 
-<span className="text-[#f5b800]">
+{" "}
 
-{" "}S/ {Number(pedido.total).toFixed(2)}
-
-</span>
-
+S/ {Number(pedido.total).toFixed(2)}
 
 </p>
+
 
 
 
@@ -557,28 +538,39 @@ producto.color &&
 
 
 {
+
 pedido.estado==="Esperando pago" &&
+
 "💳 Estamos verificando tu pago"
 
 }
 
 
+
 {
+
 pedido.estado==="Preparando pedido" &&
+
 "📦 Tu pedido está siendo preparado"
 
 }
 
 
+
 {
+
 pedido.estado==="En camino" &&
+
 "🚚 Tu pedido está en camino"
 
 }
 
 
+
 {
+
 pedido.estado==="Entregado" &&
+
 "✅ Pedido entregado correctamente"
 
 }
@@ -599,7 +591,6 @@ pedido.estado==="Entregado" &&
 
 )
 
-
 }
 
 
@@ -610,11 +601,9 @@ pedido.estado==="Entregado" &&
 
 
 
-
 </main>
 
 
 );
-
 
 }

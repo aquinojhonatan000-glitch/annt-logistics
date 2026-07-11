@@ -6,308 +6,121 @@ import { supabase } from "@/lib/supabase";
 const OrderContext = createContext();
 
 
-
 export function OrderProvider({ children }) {
 
 
-  const [pedidos, setPedidos] = useState([]);
+const [pedidos, setPedidos] = useState([]);
 
 
 
+// cargar pedidos desde Supabase
 
+const cargarPedidos = async()=>{
 
-  // Cargar pedidos
 
-  const cargarPedidos = async () => {
+const {data,error}=await supabase
 
+.from("pedidos")
 
-    const { data, error } = await supabase
+.select("*")
 
-      .from("pedidos")
+.order("created_at",{ascending:false});
 
-      .select("*")
 
-      .order("id", { ascending: false });
 
+if(error){
 
+console.log("ERROR CARGANDO PEDIDOS:",error);
 
-    if (error) {
+return;
 
-      console.log("ERROR PEDIDOS:", error);
+}
 
-      return;
 
-    }
 
+setPedidos(data || []);
 
 
-    setPedidos(data || []);
+};
 
 
-  };
 
 
+useEffect(()=>{
 
 
+cargarPedidos();
 
 
+},[]);
 
-  useEffect(() => {
 
-    cargarPedidos();
 
-  }, []);
 
 
+// crear pedido
 
+const agregarPedido = async(pedido)=>{
 
 
+const {data,error}=await supabase
 
+.from("pedidos")
 
-  // Crear pedido
+.insert([{
 
-  const agregarPedido = async (pedido) => {
 
+numero_pedido:pedido.id,
 
 
-    const { data, error } = await supabase
+cliente:{
 
-      .from("pedidos")
+...pedido.cliente,
 
-      .insert([
+correo:pedido.cliente.correo
 
-        {
+},
 
-          numero_pedido: pedido.id,
 
-          cliente: pedido.cliente,
+productos:pedido.productos,
 
-          productos: pedido.productos,
 
-          total: pedido.total,
+total:pedido.total,
 
-          estado: pedido.estado,
 
-          pago: pedido.pago,
+estado:"Esperando pago",
 
-          comprobante: pedido.comprobante || "",
 
-          fecha: pedido.fecha,
+pago:pedido.pago,
 
-          tiempo_entrega: "Pendiente"
 
-        }
+comprobante:pedido.comprobante || "",
 
-      ])
 
-      .select();
+fecha:pedido.fecha,
 
 
+tiempo_entrega:"6-15 días hábiles"
 
 
+}])
 
-    if (error) {
+.select();
 
-      console.log("ERROR GUARDANDO PEDIDO:", error);
 
-      alert("Error guardando pedido");
 
-      return;
 
-    }
 
+if(error){
 
 
+console.log("ERROR GUARDANDO PEDIDO:",error);
 
 
-    setPedidos((prev) => [
+alert("Error guardando pedido");
 
-      data[0],
 
-      ...prev
-
-    ]);
-
-
-
-  };
-
-
-
-
-
-
-
-
-  // Cambiar estado del pedido
-
-  const cambiarEstado = async (id, estado) => {
-
-
-
-    const { error } = await supabase
-
-      .from("pedidos")
-
-      .update({
-
-        estado: estado
-
-      })
-
-      .eq("id", id);
-
-
-
-
-
-    if (error) {
-
-      console.log("ERROR CAMBIANDO ESTADO:", error);
-
-      return;
-
-    }
-
-
-
-
-
-    setPedidos((prev) =>
-
-      prev.map((pedido) =>
-
-        pedido.id === id
-
-        ?
-
-        {
-
-          ...pedido,
-
-          estado: estado
-
-        }
-
-        :
-
-        pedido
-
-      )
-
-    );
-
-
-  };
-
-
-
-
-
-
-
-
-
-  // Cambiar tiempo de entrega
-
-  const cambiarTiempoEntrega = async (id, tiempo) => {
-
-
-
-    const { error } = await supabase
-
-      .from("pedidos")
-
-      .update({
-
-        tiempo_entrega: tiempo
-
-      })
-
-      .eq("id", id);
-
-
-
-
-
-    if (error) {
-
-      console.log("ERROR TIEMPO ENTREGA:", error);
-
-      return;
-
-    }
-
-
-
-
-
-    setPedidos((prev) =>
-
-      prev.map((pedido) =>
-
-        pedido.id === id
-
-        ?
-
-        {
-
-          ...pedido,
-
-          tiempo_entrega: tiempo
-
-        }
-
-        :
-
-        pedido
-
-      )
-
-    );
-
-
-
-  };
-
-
-
-
-
-
-
-  return (
-
-
-    <OrderContext.Provider
-
-      value={{
-
-
-        pedidos,
-
-        agregarPedido,
-
-        cambiarEstado,
-
-        cambiarTiempoEntrega,
-
-        cargarPedidos
-
-
-      }}
-
-
-    >
-
-
-      {children}
-
-
-    </OrderContext.Provider>
-
-
-  );
+return;
 
 
 }
@@ -315,13 +128,184 @@ export function OrderProvider({ children }) {
 
 
 
+setPedidos((prev)=>[
+
+data[0],
+
+...prev
+
+]);
 
 
 
-export function useOrders() {
+};
 
 
-  return useContext(OrderContext);
 
+
+
+
+
+
+// cambiar estado
+
+const cambiarEstado=async(id,estado)=>{
+
+
+const {error}=await supabase
+
+.from("pedidos")
+
+.update({
+
+estado
+
+})
+
+.eq("id",id);
+
+
+
+if(error){
+
+console.log(error);
+
+return;
+
+}
+
+
+
+setPedidos((prev)=>
+
+prev.map((pedido)=>
+
+pedido.id===id
+
+?
+
+{
+
+...pedido,
+
+estado
+
+}
+
+:
+
+pedido
+
+)
+
+);
+
+
+};
+
+
+
+
+
+
+
+
+
+// cambiar tiempo
+
+const cambiarTiempoEntrega=async(id,tiempo)=>{
+
+
+const {error}=await supabase
+
+.from("pedidos")
+
+.update({
+
+tiempo_entrega:tiempo
+
+})
+
+.eq("id",id);
+
+
+
+if(error){
+
+console.log(error);
+
+return;
+
+}
+
+
+
+setPedidos((prev)=>
+
+prev.map((pedido)=>
+
+pedido.id===id
+
+?
+
+{
+
+...pedido,
+
+tiempo_entrega:tiempo
+
+}
+
+:
+
+pedido
+
+)
+
+);
+
+
+};
+
+
+
+
+
+
+return(
+
+<OrderContext.Provider
+
+value={{
+
+pedidos,
+
+agregarPedido,
+
+cambiarEstado,
+
+cambiarTiempoEntrega,
+
+cargarPedidos
+
+}}
+
+>
+
+{children}
+
+</OrderContext.Provider>
+
+);
+
+
+}
+
+
+
+
+export function useOrders(){
+
+return useContext(OrderContext);
 
 }
