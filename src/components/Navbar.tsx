@@ -5,119 +5,290 @@ import Image from "next/image";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 
+
 export default function Navbar(){
 
-  const {
-    usuario,
-    cerrarSesion
-  } = useUser();
-
-  const router = useRouter();
-
-  const salir = ()=>{
-    cerrarSesion();
-    router.push("/login");
-  };
-
-  return (
-
-    <nav className="flex items-center justify-between px-6 py-4 bg-[#181818] shadow">
-
-      {/* LOGO */}
-      <Link href="/" className="flex items-center">
-        <Image
-          src="/logo.png"
-          alt="ANNT LOGISTICS"
-          width={140}
-          height={70}
-          className="w-28 md:w-36 h-auto object-contain"
-          priority
-        />
-      </Link>
+const {
+usuario,
+cerrarSesion
+} = useUser();
 
 
-      {/* MENÚ */}
-      <div className="flex items-center gap-6 text-white font-semibold">
-
-        <Link 
-          href="/"
-          className="hover:text-[#f5b800] transition"
-        >
-          Inicio
-        </Link>
+const router = useRouter();
 
 
-        <Link 
-          href="/productos"
-          className="hover:text-[#f5b800] transition"
-        >
-          Productos
-        </Link>
+const salir = ()=>{
+
+cerrarSesion();
+
+router.push("/login");
+
+};
 
 
-        <Link 
-          href="/carrito"
-          className="hover:text-[#f5b800] transition"
-        >
-          Carrito
-        </Link>
+
+return (
+
+<nav className="
+sticky top-0 z-50
+w-full
+bg-[#111111]/85
+backdrop-blur-xl
+border-b border-[#333]
+shadow-[0_5px_25px_rgba(0,0,0,0.4)]
+">
 
 
-        <Link 
-          href="/contacto"
-          className="hover:text-[#f5b800] transition"
-        >
-          Contacto
-        </Link>
+<div className="
+flex
+items-center
+justify-between
+px-6
+py-4
+max-w-7xl
+mx-auto
+">
 
 
-        {
-          usuario ? (
-            <>
+{/* LOGO */}
 
-              <Link
-                href="/perfil"
-                className="bg-white text-black px-4 py-2 rounded-xl hover:bg-gray-200 transition"
-              >
-                👤 {usuario.nombre}
-              </Link>
+<Link 
+href="/"
+className="
+flex
+items-center
+hover:scale-105
+transition
+duration-300
+"
+>
+
+<Image
+
+src="/logo.png"
+
+alt="ANNT LOGISTICS"
+
+width={140}
+
+height={70}
+
+className="
+w-32
+md:w-40
+h-auto
+object-contain
+"
+
+priority
+
+/>
+
+</Link>
 
 
-              {
-                usuario.rol === "admin" && (
-                  <Link
-                    href="/admin"
-                    className="text-[#f5b800] font-bold"
-                  >
-                    ⚙️ Admin
-                  </Link>
-                )
-              }
 
 
-              <button
-                onClick={salir}
-                className="bg-red-500 text-white px-4 py-2 rounded-xl font-bold hover:bg-red-600 transition"
-              >
-                Cerrar sesión
-              </button>
+{/* MENÚ */}
 
-            </>
-          ) : (
+<div className="
+flex
+items-center
+gap-5
+md:gap-8
+text-gray-300
+font-semibold
+">
 
-            <Link
-              href="/login"
-              className="bg-[#f5b800] text-black px-5 py-2 rounded-xl font-bold hover:bg-yellow-400 transition"
-            >
-              Iniciar sesión
-            </Link>
 
-          )
-        }
+<Link 
+href="/"
+className="
+hover:text-[#f5b800]
+transition
+duration-300
+"
+>
+Inicio
+</Link>
 
-      </div>
 
-    </nav>
 
-  );
+<Link 
+href="/productos"
+className="
+hover:text-[#f5b800]
+transition
+duration-300
+"
+>
+Productos
+</Link>
+
+
+
+<Link 
+href="/carrito"
+className="
+hover:text-[#f5b800]
+transition
+duration-300
+"
+>
+Carrito
+</Link>
+
+
+
+<Link 
+href="/contacto"
+className="
+hover:text-[#f5b800]
+transition
+duration-300
+"
+>
+Contacto
+</Link>
+
+
+
+
+
+{
+usuario ? (
+
+<>
+
+
+<Link
+
+href="/perfil"
+
+className="
+bg-[#181818]
+border
+border-[#333]
+hover:border-[#f5b800]
+text-white
+px-4
+py-2
+rounded-xl
+transition
+duration-300
+"
+
+>
+
+👤 {usuario.nombre}
+
+</Link>
+
+
+
+
+
+{
+
+usuario.rol === "admin" && (
+
+<Link
+
+href="/admin"
+
+className="
+text-[#f5b800]
+font-bold
+hover:scale-105
+transition
+"
+
+>
+
+⚙️ Admin
+
+</Link>
+
+)
+
+}
+
+
+
+
+
+<button
+
+onClick={salir}
+
+className="
+bg-red-600
+hover:bg-red-500
+text-white
+px-4
+py-2
+rounded-xl
+font-bold
+transition
+duration-300
+"
+
+>
+
+Cerrar sesión
+
+</button>
+
+
+
+</>
+
+
+):(
+
+
+
+<Link
+
+href="/login"
+
+className="
+bg-[#f5b800]
+hover:bg-[#ffd700]
+text-black
+px-5
+py-2
+rounded-xl
+font-bold
+shadow-[0_0_25px_rgba(245,184,0,0.35)]
+transition
+duration-300
+"
+
+>
+
+Iniciar sesión
+
+</Link>
+
+
+
+)
+
+}
+
+
+
+</div>
+
+
+
+</div>
+
+
+</nav>
+
+
+);
+
 }

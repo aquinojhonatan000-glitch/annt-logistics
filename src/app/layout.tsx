@@ -21,7 +21,6 @@ const geistMono = Geist_Mono({
 });
 
 
-
 export const metadata: Metadata = {
 
   title: "ANNT LOGISTICS",
@@ -43,54 +42,70 @@ export default function RootLayout({
 }>) {
 
 
-  return (
+return (
+
+<html lang="es">
 
 
-    <html lang="es">
+  <body
+
+    className={`
+      ${geistSans.variable}
+      ${geistMono.variable}
+      antialiased
+      bg-[#111111]
+      text-white
+      min-h-screen
+    `}
+
+  >
 
 
-      <body
-
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-
-      >
+    <ProductProvider>
 
 
-        <ProductProvider>
+      <CartProvider>
 
 
-          <CartProvider>
+        <OrderProvider>
 
 
-            <OrderProvider>
+          <UserProvider>
 
 
-              <UserProvider>
+            <Navbar />
 
 
-                <Navbar />
+            <main className="
+              min-h-screen
+              bg-gradient-to-b
+              from-[#111111]
+              via-[#181818]
+              to-[#0a0a0a]
+            ">
 
-                {children}
+              {children}
 
-
-              </UserProvider>
-
-
-            </OrderProvider>
-
-
-          </CartProvider>
-
-
-        </ProductProvider>
+            </main>
 
 
-      </body>
+          </UserProvider>
 
 
-    </html>
+        </OrderProvider>
 
 
-  );
+      </CartProvider>
+
+
+    </ProductProvider>
+
+
+  </body>
+
+
+</html>
+
+);
 
 }
