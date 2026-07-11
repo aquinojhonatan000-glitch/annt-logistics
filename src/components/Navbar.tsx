@@ -50,99 +50,110 @@ export default function Navbar() {
         />
       </Link>
 
+{/* MENÚ */}
+<div className="flex items-center gap-6">
 
-      {/* MENÚ */}
+  <Link 
+    href="/"
+    className="text-white hover:text-[#f5b800] transition"
+  >
+    Inicio
+  </Link>
 
-      <div className="flex items-center gap-4">
+  <Link 
+    href="/productos"
+    className="text-white hover:text-[#f5b800] transition"
+  >
+    Productos
+  </Link>
+
+  <Link 
+    href="/carrito"
+    className="text-white hover:text-[#f5b800] transition"
+  >
+    Carrito
+  </Link>
+
+  <Link 
+    href="/contacto"
+    className="text-white hover:text-[#f5b800] transition"
+  >
+    Contacto
+  </Link>
+
+
+  {
+    usuario ? (
+
+      <>
+        <Link
+          href="/perfil"
+          className="
+          bg-[#181818]
+          border
+          border-[#333]
+          hover:border-[#f5b800]
+          text-white
+          px-4
+          py-2
+          rounded-xl
+          "
+        >
+          👤 {usuario.nombre}
+        </Link>
+
 
         {
-          usuario ? (
-
-            <>
-
-              <Link
-                href="/perfil"
-                className="
-                  bg-[#181818]
-                  border
-                  border-[#333]
-                  hover:border-[#f5b800]
-                  text-white
-                  px-4
-                  py-2
-                  rounded-xl
-                  transition
-                  duration-300
-                "
-              >
-                👤 {usuario.nombre}
-              </Link>
-
-
-              {
-                usuario.rol === "admin" && (
-
-                  <Link
-                    href="/admin"
-                    className="
-                      text-[#f5b800]
-                      font-bold
-                      hover:scale-105
-                      transition
-                    "
-                  >
-                    ⚙️ Admin
-                  </Link>
-
-                )
-              }
-
-
-              <button
-                onClick={salir}
-                className="
-                  bg-red-600
-                  hover:bg-red-500
-                  text-white
-                  px-4
-                  py-2
-                  rounded-xl
-                  font-bold
-                  transition
-                  duration-300
-                "
-              >
-                Cerrar sesión
-              </button>
-
-
-            </>
-
-          ) : (
-
+          usuario.rol === "admin" && (
             <Link
-              href="/login"
+              href="/admin"
               className="
-                bg-[#f5b800]
-                hover:bg-[#ffd700]
-                text-black
-                px-5
-                py-2
-                rounded-xl
-                font-bold
-                shadow-[0_0_25px_rgba(245,184,0,0.35)]
-                transition
-                duration-300
+              text-[#f5b800]
+              font-bold
               "
             >
-              Iniciar sesión
+              ⚙️ Admin
             </Link>
-
           )
-
         }
 
-      </div>
+
+        <button
+          onClick={salir}
+          className="
+          bg-red-600
+          text-white
+          px-4
+          py-2
+          rounded-xl
+          "
+        >
+          Cerrar sesión
+        </button>
+
+      </>
+
+    ) : (
+
+      <Link
+        href="/login"
+        className="
+        bg-[#f5b800]
+        text-black
+        px-5
+        py-2
+        rounded-xl
+        font-bold
+        "
+      >
+        Iniciar sesión
+      </Link>
+
+    )
+  }
+
+</div>
+     
 
     </nav>
 
