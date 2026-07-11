@@ -18,6 +18,7 @@ pedidos
 
 
 
+
 const [editar,setEditar]=useState(false);
 
 
@@ -77,6 +78,7 @@ Iniciar sesión
 
 
 
+
 const guardar=()=>{
 
 
@@ -100,19 +102,38 @@ setEditar(false);
 
 
 
+
 // Buscar pedidos del cliente
 
 const misPedidos = pedidos.filter((pedido)=>{
 
 
-const correoPedido = pedido.cliente?.correo?.toLowerCase();
+const correoPedido =
+pedido.cliente?.correo?.toLowerCase();
 
-const correoUsuario = usuario.correo?.toLowerCase();
+
+const correoUsuario =
+usuario.correo?.toLowerCase();
 
 
-const telefonoPedido = pedido.cliente?.telefono;
 
-const telefonoUsuario = usuario.telefono;
+const telefonoPedido =
+pedido.cliente?.telefono;
+
+
+
+const telefonoUsuario =
+usuario.telefono;
+
+
+
+const nombrePedido =
+pedido.cliente?.nombre?.toLowerCase();
+
+
+
+const nombreUsuario =
+usuario.nombre?.toLowerCase();
 
 
 
@@ -124,10 +145,16 @@ correoPedido === correoUsuario
 
 telefonoPedido === telefonoUsuario
 
+||
+
+nombrePedido === nombreUsuario
+
 );
 
 
 });
+
+
 
 
 
@@ -148,7 +175,6 @@ return(
 👤 Mi Perfil ANNT
 
 </h1>
-
 
 
 
@@ -185,10 +211,14 @@ return(
 
 
 
+
 {
+
 editar ?
 
+
 (
+
 
 <>
 
@@ -215,6 +245,7 @@ nombre:e.target.value
 
 
 
+
 <input
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
@@ -234,6 +265,8 @@ telefono:e.target.value
 }
 
 />
+
+
 
 
 
@@ -259,6 +292,8 @@ direccion:e.target.value
 
 
 
+
+
 <button
 
 onClick={guardar}
@@ -278,9 +313,13 @@ className="bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 
 )
 
+
+
 :
 
+
 (
+
 
 <>
 
@@ -292,6 +331,7 @@ className="bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 </p>
 
 
+
 <p>
 
 📞 {usuario.telefono || "Sin teléfono"}
@@ -299,11 +339,13 @@ className="bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 </p>
 
 
+
 <p>
 
 📍 {usuario.direccion || "Sin dirección"}
 
 </p>
+
 
 
 
@@ -324,9 +366,13 @@ className="mt-5 bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 
 </>
 
+
 )
 
 }
+
+
+
 
 
 
@@ -355,10 +401,11 @@ className="mt-5 bg-[#f5b800] text-black px-6 py-3 rounded-xl font-bold"
 
 {
 
-misPedidos.length===0 ?
+misPedidos.length === 0 ?
 
 
 (
+
 
 <p className="text-gray-400">
 
@@ -439,12 +486,12 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-6"
 
 
 
-
-<h3 className="font-bold text-xl mt-5">
+<h3 className="text-xl font-bold mt-5">
 
 🛒 Productos
 
 </h3>
+
 
 
 
@@ -477,6 +524,8 @@ className="w-24 h-24 object-cover rounded-lg"
 
 
 
+
+
 <div>
 
 
@@ -496,6 +545,7 @@ Cantidad: {producto.cantidad}
 
 
 
+
 {
 
 producto.talla &&
@@ -510,6 +560,7 @@ producto.talla &&
 
 
 
+
 {
 
 producto.color &&
@@ -521,6 +572,7 @@ producto.color &&
 </p>
 
 }
+
 
 
 
@@ -540,6 +592,7 @@ producto.color &&
 
 
 
+
 <p className="text-2xl font-bold mt-5">
 
 💰 Total:
@@ -554,6 +607,8 @@ S/ {Number(pedido.total).toFixed(2)}
 
 
 </p>
+
+
 
 
 
