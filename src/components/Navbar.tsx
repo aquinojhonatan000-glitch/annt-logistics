@@ -37,37 +37,29 @@ export default function Navbar() {
 
   return (
 
-    <nav className="
+    <div className="
       flex
       items-center
       justify-between
-      px-10
-      py-3
-      mx-4
+      px-8
       mt-4
-      rounded-3xl
-      bg-white/5
-      backdrop-blur-2xl
-      border
-      border-white/10
-      shadow-[0_8px_40px_rgba(0,0,0,0.45)]
     ">
 
 
-      {/* LOGO */}
+      {/* LOGO LIBRE */}
 
       <Link href="/">
         <Image
           src="/logo.png"
           alt="ANNT LOGISTICS"
-          width={600}
-          height={200}
+          width={300}
+          height={120}
           className="
-            w-[400px]
-            md:w-[500px]
+            w-64
+            md:w-72
             h-auto
             object-contain
-            drop-shadow-[0_0_35px_rgba(245,184,0,0.5)]
+            drop-shadow-[0_0_30px_rgba(245,184,0,0.5)]
             hover:scale-105
             transition
             duration-500
@@ -78,12 +70,20 @@ export default function Navbar() {
 
 
 
-      {/* MENU */}
+      {/* BURBUJA DEL MENU */}
 
-      <div className="
+      <nav className="
         flex
         items-center
         gap-4
+        px-8
+        py-3
+        rounded-3xl
+        bg-white/5
+        backdrop-blur-2xl
+        border
+        border-white/10
+        shadow-[0_8px_40px_rgba(0,0,0,0.45)]
       ">
 
 
@@ -105,6 +105,7 @@ export default function Navbar() {
         <Link href="/contacto" className={linkStyle}>
           Contacto
         </Link>
+
 
 
         {
@@ -130,7 +131,6 @@ export default function Navbar() {
                       py-2
                       rounded-2xl
                       bg-[#f5b800]/20
-                      backdrop-blur-xl
                       border
                       border-[#f5b800]
                       text-[#f5b800]
@@ -151,7 +151,6 @@ export default function Navbar() {
                   py-2
                   rounded-2xl
                   bg-red-500/20
-                  backdrop-blur-xl
                   border
                   border-red-400/40
                   text-white
@@ -175,7 +174,6 @@ export default function Navbar() {
                 py-2
                 rounded-2xl
                 bg-[#f5b800]/20
-                backdrop-blur-xl
                 border
                 border-[#f5b800]
                 text-[#f5b800]
@@ -193,10 +191,10 @@ export default function Navbar() {
         }
 
 
-      </div>
+      </nav>
 
 
-    </nav>
+    </div>
 
   );
 }
