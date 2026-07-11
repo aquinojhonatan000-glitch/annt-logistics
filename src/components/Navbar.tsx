@@ -18,7 +18,8 @@ export default function Navbar() {
 
 
   const linkStyle = `
-    px-5
+    px-4
+    md:px-5
     py-2
     rounded-2xl
     bg-white/10
@@ -26,12 +27,15 @@ export default function Navbar() {
     border
     border-white/20
     text-gray-200
+    text-sm
+    md:text-base
     font-medium
     transition
     duration-300
     hover:text-[#f5b800]
     hover:border-[#f5b800]
     hover:shadow-[0_0_25px_rgba(245,184,0,0.6)]
+    whitespace-nowrap
   `;
 
 
@@ -39,23 +43,29 @@ export default function Navbar() {
 
     <div className="
       flex
+      flex-col
+      md:flex-row
       items-center
       justify-between
-      px-8
+      gap-4
+      px-4
+      md:px-8
       mt-4
     ">
 
 
-      {/* LOGO LIBRE */}
+      {/* LOGO */}
 
-      <Link href="/">
+      <Link href="/" className="shrink-0">
+
         <Image
           src="/logo.png"
           alt="ANNT LOGISTICS"
           width={300}
           height={120}
           className="
-            w-64
+            w-48
+            sm:w-56
             md:w-72
             h-auto
             object-contain
@@ -66,17 +76,21 @@ export default function Navbar() {
           "
           priority
         />
+
       </Link>
 
 
 
-      {/* BURBUJA DEL MENU */}
+      {/* MENU LIQUID GLASS */}
 
       <nav className="
         flex
         items-center
-        gap-4
-        px-8
+        gap-3
+        md:gap-4
+        max-w-full
+        overflow-x-auto
+        px-5
         py-3
         rounded-3xl
         bg-white/5
@@ -84,6 +98,7 @@ export default function Navbar() {
         border
         border-white/10
         shadow-[0_8px_40px_rgba(0,0,0,0.45)]
+        scrollbar-hide
       ">
 
 
@@ -121,6 +136,7 @@ export default function Navbar() {
               </Link>
 
 
+
               {
                 usuario.rol === "admin" && (
 
@@ -135,6 +151,7 @@ export default function Navbar() {
                       border-[#f5b800]
                       text-[#f5b800]
                       font-bold
+                      whitespace-nowrap
                     "
                   >
                     ⚙️ Admin
@@ -142,6 +159,7 @@ export default function Navbar() {
 
                 )
               }
+
 
 
               <button
@@ -156,10 +174,12 @@ export default function Navbar() {
                   text-white
                   hover:bg-red-600/40
                   transition
+                  whitespace-nowrap
                 "
               >
                 Cerrar sesión
               </button>
+
 
             </>
 
@@ -178,6 +198,7 @@ export default function Navbar() {
                 border-[#f5b800]
                 text-[#f5b800]
                 font-bold
+                whitespace-nowrap
                 hover:bg-[#f5b800]
                 hover:text-black
                 transition
@@ -197,4 +218,5 @@ export default function Navbar() {
     </div>
 
   );
+
 }
