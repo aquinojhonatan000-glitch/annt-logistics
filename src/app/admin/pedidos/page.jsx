@@ -2,7 +2,9 @@
 
 import { useOrders } from "@/context/OrderContext";
 
+
 export default function PedidosAdmin(){
+
 
 const {
 pedidos,
@@ -12,7 +14,9 @@ cambiarTiempoEntrega
 
 
 
+
 return(
+
 
 <main className="
 min-h-screen
@@ -35,6 +39,7 @@ mb-8
 
 
 
+
 {
 
 pedidos.length === 0 ? (
@@ -42,9 +47,8 @@ pedidos.length === 0 ? (
 
 <div className="
 card-dark
-p-10
+p-6
 text-center
-text-xl
 ">
 
 No hay pedidos todavía
@@ -72,41 +76,43 @@ p-6
 mb-8
 "
 
-
 >
 
 
+
 <h2 className="
-text-2xl
+text-xl
 font-bold
+text-[#f5b800]
 mb-5
 ">
 
-🛒 Pedido #{pedido.id.slice(0,8)}
+🛒 Pedido #{String(pedido.id).slice(0,8)}
 
 </h2>
 
 
 
+
+
 <div className="
-mb-6
 bg-[#111]
-p-4
 rounded-xl
-border
-border-[#333]
+p-4
+mb-6
 ">
 
 
 <h3 className="
+text-xl
 font-bold
-text-[#f5b800]
-mb-3
+mb-4
 ">
 
 👤 Datos del cliente
 
 </h3>
+
 
 
 <p>
@@ -118,28 +124,44 @@ Nombre:
 </p>
 
 
+
+<p>
+🪪 DNI:
+{" "}
+<b>
+{pedido.cliente?.dni || "No registrado"}
+</b>
+</p>
+
+
+
 <p>
 📱 Teléfono:
 {" "}
-{pedido.cliente?.telefono}
+{pedido.cliente?.telefono || "-"}
 </p>
+
 
 
 <p>
 📍 Dirección:
 {" "}
-{pedido.cliente?.direccion}
+{pedido.cliente?.direccion || "-"}
 </p>
+
 
 
 <p>
 🏙️ Ciudad:
 {" "}
-{pedido.cliente?.ciudad}
+{pedido.cliente?.ciudad || "-"}
 </p>
 
 
+
 </div>
+
+
 
 
 
@@ -157,9 +179,12 @@ mb-4
 
 
 
+
+
 {
 
 pedido.productos?.map((producto,index)=>(
+
 
 
 <div
@@ -175,8 +200,8 @@ border-[#333]
 py-4
 "
 
-
 >
+
 
 
 <img
@@ -200,20 +225,10 @@ rounded-xl
 <div>
 
 
-<p className="
-font-bold
-text-lg
-">
+<p className="font-bold">
 
 {producto.nombre}
 
-</p>
-
-
-
-<p>
-Cantidad:
-{producto.cantidad}
 </p>
 
 
@@ -232,7 +247,6 @@ producto.talla && (
 
 
 
-
 {
 
 producto.color && (
@@ -247,17 +261,25 @@ producto.color && (
 
 
 
-<p className="
-text-[#f5b800]
-font-bold
-">
+<p className="text-[#f5b800] font-bold">
 
 S/ {Number(producto.precio).toFixed(2)}
 
 </p>
 
 
+
+<p>
+
+Cantidad: {producto.cantidad}
+
+</p>
+
+
+
 </div>
+
+
 
 
 </div>
@@ -272,25 +294,25 @@ S/ {Number(producto.precio).toFixed(2)}
 
 
 
-<div className="
-mt-6
+<p className="
 text-3xl
 font-bold
+mt-6
 ">
 
 
 💰 Total:
 
-<span className="
-text-[#f5b800]
-">
+<span className="text-[#f5b800]">
 
+{" "}
 S/ {Number(pedido.total).toFixed(2)}
 
 </span>
 
 
-</div>
+</p>
+
 
 
 
@@ -302,14 +324,12 @@ S/ {Number(pedido.total).toFixed(2)}
 pedido.comprobante && (
 
 
-<div className="
-mt-6
-">
+<div className="mt-6">
 
 
 <h3 className="
-font-bold
 text-xl
+font-bold
 mb-3
 ">
 
@@ -333,12 +353,14 @@ border-[#333]
 />
 
 
+
 </div>
 
 
 )
 
 }
+
 
 
 
@@ -362,8 +384,11 @@ value={pedido.estado}
 onChange={(e)=>
 
 cambiarEstado(
+
 pedido.id,
+
 e.target.value
+
 )
 
 }
@@ -375,17 +400,21 @@ e.target.value
 Esperando pago
 </option>
 
+
 <option>
-Pago confirmado
+Pagado
 </option>
+
 
 <option>
 Preparando pedido
 </option>
 
+
 <option>
 Enviado
 </option>
+
 
 <option>
 Entregado
@@ -393,6 +422,8 @@ Entregado
 
 
 </select>
+
+
 
 
 
@@ -411,15 +442,16 @@ rounded-xl
 mt-3
 "
 
-value={
-pedido.tiempo_entrega || "Pendiente"
-}
+value={pedido.tiempo_entrega || "Pendiente"}
 
 onChange={(e)=>
 
 cambiarTiempoEntrega(
+
 pedido.id,
+
 e.target.value
+
 )
 
 }
@@ -431,16 +463,24 @@ e.target.value
 Pendiente
 </option>
 
-<option>
-1-3 días
-</option>
 
 <option>
-3-7 días
+1-3 días hábiles
 </option>
+
+
+<option>
+4-7 días hábiles
+</option>
+
 
 <option>
 6-15 días hábiles
+</option>
+
+
+<option>
+Entregado
 </option>
 
 
@@ -453,12 +493,10 @@ Pendiente
 </div>
 
 
-
 ))
 
 
 )
-
 
 }
 
