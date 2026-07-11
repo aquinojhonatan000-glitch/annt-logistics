@@ -5,9 +5,7 @@ import { useProducts } from "@/context/ProductContext";
 import { useOrders } from "@/context/OrderContext";
 import { supabase } from "@/lib/supabase";
 
-
 export default function Admin(){
-
 
 const {
 productos,
@@ -27,6 +25,7 @@ cambiarTiempoEntrega
 const [producto,setProducto]=useState({
 
 nombre:"",
+descripcion:"",
 categoria:"",
 precio:"",
 precio_original:"",
@@ -34,6 +33,7 @@ descuento:"",
 imagen:""
 
 });
+
 
 
 const [subiendo,setSubiendo]=useState(false);
@@ -49,6 +49,7 @@ if(!archivo)return;
 
 
 setSubiendo(true);
+
 
 
 const nombreArchivo=
@@ -101,10 +102,12 @@ imagen:url
 });
 
 
+
 setSubiendo(false);
 
 
 };
+
 
 
 
@@ -142,6 +145,7 @@ descuento:Number(producto.descuento)
 setProducto({
 
 nombre:"",
+descripcion:"",
 categoria:"",
 precio:"",
 precio_original:"",
@@ -152,6 +156,7 @@ imagen:""
 
 
 };
+
 
 
 
@@ -168,7 +173,7 @@ return(
 
 
 
-<div className="bg-[#181818] p-6 rounded-xl border border-[#333] mb-10">
+<div className="bg-[#181818] border border-[#333] p-6 rounded-xl mb-10">
 
 
 <h2 className="text-xl font-bold mb-5">
@@ -186,7 +191,7 @@ return(
 
 className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
 
-placeholder="Nombre"
+placeholder="Nombre del producto"
 
 value={producto.nombre}
 
@@ -195,6 +200,26 @@ onChange={(e)=>setProducto({
 ...producto,
 
 nombre:e.target.value
+
+})}
+
+/>
+
+
+
+<textarea
+
+className="w-full bg-[#111] border border-[#333] p-3 rounded-lg mb-4"
+
+placeholder="Descripción del producto"
+
+value={producto.descripcion}
+
+onChange={(e)=>setProducto({
+
+...producto,
+
+descripcion:e.target.value
 
 })}
 
@@ -302,11 +327,15 @@ className="mb-4"
 
 
 
-{subiendo && <p>⏳ Subiendo...</p>}
+{subiendo && (
+
+<p>⏳ Subiendo imagen...</p>
+
+)}
 
 
 
-{producto.imagen &&
+{producto.imagen && (
 
 <img
 
@@ -316,7 +345,7 @@ className="w-40 rounded-lg mb-4"
 
 />
 
-}
+)}
 
 
 
@@ -331,6 +360,7 @@ className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-lg"
 </button>
 
 
+
 </form>
 
 
@@ -338,10 +368,9 @@ className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-lg"
 
 
 
-<div className="bg-[#181818] p-6 rounded-xl mb-10">
 
 
-<h2 className="text-xl font-bold mb-5">
+<h2 className="text-2xl font-bold mb-5">
 
 📦 Productos
 
@@ -356,7 +385,7 @@ className="w-full bg-[#f5b800] text-black font-bold py-3 rounded-lg"
 
 key={p.id}
 
-className="border border-[#333] p-4 rounded-xl mb-4"
+className="border border-[#333] p-5 rounded-xl mb-5"
 
 >
 
@@ -370,11 +399,20 @@ className="w-32 h-32 object-cover rounded-lg"
 />
 
 
-<h3 className="font-bold mt-3">
+
+<h3 className="text-xl font-bold mt-3">
 
 {p.nombre}
 
 </h3>
+
+
+
+<p className="text-gray-300">
+
+{p.descripcion}
+
+</p>
 
 
 
@@ -383,6 +421,7 @@ className="w-32 h-32 object-cover rounded-lg"
 S/ {p.precio}
 
 </p>
+
 
 
 {p.descuento > 0 && (
@@ -410,7 +449,6 @@ className="mt-3 bg-red-600 px-4 py-2 rounded-lg"
 </button>
 
 
-
 </div>
 
 
@@ -418,13 +456,9 @@ className="mt-3 bg-red-600 px-4 py-2 rounded-lg"
 
 
 
-</div>
 
 
-
-
-
-<h2 className="text-xl font-bold mb-5">
+<h2 className="text-2xl font-bold mt-10 mb-5">
 
 📦 Pedidos de clientes
 
@@ -433,6 +467,7 @@ className="mt-3 bg-red-600 px-4 py-2 rounded-lg"
 
 
 {pedidos.map((pedido)=>(
+
 
 <div
 
@@ -443,9 +478,7 @@ className="bg-[#181818] border border-[#333] rounded-xl p-6 mb-5"
 >
 
 
-<p>📦 {pedido.numero_pedido}</p>
-
-<p>👤 {pedido.cliente?.nombre}</p>
+<p>📦 Pedido: {pedido.numero_pedido}</p>
 
 <p>Total: S/ {pedido.total}</p>
 
@@ -484,6 +517,7 @@ e.target.value
 
 
 </div>
+
 
 ))}
 
