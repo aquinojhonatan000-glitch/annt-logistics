@@ -7,432 +7,474 @@ import Link from "next/link";
 
 export default function Productos() {
 
-  const { carrito, agregarCarrito, mensajeCarrito } = useCart();
+const { carrito, agregarCarrito, mensajeCarrito } = useCart();
 
-  const { productos } = useProducts();
+const { productos } = useProducts();
 
-  const [busqueda, setBusqueda] = useState("");
+const [busqueda, setBusqueda] = useState("");
 
-  const [categoria, setCategoria] = useState("Todos");
+const [categoria, setCategoria] = useState("Todos");
 
-  const [selecciones, setSelecciones] = useState({});
+const [selecciones, setSelecciones] = useState({});
 
 
-  const categorias = [
-    "Todos",
-    "Moda",
-    "Zapatillas",
-    "Electrónica",
-    "Hogar",
-    "Belleza",
-    "Accesorios",
-    "Gaming",
-    "Mascotas",
-    "Deportes",
-    "Oficina",
-    "Herramientas",
-    "Juguetes",
-    "Bebés",
-    "Automóvil",
-    "Otros"
-  ];
+const categorias = [
+"Todos",
+"Moda",
+"Zapatillas",
+"Electrónica",
+"Hogar",
+"Belleza",
+"Accesorios",
+"Gaming",
+"Mascotas",
+"Deportes",
+"Oficina",
+"Herramientas",
+"Juguetes",
+"Bebés",
+"Automóvil",
+"Otros"
+];
 
 
-  const productosFiltrados = productos.filter((producto)=>{
+const productosFiltrados = productos.filter((producto)=>{
 
-    const nombre = producto.nombre
-    ?.toLowerCase()
-    .includes(busqueda.toLowerCase());
+const nombre = producto.nombre
+?.toLowerCase()
+.includes(busqueda.toLowerCase());
 
 
-    const cat =
-    categoria === "Todos" ||
-    producto.categoria === categoria;
+const cat =
+categoria === "Todos" ||
+producto.categoria === categoria;
 
 
-    return nombre && cat;
+return nombre && cat;
 
-  });
+});
 
 
 
-  const seleccionar = (id,campo,valor)=>{
+const seleccionar=(id,campo,valor)=>{
 
-    setSelecciones({
+setSelecciones({
 
-      ...selecciones,
+...selecciones,
 
-      [id]:{
-        ...selecciones[id],
-        [campo]:valor
-      }
+[id]:{
 
-    });
+...selecciones[id],
 
-  };
+[campo]:valor
 
+}
 
+});
 
-  return (
+};
 
-    <main className="min-h-screen bg-[#111] text-white p-8">
 
 
-      <h1 className="text-4xl font-bold mb-5">
-        🛍️ Catálogo ANNT LOGISTICS
-      </h1>
+return (
 
+<main className="min-h-screen bg-[#111] text-white p-8">
 
-      <div className="bg-[#181818] border border-[#333] rounded-xl p-5 mb-6">
 
-        <h2 className="text-xl font-bold text-[#f5b800]">
-          🚚 Tiempo de entrega ANNT LOGISTICS
-        </h2>
+<h1 className="text-4xl font-bold mb-5">
 
+🛍️ Catálogo ANNT LOGISTICS
 
-        <p className="mt-2 text-gray-300">
-          📦 Realizamos envíos a diferentes ciudades.
-        </p>
+</h1>
 
 
-        <p className="mt-2 text-lg font-bold">
-          ⏳ Entrega estimada: 6 a 15 días hábiles
-        </p>
 
+<div className="bg-[#181818] border border-[#333] rounded-xl p-5 mb-6">
 
-        <p className="text-gray-400 mt-2">
-          El tiempo puede variar según la ciudad y disponibilidad del producto.
-        </p>
+<h2 className="text-xl font-bold text-[#f5b800]">
 
-      </div>
+🚚 Tiempo de entrega ANNT LOGISTICS
 
+</h2>
 
 
-      <div className="mb-5 font-bold text-xl">
-        🛒 Carrito: {carrito.length} productos
-      </div>
+<p className="mt-2 text-gray-300">
 
+📦 Realizamos envíos a diferentes ciudades.
 
+</p>
 
-      <input
 
-        className="w-full bg-[#181818] border border-[#333] p-3 rounded-lg mb-6"
+<p className="mt-2 text-lg font-bold">
 
-        placeholder="Buscar productos..."
+⏳ Entrega estimada: 6 a 15 días hábiles
 
-        value={busqueda}
+</p>
 
-        onChange={(e)=>setBusqueda(e.target.value)}
 
-      />
+<p className="text-gray-400 mt-2">
 
+El tiempo puede variar según la ciudad y disponibilidad del producto.
 
+</p>
 
-      <div className="flex flex-wrap gap-3 mb-8">
 
+</div>
 
-      {categorias.map((cat)=>(
 
-        <button
 
-          key={cat}
 
-          onClick={()=>setCategoria(cat)}
 
-          className={
+<div className="mb-5 font-bold text-xl">
 
-          `px-5 py-2 rounded-full border ${
-            
-            categoria===cat
+🛒 Carrito: {carrito.length} productos
 
-            ?
+</div>
 
-            "bg-[#f5b800] text-black font-bold"
 
-            :
 
-            "bg-[#181818] border-[#333]"
 
-          }`
 
-          }
+<input
 
-        >
+className="w-full bg-[#181818] border border-[#333] p-3 rounded-lg mb-6"
 
-          {cat}
+placeholder="Buscar productos..."
 
-        </button>
+value={busqueda}
 
-      ))}
+onChange={(e)=>setBusqueda(e.target.value)}
 
+/>
 
-      </div>
 
 
 
 
+<div className="flex flex-wrap gap-3 mb-8">
 
-      <div className="grid md:grid-cols-3 gap-6">
 
+{categorias.map((cat)=>(
 
-      {productosFiltrados.map((producto)=>(
+<button
 
+key={cat}
 
-        <div
+onClick={()=>setCategoria(cat)}
 
-          key={producto.id}
+className={
 
-          className="bg-[#181818] border border-[#333] rounded-xl p-5"
+`px-5 py-2 rounded-full border ${
+categoria===cat
 
-        >
+?
 
+"bg-[#f5b800] text-black font-bold"
 
-          <img
+:
 
-            src={producto.imagen}
+"bg-[#181818] border-[#333]"
 
-            alt={producto.nombre}
+}`
 
-            className="w-full h-48 object-cover rounded-lg"
+}
 
-          />
+>
 
+{cat}
 
+</button>
 
-          <p className="text-[#f5b800] mt-3">
-            {producto.categoria}
-          </p>
+))}
 
 
-          <h2 className="text-xl font-bold">
-            {producto.nombre}
-          </h2>
+</div>
 
 
-          <p className="text-2xl font-bold mt-2">
-            S/ {producto.precio}
-          </p>
 
 
 
+<div className="grid md:grid-cols-3 gap-6">
 
-          {producto.tallas && (
 
-            <div className="mt-4">
 
-              <p className="mb-2">
-                👕 Talla:
-              </p>
+{productosFiltrados.map((producto)=>(
 
 
-              <div className="flex flex-wrap gap-2">
 
-              {producto.tallas.split(",").map((talla)=>(
+<div
 
-                <button
+key={producto.id}
 
-                  key={talla}
+className="bg-[#181818] border border-[#333] rounded-xl p-5"
 
-                  onClick={()=>seleccionar(
-                    producto.id,
-                    "talla",
-                    talla
-                  )}
+>
 
-                  className={
 
-                  `px-3 py-1 rounded border ${
-                    
-                    selecciones[producto.id]?.talla===talla
 
-                    ?
 
-                    "bg-[#f5b800] text-black"
+<img
 
-                    :
+src={producto.imagen}
 
-                    "bg-[#111]"
+alt={producto.nombre}
 
-                  }`
+className="w-full h-80 object-contain rounded-lg bg-white"
 
-                  }
+/>
 
-                >
 
-                {talla}
 
-                </button>
 
-              ))}
 
-              </div>
+<p className="text-[#f5b800] mt-3">
 
-            </div>
+{producto.categoria}
 
-          )}
+</p>
 
 
 
+<h2 className="text-xl font-bold">
 
+{producto.nombre}
 
+</h2>
 
-          {producto.colores && (
 
-            <div className="mt-4">
 
-              <p className="mb-2">
-                🎨 Color:
-              </p>
+<p className="text-2xl font-bold mt-2">
 
+S/ {producto.precio}
 
-              <div className="flex flex-wrap gap-2">
+</p>
 
-              {producto.colores.split(",").map((color)=>(
 
-                <button
 
-                  key={color}
 
-                  onClick={()=>seleccionar(
-                    producto.id,
-                    "color",
-                    color
-                  )}
 
-                  className={
+{producto.tallas && (
 
-                  `px-3 py-1 rounded border ${
-                    
-                    selecciones[producto.id]?.color===color
+<div className="mt-4">
 
-                    ?
+<p className="mb-2">
 
-                    "bg-[#f5b800] text-black"
+👕 Talla:
 
-                    :
+</p>
 
-                    "bg-[#111]"
 
-                  }`
+<div className="flex flex-wrap gap-2">
 
-                  }
 
-                >
+{producto.tallas.split(",").map((talla)=>(
 
-                {color}
 
-                </button>
+<button
 
-              ))}
+key={talla}
 
-              </div>
+onClick={()=>seleccionar(producto.id,"talla",talla)}
 
-            </div>
+className={
 
-          )}
+`px-3 py-1 rounded border ${
+selecciones[producto.id]?.talla===talla
 
+?
 
+"bg-[#f5b800] text-black"
 
+:
 
+"bg-[#111]"
 
+}`
 
+}
 
-          <button
+>
 
-          onClick={()=>{
+{talla}
 
+</button>
 
-            const elegido = selecciones[producto.id] || {};
 
+))}
 
 
-            if(producto.tallas && !elegido.talla){
+</div>
 
-              alert("Selecciona una talla");
+</div>
 
-              return;
+)}
 
-            }
 
 
 
-            if(producto.colores && !elegido.color){
 
-              alert("Selecciona un color");
+{producto.colores && (
 
-              return;
+<div className="mt-4">
 
-            }
+<p className="mb-2">
 
+🎨 Color:
 
+</p>
 
-            agregarCarrito({
 
-              ...producto,
+<div className="flex flex-wrap gap-2">
 
-              talla:elegido.talla || "",
 
-              color:elegido.color || ""
+{producto.colores.split(",").map((color)=>(
 
-            });
 
+<button
 
-          }}
+key={color}
 
+onClick={()=>seleccionar(producto.id,"color",color)}
 
-          className="mt-5 w-full bg-[#f5b800] text-black py-3 rounded-lg font-bold"
+className={
 
-          >
+`px-3 py-1 rounded border ${
+selecciones[producto.id]?.color===color
 
-          🛒 Agregar al carrito
+?
 
-          </button>
+"bg-[#f5b800] text-black"
 
+:
 
+"bg-[#111]"
 
-        </div>
+}`
 
+}
 
-      ))}
+>
 
+{color}
 
-      </div>
+</button>
 
 
+))}
 
 
+</div>
 
-      {mensajeCarrito && (
+</div>
 
-        <div className="fixed bottom-5 right-5 bg-[#181818] border border-[#f5b800] p-5 rounded-xl shadow-xl">
+)}
 
 
-          <p className="font-bold mb-3">
-            ✅ Producto agregado al carrito
-          </p>
 
 
-          <Link
 
-          href="/carrito"
 
-          className="block text-center bg-[#f5b800] text-black px-5 py-2 rounded-lg font-bold"
+<button
 
-          >
+onClick={()=>{
 
-          🛒 Ver carrito
 
-          </Link>
+const elegido = selecciones[producto.id] || {};
 
 
-        </div>
 
-      )}
+if(producto.tallas && !elegido.talla){
 
+alert("Selecciona una talla");
 
+return;
 
-    </main>
+}
 
-  );
+
+
+if(producto.colores && !elegido.color){
+
+alert("Selecciona un color");
+
+return;
+
+}
+
+
+
+agregarCarrito({
+
+...producto,
+
+talla:elegido.talla || "",
+
+color:elegido.color || ""
+
+});
+
+
+}}
+
+
+className="mt-5 w-full bg-[#f5b800] text-black py-3 rounded-lg font-bold"
+
+>
+
+🛒 Agregar al carrito
+
+</button>
+
+
+
+</div>
+
+
+
+))}
+
+
+</div>
+
+
+
+
+
+{mensajeCarrito && (
+
+<div className="fixed bottom-5 right-5 bg-[#181818] border border-[#f5b800] p-5 rounded-xl shadow-xl">
+
+
+<p className="font-bold mb-3">
+
+✅ Producto agregado al carrito
+
+</p>
+
+
+
+<Link
+
+href="/carrito"
+
+className="block text-center bg-[#f5b800] text-black px-5 py-2 rounded-lg font-bold"
+
+>
+
+🛒 Ver carrito
+
+</Link>
+
+
+
+</div>
+
+)}
+
+
+
+</main>
+
+);
 
 }
