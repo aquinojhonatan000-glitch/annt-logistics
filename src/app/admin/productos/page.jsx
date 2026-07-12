@@ -6,7 +6,12 @@ import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 
 export default function ProductosAdmin() {
-  const { productos, agregarProducto, eliminarProducto } = useProducts();
+  const {
+  productos,
+  agregarProducto,
+  eliminarProducto,
+  actualizarProducto
+} = useProducts();
 
   const productoInicial = {
     nombre: "",
@@ -25,6 +30,7 @@ export default function ProductosAdmin() {
   const [producto, setProducto] = useState(productoInicial);
   const [subiendo, setSubiendo] = useState(false);
   const [guardando, setGuardando] = useState(false);
+  const [editando, setEditando] = useState(null);
 
   // PEGAR IMAGEN COPIADA
   const pegarImagen = async () => {
