@@ -12,7 +12,6 @@ estadosPedido
 }=useOrders();
 
 
-
 const tiempos=[
 
 "Pendiente",
@@ -24,13 +23,19 @@ const tiempos=[
 ];
 
 
-
 return (
 
-<main className="px-6 py-10">
+<main className="min-h-screen px-6 py-10">
 
-<h1 className="text-4xl font-bold mb-10">
+
+<h1 className="
+text-4xl
+font-bold
+mb-8
+">
+
 📦 Pedidos ANNT LOGISTICS
+
 </h1>
 
 
@@ -38,8 +43,8 @@ return (
 {
 pedidos.length === 0 ? (
 
-<p>
-No hay pedidos todavía
+<p className="text-gray-400 text-xl">
+No hay pedidos todavía.
 </p>
 
 )
@@ -49,7 +54,6 @@ No hay pedidos todavía
 (
 
 pedidos.map((pedido)=>(
-
 
 <div
 
@@ -64,39 +68,86 @@ p-6
 mb-8
 "
 
+
 >
 
 
-<h2 className="text-xl font-bold">
-🛒 Pedido #{pedido.numero_pedido || String(pedido.id).slice(0,8)}
+{/* DATOS CLIENTE */}
+
+<div className="
+bg-[#111]
+border
+border-[#333]
+rounded-xl
+p-4
+mb-6
+">
+
+
+<h2 className="
+text-xl
+font-bold
+text-[#f5b800]
+mb-3
+">
+
+👤 Datos del cliente
+
 </h2>
 
 
-
-<h3 className="font-bold mt-5">
-👤 Datos del cliente
-</h3>
-
-
 <p>
-Nombre: {pedido.cliente?.nombre}
-</p>
-
-<p>
-📱 {pedido.cliente?.telefono}
-</p>
-
-<p>
-📍 {pedido.cliente?.direccion}
+Nombre:
+{" "}
+<b>{pedido.cliente?.nombre}</b>
 </p>
 
 
+<p>
+🪪 DNI:
+{" "}
+<b>{pedido.cliente?.dni}</b>
+</p>
+
+
+<p>
+📱 Teléfono:
+{" "}
+<b>{pedido.cliente?.telefono}</b>
+</p>
+
+
+<p>
+📍 Dirección:
+{" "}
+<b>{pedido.cliente?.direccion}</b>
+</p>
+
+
+<p>
+🏙️ Ciudad:
+{" "}
+<b>{pedido.cliente?.ciudad}</b>
+</p>
+
+
+</div>
 
 
 
-<h3 className="font-bold mt-6">
-📦 Productos
-</h3>
+
+
+{/* PRODUCTOS */}
+
+<h2 className="
+text-xl
+font-bold
+mb-4
+">
+
+🛒 Productos
+
+</h2>
 
 
 
@@ -116,6 +167,7 @@ border-b
 border-[#333]
 py-4
 "
+
 
 >
 
@@ -137,18 +189,34 @@ rounded-xl
 />
 
 
+
 <div>
 
+
 <p className="font-bold">
+
 {producto.nombre}
+
 </p>
+
+
+<p>
+
+Cantidad:
+{" "}
+{producto.cantidad}
+
+</p>
+
 
 
 {
 producto.talla && (
 
 <p>
-👕 Talla: {producto.talla}
+👕 Talla:
+{" "}
+{producto.talla}
 </p>
 
 )
@@ -161,7 +229,9 @@ producto.talla && (
 producto.color && (
 
 <p>
-🎨 Color: {producto.color}
+🎨 Color:
+{" "}
+{producto.color}
 </p>
 
 )
@@ -170,17 +240,8 @@ producto.color && (
 
 
 
-<p>
-Cantidad: {producto.cantidad}
-</p>
-
-
-<p>
-S/ {Number(producto.precio).toFixed(2)}
-</p>
-
-
 </div>
+
 
 
 </div>
@@ -194,18 +255,25 @@ S/ {Number(producto.precio).toFixed(2)}
 
 
 
+
+
+{/* TOTAL */}
+
 <p className="
-text-xl
+text-3xl
 font-bold
-text-[#f5b800]
-mt-5
+mt-6
 ">
 
 💰 Total:
 
-{" "}
+<span className="text-[#f5b800]">
 
+{" "}
 S/ {Number(pedido.total).toFixed(2)}
+
+</span>
+
 
 </p>
 
@@ -213,14 +281,20 @@ S/ {Number(pedido.total).toFixed(2)}
 
 
 
+
+
+{/* COMPROBANTE */}
+
 {
 pedido.comprobante && (
 
 <div className="mt-5">
 
-<h3 className="font-bold">
-🧾 Comprobante de pago
-</h3>
+<p className="font-bold mb-2">
+
+📄 Comprobante
+
+</p>
 
 
 <img
@@ -232,11 +306,9 @@ w-64
 rounded-xl
 border
 border-[#333]
-mt-3
 "
 
-/>
-
+ />
 
 </div>
 
@@ -249,11 +321,8 @@ mt-3
 
 
 
-<h3 className="font-bold mt-6">
-🚚 Estado del pedido
-</h3>
 
-
+{/* ESTADO */}
 
 <select
 
@@ -264,7 +333,7 @@ border
 border-[#333]
 p-3
 rounded-xl
-mt-3
+mt-6
 "
 
 value={pedido.estado}
@@ -278,11 +347,13 @@ e.target.value
 
 }
 
+
 >
 
 
 {
 estadosPedido.map((estado)=>(
+
 
 <option
 
@@ -296,6 +367,7 @@ value={estado}
 
 </option>
 
+
 ))
 
 }
@@ -308,11 +380,8 @@ value={estado}
 
 
 
-<h3 className="font-bold mt-6">
-⏳ Tiempo estimado
-</h3>
 
-
+{/* TIEMPO ENTREGA */}
 
 <select
 
@@ -370,7 +439,10 @@ value={tiempo}
 
 
 
+{/* WHATSAPP */}
+
 <a
+
 
 href={`https://wa.me/51${pedido.cliente?.telefono}?text=${encodeURIComponent(
 
@@ -379,7 +451,8 @@ href={`https://wa.me/51${pedido.cliente?.telefono}?text=${encodeURIComponent(
 
 Hola ${pedido.cliente?.nombre || "cliente"} 👋
 
-Tu pedido #${pedido.numero_pedido || pedido.id} fue actualizado.
+Tu pedido #${pedido.numero_pedido || pedido.id}
+fue actualizado.
 
 📦 Estado:
 ${pedido.estado}
@@ -395,9 +468,11 @@ Gracias por comprar con ANNT LOGISTICS.
 
 )}`}
 
+
 target="_blank"
 
 rel="noopener noreferrer"
+
 
 className="
 inline-block
@@ -412,9 +487,12 @@ hover:bg-green-600
 transition
 "
 
+
 >
 
+
 📲 Avisar por WhatsApp
+
 
 </a>
 
@@ -423,12 +501,8 @@ transition
 
 
 
-<h3 className="font-bold mt-8">
-📍 Historial
-</h3>
 
-
-
+{/* HISTORIAL */}
 
 {
 pedido.historial_estado?.map((historial,index)=>(
@@ -439,7 +513,7 @@ pedido.historial_estado?.map((historial,index)=>(
 key={index}
 
 className="
-mt-3
+mt-4
 border-l-2
 border-[#f5b800]
 pl-4
@@ -447,27 +521,7 @@ pl-4
 
 >
 
-<p className="text-[#f5b800] font-bold">
-
 ✅ {historial.estado}
-
-</p>
-
-
-<p>
-📅 {historial.fecha}
-</p>
-
-
-<p>
-🕒 {historial.hora}
-</p>
-
-
-<p className="text-gray-400">
-{historial.descripcion}
-</p>
-
 
 </div>
 
@@ -488,8 +542,8 @@ pl-4
 }
 
 
-
 </main>
+
 
 );
 
