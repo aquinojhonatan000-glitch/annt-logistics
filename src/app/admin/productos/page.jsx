@@ -23,52 +23,66 @@ export default function ProductosAdmin() {
   };
 
   const [producto, setProducto] = useState(productoInicial);
-  const [linkProducto, setLinkProducto] = useState("");
-  const [importando, setImportando] = useState(false);
   const [subiendo, setSubiendo] = useState(false);
   const [guardando, setGuardando] = useState(false);
 
-  const importarProducto = async () => {
-    if (!linkProducto.trim()) {
-      alert("Pega el link del producto");
-      return;
-    }
-
-    setImportando(true);
-
+  // PEGAR IMAGEN COPIADA
+  const pegarImagen = async () => {
     try {
-      const respuesta = await fetch("/api/importar-producto", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          url: linkProducto,
-        }),
-      });
+      setSubiendo(true);
 
-      const data = await respuesta.json();
+      const items = await navigator.clipboard.read();
 
-      if (!respuesta.ok) {
-        throw new Error(data.error || "No se pudo importar");
+      for (const item of items) {
+        const tipoImagen = item.types.find((tipo) =>
+          tipo.startsWith("image/")
+        );
+
+        if (!tipoImagen) continue;
+
+        const blob = await item.getType(tipoImagen);
+
+        const extension =
+          tipoImagen.split("/")[1]?.replace("jpeg", "jpg") || "png";
+
+        const nombreArchivo = `producto-${Date.now()}.${extension}`;
+
+        const { error } = await supabase.storage
+          .from("imagenes")
+          .upload(nombreArchivo, blob, {
+            contentType: tipoImagen,
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        const { data } = supabase.storage
+          .from("imagenes")
+          .getPublicUrl(nombreArchivo);
+
+        setProducto((prev) => ({
+          ...prev,
+          imagen: data.publicUrl,
+        }));
+
+        alert("✅ Imagen pegada correctamente");
+        return;
       }
 
-      setProducto((prev) => ({
-        ...prev,
-        nombre: data.nombre || prev.nombre,
-        descripcion: data.descripcion || prev.descripcion,
-        imagen: data.imagen || prev.imagen,
-      }));
-
-      alert("✅ Producto importado");
+      alert("No hay ninguna imagen copiada");
     } catch (error) {
-      console.error(error);
-      alert("No se pudo importar el producto");
+      console.error("Error pegando imagen:", error);
+
+      alert(
+        "No se pudo pegar la imagen. Copia la imagen directamente desde la página e inténtalo otra vez."
+      );
     } finally {
-      setImportando(false);
+      setSubiendo(false);
     }
   };
 
+  // SUBIR IMAGEN DESDE PC
   const subirImagen = async (e) => {
     const archivo = e.target.files?.[0];
 
@@ -76,31 +90,35 @@ export default function ProductosAdmin() {
 
     setSubiendo(true);
 
-    const nombreArchivo =
-      Date.now() + "-" + archivo.name.replace(/\s+/g, "-");
+    try {
+      const nombreArchivo =
+        Date.now() + "-" + archivo.name.replace(/\s+/g, "-");
 
-    const { error } = await supabase.storage
-      .from("imagenes")
-      .upload(nombreArchivo, archivo);
+      const { error } = await supabase.storage
+        .from("imagenes")
+        .upload(nombreArchivo, archivo);
 
-    if (error) {
+      if (error) {
+        throw error;
+      }
+
+      const { data } = supabase.storage
+        .from("imagenes")
+        .getPublicUrl(nombreArchivo);
+
+      setProducto((prev) => ({
+        ...prev,
+        imagen: data.publicUrl,
+      }));
+    } catch (error) {
+      console.error(error);
       alert("Error subiendo imagen");
+    } finally {
       setSubiendo(false);
-      return;
     }
-
-    const { data } = supabase.storage
-      .from("imagenes")
-      .getPublicUrl(nombreArchivo);
-
-    setProducto((prev) => ({
-      ...prev,
-      imagen: data.publicUrl,
-    }));
-
-    setSubiendo(false);
   };
 
+  // GUARDAR PRODUCTO
   const guardarProducto = async (e) => {
     e.preventDefault();
 
@@ -124,23 +142,27 @@ export default function ProductosAdmin() {
     try {
       await agregarProducto({
         ...producto,
+
         precio: Number(producto.precio),
+
         precio_original: producto.precio_original
           ? Number(producto.precio_original)
           : null,
+
         descuento: producto.descuento
           ? Number(producto.descuento)
           : 0,
+
         stock: producto.stock
           ? Number(producto.stock)
           : 0,
+
         descuento_hasta: producto.descuento_hasta
           ? new Date(producto.descuento_hasta).toISOString()
           : null,
       });
 
       setProducto(productoInicial);
-      setLinkProducto("");
 
       alert("✅ Producto guardado");
     } catch (error) {
@@ -154,6 +176,7 @@ export default function ProductosAdmin() {
   return (
     <main className="min-h-screen bg-[#0f0f0f] text-white p-6 md:p-10">
       <div className="max-w-5xl mx-auto">
+
         <h1 className="text-3xl font-bold mb-6">
           ⚙️ ANNT LOGISTICS ADMIN
         </h1>
@@ -174,34 +197,6 @@ export default function ProductosAdmin() {
           </Link>
         </div>
 
-        <section className="bg-[#181818] border border-[#333] rounded-2xl p-6 mb-10">
-          <h2 className="text-2xl font-bold mb-4">
-            🔗 Importar producto
-          </h2>
-
-          <p className="text-gray-400 mb-4">
-            Pega el enlace del producto para intentar importar su nombre,
-            descripción e imagen.
-          </p>
-
-          <input
-            type="url"
-            placeholder="Pega el link de Temu, AliExpress u otra tienda"
-            value={linkProducto}
-            onChange={(e) => setLinkProducto(e.target.value)}
-            className="w-full bg-[#111] border border-[#333] p-4 rounded-xl mb-4"
-          />
-
-          <button
-            type="button"
-            onClick={importarProducto}
-            disabled={importando}
-            className="bg-[#f5b800] text-black font-bold px-6 py-3 rounded-xl disabled:opacity-50"
-          >
-            {importando ? "Importando..." : "Importar producto"}
-          </button>
-        </section>
-
         <form
           onSubmit={guardarProducto}
           className="bg-[#181818] border border-[#333] rounded-2xl p-6"
@@ -211,12 +206,16 @@ export default function ProductosAdmin() {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-4">
+
             <input
               className="bg-[#111] border border-[#333] p-4 rounded-xl"
               placeholder="Nombre del producto"
               value={producto.nombre}
               onChange={(e) =>
-                setProducto({ ...producto, nombre: e.target.value })
+                setProducto({
+                  ...producto,
+                  nombre: e.target.value,
+                })
               }
             />
 
@@ -225,7 +224,10 @@ export default function ProductosAdmin() {
               placeholder="Categoría"
               value={producto.categoria}
               onChange={(e) =>
-                setProducto({ ...producto, categoria: e.target.value })
+                setProducto({
+                  ...producto,
+                  categoria: e.target.value,
+                })
               }
             />
 
@@ -236,7 +238,10 @@ export default function ProductosAdmin() {
               placeholder="Precio de venta"
               value={producto.precio}
               onChange={(e) =>
-                setProducto({ ...producto, precio: e.target.value })
+                setProducto({
+                  ...producto,
+                  precio: e.target.value,
+                })
               }
             />
 
@@ -260,7 +265,10 @@ export default function ProductosAdmin() {
               placeholder="Descuento %"
               value={producto.descuento}
               onChange={(e) =>
-                setProducto({ ...producto, descuento: e.target.value })
+                setProducto({
+                  ...producto,
+                  descuento: e.target.value,
+                })
               }
             />
 
@@ -270,7 +278,10 @@ export default function ProductosAdmin() {
               placeholder="Stock"
               value={producto.stock}
               onChange={(e) =>
-                setProducto({ ...producto, stock: e.target.value })
+                setProducto({
+                  ...producto,
+                  stock: e.target.value,
+                })
               }
             />
 
@@ -279,7 +290,10 @@ export default function ProductosAdmin() {
               placeholder="Tallas separadas por coma"
               value={producto.tallas}
               onChange={(e) =>
-                setProducto({ ...producto, tallas: e.target.value })
+                setProducto({
+                  ...producto,
+                  tallas: e.target.value,
+                })
               }
             />
 
@@ -288,7 +302,10 @@ export default function ProductosAdmin() {
               placeholder="Colores separados por coma"
               value={producto.colores}
               onChange={(e) =>
-                setProducto({ ...producto, colores: e.target.value })
+                setProducto({
+                  ...producto,
+                  colores: e.target.value,
+                })
               }
             />
 
@@ -304,17 +321,11 @@ export default function ProductosAdmin() {
               }
             />
 
-            <input
-              type="file"
-              accept="image/*"
-              onChange={subirImagen}
-              className="bg-[#111] border border-[#333] p-4 rounded-xl"
-            />
           </div>
 
           <textarea
             className="w-full bg-[#111] border border-[#333] p-4 rounded-xl mt-4 min-h-32"
-            placeholder="Descripción"
+            placeholder="Descripción del producto"
             value={producto.descripcion}
             onChange={(e) =>
               setProducto({
@@ -324,49 +335,82 @@ export default function ProductosAdmin() {
             }
           />
 
-          {subiendo && (
-            <p className="mt-4 text-[#f5b800]">Subiendo imagen...</p>
-          )}
+          <div className="mt-6 flex flex-wrap gap-4">
+
+            <button
+              type="button"
+              onClick={pegarImagen}
+              disabled={subiendo}
+              className="bg-[#f5b800] text-black font-bold px-6 py-4 rounded-xl disabled:opacity-50"
+            >
+              📋 {subiendo ? "Subiendo..." : "Pegar imagen copiada"}
+            </button>
+
+            <label className="bg-[#333] text-white font-bold px-6 py-4 rounded-xl cursor-pointer">
+              📁 Subir desde PC
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={subirImagen}
+                className="hidden"
+              />
+            </label>
+
+          </div>
 
           {producto.imagen && (
             <div className="mt-6">
-              <p className="font-bold mb-3">Vista previa:</p>
+
+              <p className="font-bold mb-3">
+                Vista previa:
+              </p>
 
               <img
                 src={producto.imagen}
                 alt={producto.nombre || "Producto"}
                 className="w-52 h-52 object-contain bg-white rounded-xl"
               />
+
             </div>
           )}
 
           <button
             type="submit"
             disabled={guardando || subiendo}
-            className="mt-6 bg-[#f5b800] text-black font-bold px-8 py-4 rounded-xl disabled:opacity-50"
+            className="mt-8 bg-[#f5b800] text-black font-bold px-8 py-4 rounded-xl disabled:opacity-50"
           >
-            {guardando ? "Guardando..." : "Guardar producto"}
+            {guardando
+              ? "Guardando..."
+              : "Guardar producto"}
           </button>
+
         </form>
 
         {productos.length > 0 && (
           <section className="mt-10">
+
             <h2 className="text-2xl font-bold mb-6">
               📋 Productos publicados
             </h2>
 
             <div className="grid md:grid-cols-2 gap-5">
+
               {productos.map((item) => (
+
                 <div
                   key={item.id}
                   className="bg-[#181818] border border-[#333] rounded-2xl p-5"
                 >
+
                   {item.imagen && (
+
                     <img
                       src={item.imagen}
                       alt={item.nombre}
                       className="w-full h-48 object-contain bg-white rounded-xl mb-4"
                     />
+
                   )}
 
                   <h3 className="font-bold text-lg">
@@ -379,16 +423,23 @@ export default function ProductosAdmin() {
 
                   <button
                     type="button"
-                    onClick={() => eliminarProducto(item.id)}
+                    onClick={() =>
+                      eliminarProducto(item.id)
+                    }
                     className="mt-4 bg-red-600 px-5 py-2 rounded-xl font-bold"
                   >
                     Eliminar
                   </button>
+
                 </div>
+
               ))}
+
             </div>
+
           </section>
         )}
+
       </div>
     </main>
   );
