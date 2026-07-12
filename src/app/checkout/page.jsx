@@ -21,6 +21,7 @@ export default function Checkout() {
     direccion: usuario?.direccion || "",
     ciudad: "",
     pago: "Yape",
+    comprobante: null,
   });
 
   const [comprobante, setComprobante] = useState("");
@@ -133,9 +134,13 @@ export default function Checkout() {
           },
           body: JSON.stringify({
             nombre: datos.nombre,
+            dni: datos.dni,
             telefono: datos.telefono,
             direccion: `${datos.direccion}, ${datos.ciudad}`,
+            pago: datos.pago,
+            productos:carrito,
             total: total.toFixed(2),
+            comprobante: comprobante,
           }),
         });
 
