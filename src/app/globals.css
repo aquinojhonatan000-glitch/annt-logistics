@@ -606,3 +606,18 @@ width:100%;
 animation:progress 2.5s linear;
 
 }
+/* INPUT STYLE */
+.input-style{
+  width:100%;
+  background:#111;
+  border:1px solid #333;
+  padding:14px;
+  border-radius:14px;
+  margin-top:12px;
+  color:white;
+}
+
+.input-style option{
+  background:#111;
+  color:white;
+}
