@@ -50,6 +50,9 @@ S/ ${body.total}
 
     const token = process.env.TELEGRAM_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
+    
+    console.log("TOKEN EXISTE:", !!token);
+console.log("CHAT ID:", chatId);
 
 
     // ENVIAR TEXTO DEL PEDIDO
