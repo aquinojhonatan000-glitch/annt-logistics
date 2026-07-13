@@ -79,7 +79,7 @@ export default function Productos() {
 
     const coincideCategoria =
     categoria === "Todos" ||
-    producto.categoria === categoria;
+   producto.categoria?.toLowerCase().trim() === categoria.toLowerCase().trim();
 
 
     return coincideNombre && coincideCategoria;
@@ -239,7 +239,8 @@ export default function Productos() {
 
 
       <div
-className={
+className=
+{
 producto.imagenes?.length > 1
 ?
 "grid grid-cols-2 gap-3"
