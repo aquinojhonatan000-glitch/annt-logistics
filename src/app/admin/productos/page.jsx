@@ -231,9 +231,8 @@ imagenes:p.imagenes || [],
 // ==========================
 // GUARDAR PRODUCTO
 // ==========================
-
+console.log("PRODUCTO A GUARDAR:", producto);
 const guardarProducto=async(e)=>{
-
 
 
 e.preventDefault();
