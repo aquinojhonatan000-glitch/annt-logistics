@@ -242,51 +242,58 @@ export default function Productos() {
 
 
       {
-      producto.imagenes?.length > 0
+producto.imagenes?.length > 0
 
-      ?
+?
 
-      producto.imagenes.map((img,index)=>(
+producto.imagenes.map((img,index)=>(
 
-        <img
+<img
 
-        key={index}
+key={index}
 
-        src={img}
+src={img}
 
-        alt={producto.nombre}
+alt={producto.nombre}
 
-        className="
-        w-full
-        h-40
-        object-contain
-        bg-white
-        rounded-2xl
-        "
+onClick={()=>{
 
-        />
+setImagenActual(producto.imagenes);
 
-      ))
+setIndiceImagen(index);
 
-      :
+}}
 
-    <img
+className="
+w-full
+h-40
+object-contain
+bg-white
+rounded-2xl
+cursor-pointer
+"
+
+/>
+
+))
+
+:
+
+<img
+
 src={
-  producto.imagen ||
-  producto.imagenes?.[0] ||
-  "/producto.png"
+producto.imagen ||
+"/producto.png"
 }
 
 alt={producto.nombre}
 
 onClick={()=>{
-  setImagenActual(
-    producto.imagenes?.length > 0
-    ? producto.imagenes
-    : [producto.imagen]
-  );
 
-  setIndiceImagen(0);
+setImagenActual([producto.imagen]);
+
+setIndiceImagen(0);
+
 }}
 
 className="
@@ -300,7 +307,7 @@ cursor-pointer
 
 />
 
-      }
+}
 
 
       </div>
@@ -561,7 +568,67 @@ cursor-pointer
       )}
 
 
+{imagenActual && (
 
+<div
+className="
+fixed
+inset-0
+bg-black/80
+z-50
+flex
+items-center
+justify-center
+"
+onClick={()=>setImagenActual(null)}
+>
+
+<img
+
+src={imagenActual[indiceImagen]}
+
+className="
+max-h-[90vh]
+max-w-[90vw]
+object-contain
+rounded-xl
+"
+
+/>
+
+
+<button
+
+onClick={(e)=>{
+
+e.stopPropagation();
+
+setIndiceImagen(
+(indiceImagen + 1) % imagenActual.length
+);
+
+}}
+
+className="
+absolute
+right-10
+bg-white
+text-black
+px-4
+py-2
+rounded-full
+"
+
+>
+
+➡️
+
+</button>
+
+
+</div>
+
+)}
     </main>
 
   );
