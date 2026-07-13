@@ -238,7 +238,15 @@ export default function Productos() {
 
 
 
-      <div className="grid grid-cols-2 gap-3">
+      <div
+className={
+producto.imagenes?.length > 1
+?
+"grid grid-cols-2 gap-3"
+:
+"grid grid-cols-1"
+}
+>
 
 
       {
