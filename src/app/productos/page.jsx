@@ -240,6 +240,7 @@ export default function Productos() {
 
 
       {
+      Array.isArray(producto.imagenes) &&
       producto.imagenes?.length > 0
 
       ?
@@ -268,11 +269,13 @@ export default function Productos() {
 
       :
 
-      <img
-
-      src={producto.imagen}
-
-      alt={producto.nombre}
+    <img
+    src={
+    producto.imagen ||
+    producto.imagenes?.[0] ||
+    "/producto.png"
+    }
+    alt={producto.nombre}
 
       className="
       w-full
