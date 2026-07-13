@@ -242,7 +242,6 @@ export default function Productos() {
 
 
       {
-      Array.isArray(producto.imagenes) &&
       producto.imagenes?.length > 0
 
       ?
