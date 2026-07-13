@@ -158,15 +158,16 @@ export default function Home() {
 
 
               <img
-                src={producto.imagen}
-                alt={producto.nombre}
-                className="
-                  w-full
-                  h-52
-                  object-contain
-                  bg-white
-                  rounded-2xl
-                "
+               src={producto.imagen || producto.imagenes?.[0] || "/placeholder.png"}
+               alt={producto.nombre}
+               className="
+                 w-full
+                 h-52
+                 object-contain
+                 bg-white
+                 rounded-2xl
+            "
+
               />
 
 
