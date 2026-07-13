@@ -449,13 +449,22 @@ cursor-pointer
         color.trim()
       )}
 
-      className="
+      className={`
       px-4
       py-2
       border
       rounded-lg
-      "
+      cursor-pointer
 
+      ${
+      selecciones[producto.id]?.color === color.trim()
+      ?
+      "bg-[#f5b800] text-black font-bold border-yellow-400"
+      :
+      "bg-transparent"
+      }
+
+     `}
       >
 
       {color.trim()}
