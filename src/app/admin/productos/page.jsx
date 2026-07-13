@@ -1043,7 +1043,35 @@ p-5
 >
 
 
-{item.imagen && (
+{item.imagenes?.length > 0 ? (
+
+<div className="grid grid-cols-2 gap-3">
+
+{item.imagenes.map((img,index)=>(
+
+<img
+
+key={index}
+
+src={img}
+
+alt={item.nombre}
+
+className="
+w-full
+h-32
+object-contain
+bg-white
+rounded-xl
+"
+
+/>
+
+))}
+
+</div>
+
+) : item.imagen && (
 
 <img
 
