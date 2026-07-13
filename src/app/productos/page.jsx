@@ -400,12 +400,22 @@ cursor-pointer
         talla.trim()
       )}
 
-      className="
+      className={`
       px-4
       py-2
       border
       rounded-lg
-      "
+      cursor-pointer
+
+      ${
+      selecciones[producto.id]?.talla === talla.trim()
+      ?
+      "bg-[#f5b800] text-black font-bold border-yellow-400"
+     :
+     "bg-transparent"
+     }
+
+     `}
 
       >
 
