@@ -16,6 +16,8 @@ export default function Productos() {
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("Todos");
   const [selecciones, setSelecciones] = useState({});
+  const [imagenActual, setImagenActual] = useState(null);
+  const [indiceImagen, setIndiceImagen] = useState(0);
 
 
   const categorias = [
@@ -270,22 +272,34 @@ export default function Productos() {
       :
 
     <img
-    src={
-    producto.imagen ||
-    producto.imagenes?.[0] ||
-    "/producto.png"
-    }
-    alt={producto.nombre}
+src={
+  producto.imagen ||
+  producto.imagenes?.[0] ||
+  "/producto.png"
+}
 
-      className="
-      w-full
-      h-80
-      object-contain
-      bg-white
-      rounded-2xl
-      "
+alt={producto.nombre}
 
-      />
+onClick={()=>{
+  setImagenActual(
+    producto.imagenes?.length > 0
+    ? producto.imagenes
+    : [producto.imagen]
+  );
+
+  setIndiceImagen(0);
+}}
+
+className="
+w-full
+h-80
+object-contain
+bg-white
+rounded-2xl
+cursor-pointer
+"
+
+/>
 
       }
 
