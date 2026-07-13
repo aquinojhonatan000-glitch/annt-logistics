@@ -6,716 +6,548 @@ import { useCart } from "@/context/CartContext";
 import { useProducts } from "@/context/ProductContext";
 import CountdownProduct from "@/components/CountdownProduct";
 
+export default function Productos() {
 
-export default function Productos(){
+  const { carrito, agregarCarrito } = useCart();
+  const { productos } = useProducts();
 
-const { carrito, agregarCarrito } = useCart();
+  const pathname = usePathname();
 
-const { productos } = useProducts();
+  const [busqueda, setBusqueda] = useState("");
+  const [categoria, setCategoria] = useState("Todos");
+  const [selecciones, setSelecciones] = useState({});
 
-const pathname = usePathname();
 
+  const categorias = [
+    "Todos",
+    "Moda",
+    "Zapatillas",
+    "Electrónica",
+    "Hogar",
+    "Belleza",
+    "Accesorios",
+    "Gaming",
+    "Mascotas",
+    "Deportes",
+    "Oficina",
+    "Herramientas",
+    "Juguetes",
+    "Bebés",
+    "Automóvil",
+    "Otros",
+  ];
 
-const [busqueda,setBusqueda]=useState("");
 
-const [categoria,setCategoria]=useState("Todos");
+  const ofertaActiva = (producto) => {
 
-const [selecciones,setSelecciones]=useState({});
+    if (!producto.descuento_hasta) return false;
+    if (!producto.descuento) return false;
 
+    return new Date(producto.descuento_hasta) > new Date();
 
+  };
 
-const categorias=[
 
-"Todos",
-"Moda",
-"Zapatillas",
-"Electrónica",
-"Hogar",
-"Belleza",
-"Accesorios",
-"Gaming",
-"Mascotas",
-"Deportes",
-"Oficina",
-"Herramientas",
-"Juguetes",
-"Bebés",
-"Automóvil",
-"Otros",
+  const seleccionar = (id, campo, valor) => {
 
-];
+    setSelecciones(prev => ({
 
+      ...prev,
 
+      [id]: {
 
-// OFERTA ACTIVA
+        ...prev[id],
 
-const ofertaActiva=(producto)=>{
+        [campo]: valor
 
-if(!producto.descuento_hasta) return false;
+      }
 
-if(!producto.descuento) return false;
+    }));
 
+  };
 
-return new Date(producto.descuento_hasta)>new Date();
 
-};
+  const productosFiltrados = productos.filter((producto)=>{
 
+    const coincideNombre =
+    producto.nombre
+    ?.toLowerCase()
+    .includes(busqueda.toLowerCase());
 
 
-// SELECCIONAR TALLA Y COLOR
+    const coincideCategoria =
+    categoria === "Todos" ||
+    producto.categoria === categoria;
 
-const seleccionar=(id,campo,valor)=>{
 
-setSelecciones(prev=>({
+    return coincideNombre && coincideCategoria;
 
-...prev,
+  });
 
-[id]:{
 
-...prev[id],
 
-[campo]:valor
+  return (
 
-}
+    <main className="p-5">
 
-}));
 
-};
+      <h1 className="text-3xl font-bold mb-3">
+        🛍️ Catálogo
+      </h1>
 
 
+      <p>
+        Todos nuestros productos están sujetos a disponibilidad,
+        proveedores y costos de importación.
+      </p>
 
-// FILTRO
 
-const productosFiltrados=productos.filter((producto)=>{
+      <p>
+        🚚 Entrega estimada: 6 a 15 días hábiles
+      </p>
 
 
-const coincideNombre=
+      <a
+      href="https://wa.me/51907025944"
+      target="_blank"
+      className="
+      inline-block
+      mt-5
+      bg-green-500
+      px-6
+      py-3
+      rounded-xl
+      font-bold
+      "
+      >
 
-producto.nombre
-?.toLowerCase()
-.includes(busqueda.toLowerCase());
+      💬 WhatsApp: 907025944
 
+      </a>
 
 
-const coincideCategoria=
 
-categoria==="Todos" ||
+      <input
 
-producto.categoria
-?.trim()
-.toLowerCase()
-===
-categoria.trim()
-.toLowerCase();
+      className="
+      w-full
+      bg-[#181818]
+      border
+      border-[#333]
+      p-4
+      rounded-2xl
+      my-6
+      "
 
+      placeholder="🔎 Buscar productos..."
 
+      value={busqueda}
 
-return coincideNombre && coincideCategoria;
+      onChange={(e)=>setBusqueda(e.target.value)}
 
+      />
 
-});
 
 
+      <div className="flex flex-wrap gap-3 mb-8">
 
-return(
+      {categorias.map(cat=>(
 
-<main className="p-6">
-{/* ANUNCIO */}
+        <button
 
-<div
-className="
-bg-white/10
-backdrop-blur-xl
-border
-border-white/20
-rounded-3xl
-p-8
-mb-10
-shadow-xl
-"
->
+        key={cat}
 
-<h1 className="text-4xl font-bold">
+        onClick={()=>setCategoria(cat)}
 
-🛍️ Catálogo{" "}
+        className={`
+        px-5
+        py-2
+        rounded-full
+        border
 
-<span className="text-[#f5b800]">
-ANNT LOGISTICS
-</span>
+        ${
+        categoria===cat
+        ?
+        "bg-[#f5b800] text-black font-bold"
+        :
+        "bg-[#181818]"
+        }
 
-</h1>
+        `}
 
+        >
 
-<p className="mt-4 text-gray-300">
+        {cat}
 
-Todos nuestros productos están sujetos a disponibilidad,
-proveedores y costos de importación.
+        </button>
 
-</p>
+      ))}
 
+      </div>
 
-<p className="mt-2">
 
-🚚 Entrega estimada: 6 a 15 días hábiles
 
-</p>
+      <div className="grid md:grid-cols-3 gap-6">
 
 
-<a
-href="https://wa.me/51907025944"
-target="_blank"
-className="
-inline-block
-mt-5
-bg-green-500
-px-6
-py-3
-rounded-xl
-font-bold
-"
->
+      {productosFiltrados.map((producto)=>(
 
-💬 WhatsApp: 907025944
 
-</a>
+      <div
 
+      key={producto.id}
 
-</div>
+      className="
+      card-dark
+      p-5
+      rounded-2xl
+      relative
+      "
 
+      >
 
 
 
+      {ofertaActiva(producto) && (
 
-{/* BUSCADOR */}
+        <span
 
-<input
+        className="
+        absolute
+        top-4
+        left-4
+        z-10
+        bg-red-500
+        text-white
+        px-3
+        py-1
+        rounded-full
+        font-bold
+        "
 
-className="
-w-full
-bg-[#181818]
-border
-border-[#333]
-p-4
-rounded-2xl
-mb-6
-"
+        >
 
-placeholder="🔎 Buscar productos..."
+        🔥 OFERTA -{producto.descuento}%
 
-value={busqueda}
+        </span>
 
-onChange={(e)=>setBusqueda(e.target.value)}
+      )}
 
-/>
 
 
 
+      <div className="grid grid-cols-2 gap-3">
 
 
-{/* CATEGORIAS */}
+      {
+      producto.imagenes?.length > 0
 
-<div className="flex flex-wrap gap-3 mb-8">
+      ?
 
+      producto.imagenes.map((img,index)=>(
 
-{categorias.map(cat=>(
+        <img
 
-<button
+        key={index}
 
-key={cat}
+        src={img}
 
-onClick={()=>setCategoria(cat)}
+        alt={producto.nombre}
 
-className={`
-px-5
-py-2
-rounded-full
-border
+        className="
+        w-full
+        h-40
+        object-contain
+        bg-white
+        rounded-2xl
+        "
 
-${
-categoria===cat
-?
-"bg-[#f5b800] text-black font-bold"
-:
-"bg-[#181818]"
-}
+        />
 
-`}
+      ))
 
->
+      :
 
-{cat}
+      <img
 
-</button>
+      src={producto.imagen}
 
+      alt={producto.nombre}
 
-))}
+      className="
+      w-full
+      h-80
+      object-contain
+      bg-white
+      rounded-2xl
+      "
 
+      />
 
-</div>
+      }
 
 
+      </div>
 
 
 
-{/* PRODUCTOS */}
+      <p className="mt-4 text-yellow-400">
+      {producto.categoria}
+      </p>
 
-<div
-className="
-grid
-md:grid-cols-2
-lg:grid-cols-3
-gap-6
-"
->
 
+      <h2 className="text-xl font-bold">
+      {producto.nombre}
+      </h2>
 
-{productosFiltrados.map((producto)=>(
 
+      <p>
+      {producto.descripcion}
+      </p>
 
-<div
 
-key={producto.id}
 
-className="
-card-dark
-p-5
-relative
-hover:-translate-y-2
-transition
-"
+      <div className="mt-4">
 
->
 
+      {ofertaActiva(producto) ? (
 
+        <>
 
-{/* OFERTA */}
+        <del>
+        S/ {Number(producto.precio_original).toFixed(2)}
+        </del>
 
-{ofertaActiva(producto) && (
+        <p className="text-xl font-bold">
+        S/ {Number(producto.precio).toFixed(2)}
+        </p>
 
-<span
+        </>
 
-className="
-absolute
-top-4
-left-4
-z-10
-bg-red-500
-text-white
-px-3
-py-1
-rounded-full
-font-bold
-"
 
->
+      ):(
 
-🔥 OFERTA -{producto.descuento}%
+        <p className="text-xl font-bold">
+        S/ {Number(producto.precio).toFixed(2)}
+        </p>
 
-</span>
+      )}
 
-)}
 
+      </div>
 
 
 
-<img
 
-src={producto.imagen}
+      {ofertaActiva(producto) && (
 
-alt={producto.nombre}
+        <CountdownProduct
+        fecha={producto.descuento_hasta}
+        />
 
-className="
-w-full
-h-80
-object-contain
-bg-white
-rounded-2xl
-"
+      )}
 
-/>
 
 
 
 
-<p className="text-sm text-gray-400 mt-3">
 
-{producto.categoria}
+      {producto.tallas && (
 
-</p>
+      <div className="flex gap-2 flex-wrap mt-4">
 
+      {producto.tallas.split(",").map(talla=>(
 
+      <button
 
-<h2 className="text-xl font-bold">
+      key={talla}
 
-{producto.nombre}
+      onClick={()=>seleccionar(
+        producto.id,
+        "talla",
+        talla.trim()
+      )}
 
-</h2>
+      className="
+      px-4
+      py-2
+      border
+      rounded-lg
+      "
 
+      >
 
+      {talla.trim()}
 
-<p className="text-gray-300 mt-2">
+      </button>
 
-{producto.descripcion}
+      ))}
 
-</p>
+      </div>
 
+      )}
 
 
 
 
-{/* PRECIOS */}
+      {producto.colores && (
 
-{ofertaActiva(producto) ? (
+      <div className="flex gap-2 flex-wrap mt-4">
 
 
-<div className="mt-4">
+      {producto.colores.split(",").map(color=>(
 
+      <button
 
-<p className="
-line-through
-text-gray-400
-">
+      key={color}
 
-S/
-{Number(producto.precio_original).toFixed(2)}
+      onClick={()=>seleccionar(
+        producto.id,
+        "color",
+        color.trim()
+      )}
 
-</p>
+      className="
+      px-4
+      py-2
+      border
+      rounded-lg
+      "
 
+      >
 
+      {color.trim()}
 
-<p className="
-text-3xl
-font-bold
-text-[#f5b800]
-">
+      </button>
 
-S/
-{Number(producto.precio).toFixed(2)}
 
-</p>
+      ))}
 
 
-</div>
+      </div>
 
+      )}
 
-):(
 
 
-<p className="
-text-3xl
-font-bold
-text-[#f5b800]
-mt-4
-">
 
-S/
-{Number(producto.precio).toFixed(2)}
 
-</p>
 
+      <button
 
-)}
+      onClick={()=>{
 
+      const elegido = selecciones[producto.id] || {};
 
 
+      if(producto.tallas && !elegido.talla){
 
+        alert("Selecciona una talla");
 
+        return;
 
-{/* CONTADOR */}
+      }
 
-{ofertaActiva(producto) && (
 
-<CountdownProduct
+      agregarCarrito({
 
-fecha={producto.descuento_hasta}
+        ...producto,
 
-/>
+        talla:elegido.talla || "",
 
-)}
-{/* TALLAS */}
+        color:elegido.color || "",
 
-{producto.tallas && (
+        cantidad:1
 
-<div className="mt-5">
+      });
 
-<p className="font-bold mb-2">
-📏 Talla:
-</p>
 
+      }}
 
-<div className="flex flex-wrap gap-2">
+      className="
+      mt-6
+      w-full
+      btn-gold
+      "
 
+      >
 
-{producto.tallas.split(",").map((talla)=>(
+      🛒 Agregar al carrito
 
-<button
+      </button>
 
-key={talla}
 
-type="button"
 
-onClick={()=>seleccionar(
-producto.id,
-"talla",
-talla.trim()
-)}
+      </div>
 
-className={`
-px-4
-py-2
-rounded-lg
-border
 
-${
-selecciones[producto.id]?.talla===talla.trim()
+      ))}
 
-?
 
-"bg-[#f5b800] text-black font-bold"
+      </div>
 
-:
 
-"bg-[#222]"
-}
 
-`}
 
->
+      {productosFiltrados.length===0 && (
 
-{talla.trim()}
+      <p>
+      No hay productos en la categoría "{categoria}"
+      </p>
 
-</button>
+      )}
 
 
-))}
 
 
-</div>
+      {carrito.length>0 && pathname!=="/carrito" && (
 
-</div>
+      <div
 
-)}
+      className="
+      fixed
+      bottom-5
+      right-5
+      bg-[#f5b800]
+      text-black
+      font-bold
+      px-6
+      py-4
+      rounded-2xl
+      shadow-xl
+      z-50
+      "
 
+      >
 
+      🛒 {carrito.length} producto(s)
 
 
+      <a
 
+      href="/carrito"
 
-{/* COLORES */}
+      className="
+      block
+      underline
+      mt-2
+      "
 
-{producto.colores && (
+      >
 
-<div className="mt-5">
+      Ver carrito
 
+      </a>
 
-<p className="font-bold mb-2">
-🎨 Color:
-</p>
 
+      </div>
 
-<div className="flex flex-wrap gap-2">
+      )}
 
 
-{producto.colores.split(",").map((color)=>(
 
+    </main>
 
-<button
-
-key={color}
-
-type="button"
-
-onClick={()=>seleccionar(
-producto.id,
-"color",
-color.trim()
-)}
-
-className={`
-px-4
-py-2
-rounded-lg
-border
-
-${
-selecciones[producto.id]?.color===color.trim()
-
-?
-
-"bg-[#f5b800] text-black font-bold"
-
-:
-
-"bg-[#222]"
-}
-
-`}
-
->
-
-{color.trim()}
-
-</button>
-
-
-))}
-
-
-</div>
-
-
-</div>
-
-
-)}
-
-
-
-
-
-
-{/* BOTON CARRITO */}
-
-<button
-
-type="button"
-
-onClick={()=>{
-
-
-const elegido = selecciones[producto.id] || {};
-
-
-
-if(producto.tallas && !elegido.talla){
-
-alert("Selecciona una talla");
-
-return;
-
-}
-
-
-
-agregarCarrito({
-
-...producto,
-
-talla:elegido.talla || "",
-
-color:elegido.color || "",
-
-cantidad:1
-
-});
-
-
-}}
-
-className="
-mt-6
-w-full
-btn-gold
-"
-
->
-
-🛒 Agregar al carrito
-
-</button>
-
-
-
-</div>
-
-
-))}
-
-
-</div>
-
-
-
-
-
-
-{/* SIN PRODUCTOS */}
-
-{productosFiltrados.length===0 && (
-
-<p className="
-text-center
-text-gray-400
-text-xl
-mt-12
-">
-
-No hay productos en la categoría "{categoria}"
-
-</p>
-
-)}
-
-
-
-
-
-
-
-{/* CARRITO FLOTANTE */}
-
-{carrito.length>0 && pathname!=="/carrito" && (
-
-<div
-
-className="
-fixed
-bottom-5
-right-5
-bg-[#f5b800]
-text-black
-font-bold
-px-6
-py-4
-rounded-2xl
-shadow-xl
-z-50
-"
-
->
-
-
-🛒 {carrito.length} producto(s)
-
-
-<a
-
-href="/carrito"
-
-className="
-block
-underline
-mt-2
-"
-
->
-
-Ver carrito
-
-</a>
-
-
-</div>
-
-
-)}
-
-
-
-</main>
-
-
-);
-
+  );
 
 }

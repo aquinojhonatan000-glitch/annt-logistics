@@ -150,60 +150,56 @@ export function ProductProvider({ children }) {
   // EDITAR / ACTUALIZAR PRODUCTO
   // ==========================
 
-  const actualizarProducto = async(
-    id,
-    cambios
-  )=>{
+ const actualizarProducto = async(
+id,
+cambios
+)=>{
+
+const { data,error } = await supabase
+.from("productos")
+.update(cambios)
+.eq("id",id)
+.select();
 
 
-    const { data,error } = await supabase
-      .from("productos")
-      .update(cambios)
-      .eq("id",id)
-      .select();
+if(error){
+
+console.log(
+"ERROR ACTUALIZANDO PRODUCTO:",
+error
+);
+
+alert(error.message);
+
+return false;
+
+}
 
 
+setProductos(prev=>
 
-    if(error){
+prev.map(producto=>
 
-      console.log(
-        "ERROR ACTUALIZANDO PRODUCTO:",
-        error
-      );
+producto.id === id
+?
+{
+...producto,
+...cambios
+}
+:
+producto
 
+)
 
-      alert(error.message);
-
-
-      return false;
-
-    }
-
-
-
-    setProductos(prev=>
-
-      prev.map(producto=>
-
-        producto.id === id
-        ? data[0]
-        : producto
-
-      )
-
-    );
+);
 
 
-
-    alert("✅ Producto actualizado");
-
-
-    return true;
+alert("✅ Producto actualizado");
 
 
-  };
+return true;
 
-
+};
 
 
 
