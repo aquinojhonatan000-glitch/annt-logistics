@@ -383,103 +383,72 @@ cursor-pointer
 
 
 
+{producto.tallas && (
+  <>
+    <p className="mt-4 mb-2 font-semibold text-gray-300">
+      👕 Tallas:
+    </p>
 
-      {producto.tallas && (
+    <div className="flex gap-2 flex-wrap">
+      {producto.tallas.split(",").map((talla) => (
+        <button
+          key={talla}
+          onClick={() =>
+            seleccionar(producto.id, "talla", talla.trim())
+          }
+          className={`
+            px-4
+            py-2
+            border
+            rounded-lg
+            cursor-pointer
 
-      <div className="flex gap-2 flex-wrap mt-4">
-
-      {producto.tallas.split(",").map(talla=>(
-
-      <button
-
-      key={talla}
-
-      onClick={()=>seleccionar(
-        producto.id,
-        "talla",
-        talla.trim()
-      )}
-
-      className={`
-      px-4
-      py-2
-      border
-      rounded-lg
-      cursor-pointer
-
-      ${
-      selecciones[producto.id]?.talla === talla.trim()
-      ?
-      "bg-[#f5b800] text-black font-bold border-yellow-400"
-     :
-     "bg-transparent"
-     }
-
-     `}
-
-      >
-
-      {talla.trim()}
-
-      </button>
-
+            ${
+              selecciones[producto.id]?.talla === talla.trim()
+                ? "bg-[#f5b800] text-black font-bold border-yellow-400"
+                : "bg-transparent"
+            }
+          `}
+        >
+          {talla.trim()}
+        </button>
       ))}
+    </div>
+  </>
+)}
 
-      </div>
+{producto.colores && (
+  <>
+    <p className="mt-4 mb-2 font-semibold text-gray-300">
+      🎨 Colores:
+    </p>
 
-      )}
-
-
-
-
-      {producto.colores && (
-
-      <div className="flex gap-2 flex-wrap mt-4">
-
-
-      {producto.colores.split(",").map(color=>(
-
-      <button
-
-      key={color}
-
-      onClick={()=>seleccionar(
-        producto.id,
-        "color",
-        color.trim()
-      )}
-
-      className={`
-      px-4
-      py-2
-      border
-      rounded-lg
-      cursor-pointer
-
-      ${
-      selecciones[producto.id]?.color === color.trim()
-      ?
-      "bg-[#f5b800] text-black font-bold border-yellow-400"
-      :
-      "bg-transparent"
-      }
-
-     `}
-      >
-
-      {color.trim()}
-
-      </button>
-
-
+    <div className="flex gap-2 flex-wrap">
+      {producto.colores.split(",").map((color) => (
+        <button
+          key={color}
+          onClick={() =>
+            seleccionar(producto.id, "color", color.trim())
+          }
+          className={`
+            px-4
+            py-2
+            border
+            rounded-lg
+            cursor-pointer
+            ${
+              selecciones[producto.id]?.color === color.trim()
+                ? "bg-[#f5b800] text-black font-bold border-yellow-400"
+                : "bg-transparent"
+            }
+          `}
+        >
+          {color.trim()}
+        </button>
       ))}
-
-
-      </div>
-
-      )}
-
-
+    </div>
+  </>
+)}
 
 
 
