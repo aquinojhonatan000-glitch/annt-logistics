@@ -1118,24 +1118,23 @@ S/ {Number(item.precio).toFixed(2)}
 
 
 
-<button
+<div className="flex gap-3 mt-4">
 
-onClick={()=>eliminarProducto(item.id)}
+  <button
+    onClick={() => editarProducto(item)}
+    className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-xl font-bold"
+  >
+    ✏️ Editar
+  </button>
 
-className="
-mt-4
-bg-red-600
-px-5
-py-2
-rounded-xl
-font-bold
-"
+  <button
+    onClick={() => eliminarProducto(item.id)}
+    className="bg-red-600 hover:bg-red-700 px-5 py-2 rounded-xl font-bold"
+  >
+    🗑️ Eliminar
+  </button>
 
->
-
-🗑️ Eliminar
-
-</button>
+</div>
 
 
 
