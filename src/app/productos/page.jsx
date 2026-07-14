@@ -38,9 +38,10 @@ export default function Productos() {
     "Jabones",
     "Detergente",
     "Toallitas Humedas",
-     "Otros",
      "Ropa",
       "Libros",
+      "Envios de 2 a 3 dias ",
+      "Otros",
       
   ];
 
@@ -111,6 +112,7 @@ export default function Productos() {
 
       <p>
         🚚 Entrega estimada: 6 a 15 días hábiles
+        Cualquier inconveniente con el pedido, se le hará saber por medio de whatsapp
       </p>
 
 
