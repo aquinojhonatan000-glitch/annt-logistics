@@ -112,11 +112,12 @@ export default function Productos() {
 
       <p>
         🚚 Entrega estimada: 6 a 15 días hábiles
-        
-        
-        Cualquier inconveniente con el pedido, se le hará saber por medio de whatsapp
+      
       </p>
 
+        
+        Cualquier inconveniente con el pedido, se le hará saber por medio de whatsapp
+      
 
       <a
       href="https://wa.me/51907025944"
