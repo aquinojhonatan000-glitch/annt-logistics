@@ -109,33 +109,29 @@ export default function Productos() {
         proveedores y costos de importación.
       </p>
 
-
       <p>
-        🚚 Entrega estimada: 6 a 15 días hábiles
-      
-      </p>
+  🚚 Entrega estimada: 6 a 15 días hábiles.
+  <br />
+  Cualquier inconveniente con el pedido, se le hará saber por medio de WhatsApp.
+</p>
 
-        
-        Cualquier inconveniente con el pedido, se le hará saber por medio de whatsapp
-      
+<br />
 
-      <a
-      href="https://wa.me/51907025944"
-      target="_blank"
-      className="
-      inline-block
-      mt-5
-      bg-green-500
-      px-6
-      py-3
-      rounded-xl
-      font-bold
-      "
-      >
-
-      💬 WhatsApp: 907025944
-
-      </a>
+<a
+  href="https://wa.me/51907025944"
+  target="_blank"
+  className="
+    inline-block
+    mt-5
+    bg-green-500
+    px-6
+    py-3
+    rounded-xl
+    font-bold
+  "
+>
+  💬 WhatsApp: 907025944
+</a>
 
 
 
