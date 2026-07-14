@@ -35,14 +35,14 @@ Anntlop000@gmail.com
 
 <p>
 📱 <strong>WhatsApp:</strong><br/>
-907025944
++51 907 025 944 
 </p>
 
 
 
 <p>
 📍 <strong>Ubicación:</strong><br/>
-Perú
+Operamos de forma online y realizamos envios a nivel nacional 
 </p>
 
 
