@@ -41,6 +41,7 @@ export default function Productos() {
      "Ropa",
       "Libros",
       "Envios de 2 a 3 dias ",
+      "Limpieza",
       "Otros",
       
   ];
