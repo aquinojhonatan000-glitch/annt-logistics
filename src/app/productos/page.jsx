@@ -24,7 +24,7 @@ export default function Productos() {
     "Todos",
     "Moda",
     "Zapatillas",
-    "Tecnología",
+    "Tecnologia",
     "Hogar y Cocina",
     "Uso diario",
     "Belleza",
