@@ -118,24 +118,14 @@ export default function Productos() {
 </p>
 
 <br />
-
 <a
   href="https://wa.me/51907025944"
   target="_blank"
-  className="
-    inline-block
-    mt-5
-    bg-green-500
-    px-6
-    py-3
-    rounded-xl
-    font-bold
-  "
+  rel="noopener noreferrer"
+  className="inline-block mt-5 bg-green-500 px-6 py-3 rounded-xl font-bold hover:bg-green-600 transition"
 >
-  💬 WhatsApp: 907025944
+  💬 WhatsApp
 </a>
-
-
 
       <input
 
