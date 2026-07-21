@@ -154,7 +154,7 @@ carrito.map((producto)=>(
 
 <div
 
-key={producto.id}
+key={`${producto.id}-${producto.talla}-${producto.color}`}
 
 className="
 card-dark
@@ -273,30 +273,55 @@ Cantidad:
 </span>
 
 
+<div className="flex items-center gap-3 mt-4">
 
 <button
-
-onClick={()=>cambiarCantidad(
-producto.id,
-producto.cantidad-1
-)}
-
-className="
-w-9
-h-9
-rounded-lg
-border
-border-[#444]
-hover:border-[#f5b800]
-"
-
+  onClick={() =>
+    cambiarCantidad(
+      producto.id,
+      producto.talla,
+      producto.color,
+      producto.cantidad - 1
+    )
+  }
+  className="
+    w-9
+    h-9
+    rounded-lg
+    border
+    border-[#444]
+    hover:border-[#f5b800]
+  "
 >
-
--
-
+  -
 </button>
 
+<span className="mx-3 font-bold text-lg">
+  {producto.cantidad}
+</span>
 
+<button
+  onClick={() =>
+    cambiarCantidad(
+      producto.id,
+      producto.talla,
+      producto.color,
+      producto.cantidad + 1
+    )
+  }
+  className="
+    w-9
+    h-9
+    rounded-lg
+    border
+    border-[#444]
+    hover:border-[#f5b800]
+  "
+>
+  +
+</button>
+
+</div>
 
 <span className="
 font-bold
@@ -311,11 +336,14 @@ text-xl
 
 
 <button
-
-onClick={()=>cambiarCantidad(
-producto.id,
-producto.cantidad+1
-)}
+onClick={() =>
+  cambiarCantidad(
+    producto.id,
+    producto.talla,
+    producto.color,
+    producto.cantidad + 1
+  )
+}
 
 className="
 w-9
@@ -343,8 +371,13 @@ hover:border-[#f5b800]
 
 <button
 
-onClick={()=>eliminarCarrito(producto.id)}
-
+onClick={() =>
+  eliminarCarrito(
+    producto.id,
+    producto.talla,
+    producto.color
+  )
+}
 className="
 mt-5
 text-red-400
