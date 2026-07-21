@@ -280,16 +280,19 @@ export default function Checkout() {
 
           {carrito.map((p) => (
             <div
-              key={p.id}
+              key={`${p.id}-${p.talla}-${p.color}`}
               className="border-b border-[#333] pb-4 mb-4"
             >
               <div className="flex gap-4">
                 <img
-                  src={p.imagen}
-                  alt={p.nombre}
-                  className="w-20 h-20 bg-white rounded-xl object-contain"
-                />
-
+                  src={
+                    p.imagenes?.length > 0
+                      ? p.imagenes[0]
+                      : p.imagen || "/producto.png"
+            }
+           alt={p.nombre}
+           className="w-20 h-20 bg-white rounded-xl object-contain"
+         />
                 <div>
                   <p className="font-bold">{p.nombre}</p>
 
