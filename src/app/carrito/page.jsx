@@ -82,24 +82,22 @@ export default function Carrito() {
 
                 >
 
-
-                  <img
-
-                    src={producto.imagen}
-
-                    alt={producto.nombre}
-
-                    className="
-                    w-full
-                    md:w-32
-                    h-32
-                    object-contain
-                    bg-white
-                    rounded-xl
-                    "
-
-                  />
-
+                <img
+                 src={
+                producto.imagenes?.length > 0
+                  ? producto.imagenes[0]
+                  : producto.imagen || "/producto.png"
+        }
+        alt={producto.nombre}
+        className="
+          w-full
+          md:w-32
+          h-32
+          object-contain
+          bg-white
+          rounded-xl
+        "
+    />
 
                   <div className="flex-1">
 
