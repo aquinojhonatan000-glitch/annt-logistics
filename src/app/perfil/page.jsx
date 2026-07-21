@@ -528,18 +528,18 @@ mb-4
 
 
 <img
-
-src={producto.imagen}
-
-alt={producto.nombre}
-
-className="
-w-24
-h-24
-object-cover
-rounded-lg
-"
-
+  src={
+    producto.imagenes?.length > 0
+      ? producto.imagenes[0]
+      : producto.imagen || "/producto.png"
+  }
+  alt={producto.nombre}
+  className="
+  w-24
+  h-24
+  object-cover
+  rounded-lg
+  "
 />
 
 
