@@ -27,8 +27,6 @@ const estadosPedido = [
 
 "Orden rechazada",
 
-"El almacen está prerando el pedido",
-
 "Preparando pedido",
 
 "Paquete llegó al aeropuerto",
@@ -50,7 +48,6 @@ const estadosPedido = [
 "Entregado"
 
 ];
-
 
 
 
