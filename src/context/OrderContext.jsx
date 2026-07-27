@@ -27,17 +27,23 @@ const estadosPedido = [
 
 "Orden rechazada",
 
+"El almacen está prerando el pedido",
+
 "Preparando pedido",
+
+"Paquete llegó al aeropuerto",
 
 "Salió del aeropuerto",
 
-"Pasando aduanas",
+"El vuelo despegó",
 
-"Aduanas correctamente",
+"Procesando por aduanas",
+
+"Despacho aduanero completado",
 
 "En tránsito",
 
-"En agencia",
+"En destino",
 
 "En ruta de entrega",
 

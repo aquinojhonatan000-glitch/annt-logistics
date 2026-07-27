@@ -479,23 +479,32 @@ pedido.cliente?.telefono
 }?text=${encodeURIComponent(
 
 `
-🚚 ANNT LOGISTICS
+🚚 *ANNT LOGISTICS*
 
 Hola ${pedido.cliente?.nombre || "cliente"} 👋
 
-Tu pedido #${pedido.numero_pedido || pedido.id}
-fue actualizado.
+Te informamos que tu pedido ha sido actualizado correctamente.
 
-📦 Estado:
+📦 *Número de pedido:*
+#${pedido.numero_pedido || pedido.id}
+
+📌 *Estado actual:*
 ${pedido.estado}
 
-📅 Fecha:
+🕒 *Tiempo estimado de entrega:*
+${pedido.tiempo_entrega || "Por confirmar"}
+
+📅 *Fecha de actualización:*
 ${new Date().toLocaleDateString("es-PE")}
 
-🕒 Hora:
+⏰ *Hora:*
 ${new Date().toLocaleTimeString("es-PE")}
 
-Gracias por comprar con ANNT LOGISTICS.
+Gracias por confiar en *ANNT LOGISTICS* 🤝
+
+Si tienes alguna consulta, nuestro equipo está disponible para ayudarte.
+
+🚀 *ANNT LOGISTICS*
 `
 
 )}`}
@@ -521,10 +530,6 @@ transition
 📲 Avisar por WhatsApp
 
 </a>
-
-</div>
-
-
 
 
 
