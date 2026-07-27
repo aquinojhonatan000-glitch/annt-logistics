@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useOrders } from "@/context/OrderContext";
 
 export default function PedidosAdmin(){
@@ -11,6 +12,7 @@ cambiarTiempoEntrega,
 estadosPedido
 }=useOrders();
 
+const [numerosWhatsapp, setNumerosWhatsapp] = useState({});
 
 const tiempos=[
 
@@ -439,17 +441,42 @@ value={tiempo}
 </select>
 
 
-
-
-
-
-
 {/* WHATSAPP */}
+
+<div className="mt-6">
+
+<input
+type="text"
+placeholder="Número WhatsApp"
+value={
+numerosWhatsapp[pedido.id] ??
+pedido.cliente?.telefono ??
+""
+}
+onChange={(e)=>
+setNumerosWhatsapp({
+...numerosWhatsapp,
+[pedido.id]: e.target.value
+})
+}
+className="
+w-full
+bg-[#111]
+border
+border-[#333]
+p-3
+rounded-xl
+mb-3
+"
+/>
+
 
 <a
 
-
-href={`https://wa.me/51${pedido.cliente?.telefono}?text=${encodeURIComponent(
+href={`https://wa.me/51${
+numerosWhatsapp[pedido.id] ??
+pedido.cliente?.telefono
+}?text=${encodeURIComponent(
 
 `
 🚚 ANNT LOGISTICS
@@ -473,15 +500,12 @@ Gracias por comprar con ANNT LOGISTICS.
 
 )}`}
 
-
 target="_blank"
 
 rel="noopener noreferrer"
 
-
 className="
 inline-block
-mt-6
 bg-green-500
 text-white
 font-bold
@@ -492,14 +516,15 @@ hover:bg-green-600
 transition
 "
 
-
 >
-
 
 📲 Avisar por WhatsApp
 
-
 </a>
+
+</div>
+
+
 
 
 
