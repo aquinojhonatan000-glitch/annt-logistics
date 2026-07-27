@@ -173,21 +173,16 @@ py-4
 
 
 <img
-
-src={producto.imagen}
-
-alt={producto.nombre}
-
-className="
-w-24
-h-24
-object-contain
-bg-white
-rounded-xl
-"
-
+  src={
+    producto.imagen ||
+    (Array.isArray(producto.imagenes)
+      ? producto.imagenes[0]
+      : producto.imagenes) ||
+    "/producto.png"
+  }
+  alt={producto.nombre}
+  className="w-24 h-24 object-contain bg-white rounded-xl"
 />
-
 
 
 <div>
