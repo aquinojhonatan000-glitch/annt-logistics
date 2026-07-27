@@ -172,18 +172,28 @@ py-4
 >
 
 
-<img
-  src={
+<a
+  href={
     producto.imagen ||
     (Array.isArray(producto.imagenes)
       ? producto.imagenes[0]
-      : producto.imagenes) ||
-    "/producto.png"
+      : producto.imagenes)
   }
-  alt={producto.nombre}
-  className="w-24 h-24 object-contain bg-white rounded-xl"
-/>
-
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <img
+    src={
+      producto.imagen ||
+      (Array.isArray(producto.imagenes)
+        ? producto.imagenes[0]
+        : producto.imagenes) ||
+      "/producto.png"
+    }
+    alt={producto.nombre}
+    className="w-24 h-24 object-contain bg-white rounded-xl cursor-pointer hover:scale-105 transition"
+  />
+</a>
 
 <div>
 
